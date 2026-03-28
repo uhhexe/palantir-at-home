@@ -17,7 +17,6 @@ export default function ChatPanel() {
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Initialize welcome message client-side to avoid hydration mismatch on timestamp
   useEffect(() => {
     setMessages([
       {
@@ -48,8 +47,6 @@ export default function ChatPanel() {
     setInput("");
     setLoading(true);
 
-    // Phase 2: This will call the RAG endpoint
-    // For now, simulate a response
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
@@ -66,43 +63,43 @@ export default function ChatPanel() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-background">
+    <div className="flex flex-col h-full bg-void">
       {/* Header */}
-      <div className="h-10 bg-surface border-b border-border flex items-center px-4 shrink-0">
-        <Database className="w-3.5 h-3.5 text-accent-blue mr-2" />
-        <span className="text-[11px] tracking-wider text-text-dim">
-          INTEL — RAG QUERY INTERFACE
+      <div className="h-7 bg-surface border-b border-border flex items-center px-3 shrink-0">
+        <Database className="w-3 h-3 text-accent mr-1.5" />
+        <span className="text-[7px] font-heading tracking-[1.5px] text-text-dim uppercase">
+          Intel — RAG Query
         </span>
-        <div className="ml-auto flex items-center gap-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-warning animate-pulse" />
-          <span className="text-[10px] text-warning">STANDBY</span>
+        <div className="ml-auto flex items-center gap-1.5">
+          <div className="w-1 h-1 bg-warning animate-pulse" />
+          <span className="text-[7px] font-mono text-warning">STANDBY</span>
         </div>
       </div>
 
       {/* Messages */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-3">
         {messages.map((msg) => (
           <div
             key={msg.id}
             className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-[85%] rounded-lg px-3.5 py-2.5 text-[12px] leading-relaxed ${
+              className={`max-w-[90%] px-2.5 py-2 text-[9px] font-body leading-relaxed ${
                 msg.role === "user"
-                  ? "bg-accent/10 text-accent border border-accent/20"
+                  ? "bg-accent-glow text-accent border border-accent/20"
                   : "bg-surface border border-border text-text"
               }`}
             >
               <div className="whitespace-pre-wrap">{msg.content}</div>
               {msg.sources && msg.sources.length > 0 && (
-                <div className="mt-3 pt-2 border-t border-border space-y-1.5">
-                  <div className="text-[10px] text-text-dim tracking-wider">
-                    SOURCES
+                <div className="mt-2 pt-1.5 border-t border-border space-y-1">
+                  <div className="text-[7px] font-heading tracking-[1.5px] text-text-dim uppercase">
+                    Sources
                   </div>
                   {msg.sources.map((src, i) => (
                     <div
                       key={i}
-                      className="text-[10px] text-accent-blue hover:text-accent cursor-pointer"
+                      className="text-[8px] font-mono text-accent hover:text-accent-bright cursor-pointer"
                     >
                       [{i + 1}] {src.filename}
                       {src.page ? `, p.${src.page}` : ""}
@@ -110,37 +107,37 @@ export default function ChatPanel() {
                   ))}
                 </div>
               )}
-              <div className="text-[9px] text-text-dim mt-1.5">
+              <div className="text-[7px] font-mono text-text-muted mt-1">
                 {msg.timestamp.toLocaleTimeString("en-US", { hour12: false })}
               </div>
             </div>
           </div>
         ))}
         {loading && (
-          <div className="flex items-center gap-2 text-text-dim text-[11px]">
-            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          <div className="flex items-center gap-1.5 text-text-dim text-[8px] font-mono">
+            <Loader2 className="w-3 h-3 animate-spin" />
             <span>Querying intelligence database...</span>
           </div>
         )}
       </div>
 
       {/* Input */}
-      <div className="p-3 border-t border-border bg-surface">
-        <div className="flex items-center gap-2 bg-surface-2 border border-border rounded-lg px-3 py-2">
+      <div className="p-2 border-t border-border bg-surface">
+        <div className="flex items-center gap-1.5 bg-surface-2 border border-border px-2 py-1.5">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="Query intelligence database..."
-            className="flex-1 bg-transparent text-[12px] text-text placeholder:text-text-dim outline-none"
+            className="flex-1 bg-transparent text-[9px] font-body text-text placeholder:text-text-muted outline-none"
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || loading}
-            className="p-1.5 rounded hover:bg-accent/10 text-accent disabled:text-text-dim disabled:hover:bg-transparent transition-colors"
+            className="p-1 hover:bg-accent-glow text-accent disabled:text-text-muted transition-colors"
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-3 h-3" />
           </button>
         </div>
       </div>

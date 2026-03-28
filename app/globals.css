@@ -1,72 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Chakra+Petch:wght@300;400;500;600;700&display=swap');
+
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #080810;
-  --color-surface: #0f0f1a;
-  --color-surface-2: #161625;
-  --color-border: #1e1e35;
-  --color-text: #d4d4e0;
-  --color-text-dim: #5a5a72;
-  --color-accent: #00e87b;
-  --color-accent-blue: #00b4ff;
-  --color-danger: #ff2b4e;
-  --color-warning: #f5a623;
-  --color-purple: #8b5cf6;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-  --font-heading: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --color-void: #060809;
+  --color-background: #0a0d10;
+  --color-surface: #0e1215;
+  --color-surface-2: #13181d;
+  --color-surface-3: #1a2028;
+  --color-border: rgba(0, 210, 170, 0.06);
+  --color-border-hover: rgba(0, 210, 170, 0.14);
+  --color-border-active: rgba(0, 210, 170, 0.25);
+  --color-text: #9aa8b4;
+  --color-text-dim: #5c6c78;
+  --color-text-muted: #344050;
+  --color-white: #d0d8e0;
+  --color-accent: #00d4aa;
+  --color-accent-bright: #40e8c4;
+  --color-accent-dark: #0a5c4a;
+  --color-accent-glow: rgba(0, 212, 170, 0.08);
+  --color-danger: #e8364a;
+  --color-warning: #d4962a;
+  --font-mono: "Inconsolata", ui-monospace, monospace;
+  --font-heading: "Chakra Petch", sans-serif;
+  --font-body: "Rajdhani", sans-serif;
 }
 
 body {
-  background: var(--color-background);
+  background: var(--color-void);
   color: var(--color-text);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
+  font-size: 9.5px;
   margin: 0;
   overflow: hidden;
 }
 
-/* Leaflet overrides for dark theme */
+/* ─── Leaflet overrides ─── */
 .leaflet-container {
-  background: #080810;
+  background: #060809;
 }
 
 .leaflet-control-zoom a {
-  background: #0f0f1a !important;
-  color: #d4d4e0 !important;
-  border-color: #1e1e35 !important;
+  background: #0e1215 !important;
+  color: #9aa8b4 !important;
+  border-color: rgba(0, 210, 170, 0.06) !important;
+  border-radius: 1px !important;
 }
 
 .leaflet-control-zoom a:hover {
-  background: #161625 !important;
+  background: #13181d !important;
 }
 
 .leaflet-control-attribution {
-  background: rgba(8, 8, 16, 0.8) !important;
-  color: #5a5a72 !important;
-  font-size: 10px !important;
+  background: rgba(6, 8, 9, 0.85) !important;
+  color: #5c6c78 !important;
+  font-size: 9px !important;
+  font-family: "Inconsolata", monospace !important;
 }
 
 .leaflet-control-attribution a {
-  color: #5a5a72 !important;
+  color: #5c6c78 !important;
 }
 
 .leaflet-popup-content-wrapper {
-  background: #0f0f1a !important;
-  color: #d4d4e0 !important;
-  border: 1px solid #1e1e35 !important;
-  border-radius: 8px !important;
+  background: #0e1215 !important;
+  color: #9aa8b4 !important;
+  border: 1px solid rgba(0, 210, 170, 0.14) !important;
+  border-radius: 2px !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6) !important;
 }
 
 .leaflet-popup-tip {
-  background: #0f0f1a !important;
-  border: 1px solid #1e1e35 !important;
+  background: #0e1215 !important;
+  border: 1px solid rgba(0, 210, 170, 0.06) !important;
 }
 
 .leaflet-popup-close-button {
-  color: #5a5a72 !important;
+  color: #5c6c78 !important;
 }
 
-/* Marker cluster overrides */
+.leaflet-popup-content {
+  margin: 8px 10px !important;
+  font-family: "Inconsolata", monospace !important;
+  font-size: 10px !important;
+}
+
+/* ─── Marker clusters ─── */
 .marker-cluster-small,
 .marker-cluster-medium,
 .marker-cluster-large {
@@ -79,25 +98,91 @@ body {
   background: transparent !important;
 }
 
-.leaflet-popup-content {
-  margin: 10px 12px !important;
-}
-
-/* Custom scrollbar */
+/* ─── Scrollbar ─── */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #080810;
+  background: #060809;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e1e35;
-  border-radius: 3px;
+  background: rgba(0, 210, 170, 0.12);
+  border-radius: 1px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2a2a40;
+  background: rgba(0, 210, 170, 0.25);
+}
+
+/* ─── Camera feed effects ─── */
+.camera-filter {
+  filter: saturate(.5) contrast(1.1) brightness(.95);
+}
+
+.scanline-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  z-index: 1;
+}
+
+/* ─── HUD corner brackets ─── */
+.hud-bracket {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-color: var(--color-accent);
+  border-style: solid;
+  border-width: 0;
+  opacity: 0.6;
+}
+
+.hud-bracket-tl { top: 12px; left: 12px; border-top-width: 2px; border-left-width: 2px; }
+.hud-bracket-tr { top: 12px; right: 12px; border-top-width: 2px; border-right-width: 2px; }
+.hud-bracket-bl { bottom: 12px; left: 12px; border-bottom-width: 2px; border-left-width: 2px; }
+.hud-bracket-br { bottom: 12px; right: 12px; border-bottom-width: 2px; border-right-width: 2px; }
+
+/* ─── HUD crosshair ─── */
+.hud-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.hud-crosshair::before,
+.hud-crosshair::after {
+  content: '';
+  position: absolute;
+  background: var(--color-accent);
+}
+
+.hud-crosshair::before {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.hud-crosshair::after {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform: translateX(-50%);
 }

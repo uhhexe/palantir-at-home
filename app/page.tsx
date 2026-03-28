@@ -2,26 +2,23 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/ResizablePanels";
 import TopBar from "@/components/layout/TopBar";
+import BottomBar from "@/components/layout/BottomBar";
 import Sidebar, {
   DEFAULT_LAYERS,
   type LayerConfig,
 } from "@/components/layout/Sidebar";
 import ChatPanel from "@/components/chat/ChatPanel";
-import CameraPanel from "@/components/map/CameraPanel";
+import PrimaryCameraView from "@/components/camera/PrimaryCameraView";
+import ThumbnailStrip from "@/components/camera/ThumbnailStrip";
 import type { CameraData, CableData } from "@/components/map/MapEngine";
 
 const MapEngine = dynamic(() => import("@/components/map/MapEngine"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full bg-background flex items-center justify-center">
-      <div className="text-text-dim text-[11px] tracking-wider animate-pulse">
-        INITIALIZING MAP ENGINE...
+    <div className="w-full h-full bg-void flex items-center justify-center">
+      <div className="text-text-dim text-[9px] font-heading tracking-[2px] animate-pulse uppercase">
+        Initializing Map Engine...
       </div>
     </div>
   ),
@@ -142,14 +139,24 @@ export default function Home() {
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
 
+  const enabledLayers = layers.filter((l) => l.enabled).length;
+  const totalPoints = Object.values(layerData).reduce(
+    (sum, d) => sum + (d.features?.length || 0),
+    0
+  );
+  const sourceCount = new Set(cameras.map((c) => c.source)).size;
+
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
-      <TopBar />
+    <div className="h-screen flex flex-col overflow-hidden bg-void">
+      <TopBar
+        cameraCount={cameras.length}
+        sourceCount={sourceCount}
+      />
 
       {loadingStatus && (
-        <div className="h-6 bg-surface-2 border-b border-border flex items-center px-4">
-          <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse mr-2" />
-          <span className="text-[10px] text-text-dim tracking-wider">
+        <div className="h-5 bg-surface-2 border-b border-border flex items-center px-3">
+          <div className="w-1 h-1 bg-accent animate-pulse mr-2" />
+          <span className="text-[8px] font-mono text-text-dim tracking-wider">
             {loadingStatus}
           </span>
         </div>
@@ -161,73 +168,71 @@ export default function Home() {
           onToggleLayer={toggleLayer}
           activeView={activeView}
           onChangeView={setActiveView}
-          onQuickNav={handleQuickNav}
         />
 
-        <main className="flex-1 overflow-hidden">
+        <main className="flex-1 flex flex-col overflow-hidden">
           {activeView === "map" && (
-            <ResizablePanelGroup direction="horizontal">
-              <ResizablePanel defaultSize={selectedCamera ? 50 : 65} minSize={30}>
-                <MapEngine
-                  layers={layers}
-                  cameras={cameras}
-                  cableData={cableData}
-                  layerData={layerData}
-                  onCameraClick={handleCameraClick}
-                  navRef={mapNavRef}
-                />
-              </ResizablePanel>
-              <ResizableHandle />
-              <ResizablePanel defaultSize={selectedCamera ? 50 : 35} minSize={20}>
+            <>
+              <div className="flex-1 overflow-hidden relative">
                 {selectedCamera ? (
-                  <ResizablePanelGroup direction="vertical">
-                    <ResizablePanel defaultSize={60} minSize={30}>
-                      <CameraPanel
-                        camera={selectedCamera}
-                        onClose={() => setSelectedCamera(null)}
-                      />
-                    </ResizablePanel>
-                    <ResizableHandle />
-                    <ResizablePanel defaultSize={40} minSize={20}>
-                      <ChatPanel />
-                    </ResizablePanel>
-                  </ResizablePanelGroup>
+                  <PrimaryCameraView
+                    camera={selectedCamera}
+                    onClose={() => setSelectedCamera(null)}
+                  />
                 ) : (
-                  <ChatPanel />
+                  <MapEngine
+                    layers={layers}
+                    cameras={cameras}
+                    cableData={cableData}
+                    layerData={layerData}
+                    onCameraClick={handleCameraClick}
+                    navRef={mapNavRef}
+                  />
                 )}
-              </ResizablePanel>
-            </ResizablePanelGroup>
+              </div>
+              <ThumbnailStrip
+                cameras={cameras}
+                selectedId={selectedCamera?.id}
+                onSelect={handleCameraClick}
+              />
+            </>
           )}
 
           {activeView === "chat" && <ChatPanel />}
 
           {activeView === "canvas" && (
-            <div className="w-full h-full bg-background flex items-center justify-center">
+            <div className="w-full h-full bg-void flex items-center justify-center">
               <div className="text-center">
-                <div className="text-text-dim text-[11px] tracking-wider mb-2">
-                  CANVAS — VISUAL RESEARCH BOARD
+                <div className="text-text-dim text-[9px] font-heading tracking-[2px] uppercase mb-1">
+                  Canvas — Visual Research Board
                 </div>
-                <div className="text-text-dim/50 text-[10px]">
-                  Phase 3 — React Flow + Obsidian Import
+                <div className="text-text-muted text-[8px] font-mono">
+                  React Flow + Obsidian Import
                 </div>
               </div>
             </div>
           )}
 
           {activeView === "ingest" && (
-            <div className="w-full h-full bg-background flex items-center justify-center">
+            <div className="w-full h-full bg-void flex items-center justify-center">
               <div className="text-center">
-                <div className="text-text-dim text-[11px] tracking-wider mb-2">
-                  INGEST — DOCUMENT PIPELINE
+                <div className="text-text-dim text-[9px] font-heading tracking-[2px] uppercase mb-1">
+                  Ingest — Document Pipeline
                 </div>
-                <div className="text-text-dim/50 text-[10px]">
-                  Phase 2 — Upload, chunk, embed, store
+                <div className="text-text-muted text-[8px] font-mono">
+                  Upload, chunk, embed, store
                 </div>
               </div>
             </div>
           )}
         </main>
       </div>
+
+      <BottomBar
+        enabledLayers={enabledLayers}
+        totalPoints={totalPoints}
+        onQuickNav={handleQuickNav}
+      />
     </div>
   );
 }

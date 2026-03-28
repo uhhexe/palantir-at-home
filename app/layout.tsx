@@ -1,19 +1,26 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Inconsolata, Chakra_Petch, Rajdhani } from "next/font/google";
 import "./globals.css";
 
-const jetbrainsMono = JetBrains_Mono({
+const inconsolata = Inconsolata({
   variable: "--font-mono",
   subsets: ["latin"],
 });
 
-const spaceGrotesk = Space_Grotesk({
+const chakraPetch = Chakra_Petch({
   variable: "--font-heading",
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin"],
+});
+
+const rajdhani = Rajdhani({
+  variable: "--font-body",
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "WAR ROOM — SIGINT Research Platform",
+  title: "WAR ROOM — Surveillance Operations Center",
   description:
     "Self-hosted investigative research platform with map intelligence, RAG-powered document search, and visual research boards.",
 };
@@ -26,7 +33,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${jetbrainsMono.variable} ${spaceGrotesk.variable} h-full`}
+      className={`${inconsolata.variable} ${chakraPetch.variable} ${rajdhani.variable} h-full`}
     >
       <body className="h-full">{children}</body>
     </html>

@@ -38,6 +38,6 @@ export function ResizablePanel({
 
 export function ResizableHandle() {
   return (
-    <Separator className="bg-border hover:bg-accent/30 transition-colors data-[orientation=horizontal]:w-[3px] data-[orientation=vertical]:h-[3px]" />
+    <Separator className="bg-border hover:bg-border-active transition-colors data-[orientation=horizontal]:w-px data-[orientation=vertical]:h-px" />
   );
 }
