@@ -223,6 +223,85 @@ async function fetch511Platform(
   return allCameras;
 }
 
+// ─── NYC TMC (New York City Traffic Management Center) ───
+
+const NYC_TMC_API = "https://webcams.nyctmc.org/api/cameras";
+
+interface NycTmcCamera {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+  area: string;
+  isOnline: string;
+  imageUrl: string;
+}
+
+function parseNycTmc(data: NycTmcCamera[]): NormalizedCamera[] {
+  if (!Array.isArray(data)) return [];
+  return data
+    .filter((cam) => cam.latitude && cam.longitude && cam.isOnline === "true")
+    .map((cam) => ({
+      id: `nyctmc-${cam.id}`,
+      name: cam.name || `NYC Camera`,
+      lat: cam.latitude,
+      lng: cam.longitude,
+      imageUrl: cam.imageUrl || null,
+      streamUrl: null,
+      road: "",
+      direction: "",
+      county: cam.area || "",
+      state: "NY",
+      source: "nyctmc",
+      inService: true,
+    }));
+}
+
+// ─── MassDOT (Castle Rock / CARS program) ───
+
+const MASSDOT_API =
+  "https://matg.carsprogram.org/cameras_v1/api/cameras?cameraSystem=default";
+
+interface MassDotCamera {
+  id: number;
+  name: string;
+  location: {
+    latitude: number;
+    longitude: number;
+    routeId: string;
+    cityReference: string;
+  };
+  views: Array<{
+    name: string;
+    type: string;
+    url: string;
+    videoPreviewUrl: string;
+  }>;
+}
+
+function parseMassDot(data: MassDotCamera[]): NormalizedCamera[] {
+  if (!Array.isArray(data)) return [];
+  return data
+    .filter((cam) => cam.location?.latitude && cam.location?.longitude)
+    .map((cam) => {
+      const view = cam.views?.[0];
+      return {
+        id: `massdot-${cam.id}`,
+        name: cam.name || `MA Camera ${cam.id}`,
+        lat: cam.location.latitude,
+        lng: cam.location.longitude,
+        imageUrl: view?.videoPreviewUrl || null,
+        streamUrl: view?.url || null,
+        road: cam.location.routeId || "",
+        direction: view?.name || "",
+        county: cam.location.cityReference?.replace(/^in /, "") || "",
+        state: "MA",
+        source: "massdot",
+        inService: true,
+      };
+    });
+}
+
 // ─── Main handler ───
 
 export async function GET() {
@@ -257,6 +336,30 @@ export async function GET() {
     } else {
       errors.push(result.reason?.message || "511 fetch failed");
     }
+  }
+
+  // NYC TMC cameras
+  try {
+    const res = await fetch(NYC_TMC_API, { next: { revalidate: 300 } });
+    if (!res.ok) throw new Error(`NYC TMC HTTP ${res.status}`);
+    const data = await res.json();
+    const cameras = parseNycTmc(data);
+    allCameras.push(...cameras);
+    sourceCounts.nyctmc = cameras.length;
+  } catch (err) {
+    errors.push(`NYC TMC: ${err instanceof Error ? err.message : "failed"}`);
+  }
+
+  // MassDOT cameras
+  try {
+    const res = await fetch(MASSDOT_API, { next: { revalidate: 300 } });
+    if (!res.ok) throw new Error(`MassDOT HTTP ${res.status}`);
+    const data = await res.json();
+    const cameras = parseMassDot(data);
+    allCameras.push(...cameras);
+    sourceCounts.massdot = cameras.length;
+  } catch (err) {
+    errors.push(`MassDOT: ${err instanceof Error ? err.message : "failed"}`);
   }
 
   return NextResponse.json({

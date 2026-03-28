@@ -16,6 +16,11 @@ const ALLOWED_HOSTS = [
   "511ga.org",
   // Pennsylvania
   "www.511pa.com",
+  // NYC TMC
+  "webcams.nyctmc.org",
+  // MassDOT
+  "public.carsprogram.org",
+  "api.trafficland.com",
 ];
 
 export async function GET(request: Request) {

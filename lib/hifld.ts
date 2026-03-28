@@ -80,6 +80,18 @@ export const HIFLD_LAYERS: HifldLayerConfig[] = [
     popupFields: ["NAME", "STATE", "OWNER_TYPES", "DAM_HEIGHT"],
     stateField: "STATE",
   },
+  {
+    id: "bridges",
+    name: "Railroad Bridges",
+    group: "infrastructure",
+    baseUrl:
+      "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/NTAD_Railroad_Bridges/FeatureServer/0/query",
+    color: "#8b5cf6",
+    markerType: "circle",
+    maxResults: 2000,
+    popupFields: ["Name", "City", "County", "State", "Type", "Bridge_Type", "RROwner"],
+    stateField: "State",
+  },
   // EMERGENCY
   {
     id: "hospitals",
@@ -137,12 +149,32 @@ export async function fetchHifldLayer(
     where = `${config.stateField}='${stateFilter}'`;
   }
 
-  const maxResults = config.maxResults || 2000;
-  const url = `${config.baseUrl}?where=${encodeURIComponent(where)}&outFields=*&f=geojson&resultRecordCount=${maxResults}`;
+  const batchSize = config.maxResults || 2000;
+  const allFeatures: GeoJSON.Feature[] = [];
+  let offset = 0;
+  let hasMore = true;
 
-  const response = await fetch(url, { next: { revalidate: 86400 } });
-  if (!response.ok) {
-    throw new Error(`HIFLD ${config.id}: HTTP ${response.status}`);
+  while (hasMore) {
+    const url = `${config.baseUrl}?where=${encodeURIComponent(where)}&outFields=*&f=geojson&resultRecordCount=${batchSize}&resultOffset=${offset}`;
+    const response = await fetch(url, { next: { revalidate: 86400 } });
+    if (!response.ok) {
+      throw new Error(`HIFLD ${config.id}: HTTP ${response.status}`);
+    }
+    const data: GeoJSON.FeatureCollection = await response.json();
+
+    if (data.features && data.features.length > 0) {
+      allFeatures.push(...data.features);
+      offset += batchSize;
+      // Stop paginating if we got fewer than batchSize (last page)
+      // or if we've hit a safety cap (50K features max to avoid browser issues)
+      hasMore = data.features.length === batchSize && allFeatures.length < 50000;
+    } else {
+      hasMore = false;
+    }
   }
-  return response.json();
+
+  return {
+    type: "FeatureCollection",
+    features: allFeatures,
+  };
 }
