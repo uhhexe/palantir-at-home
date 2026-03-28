@@ -1,65 +1,229 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/ResizablePanels";
+import TopBar from "@/components/layout/TopBar";
+import Sidebar, {
+  DEFAULT_LAYERS,
+  type LayerConfig,
+} from "@/components/layout/Sidebar";
+import ChatPanel from "@/components/chat/ChatPanel";
+import CameraPanel from "@/components/map/CameraPanel";
+import type { CameraData, CableData } from "@/components/map/MapEngine";
+
+const MapEngine = dynamic(() => import("@/components/map/MapEngine"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-background flex items-center justify-center">
+      <div className="text-text-dim text-[11px] tracking-wider animate-pulse">
+        INITIALIZING MAP ENGINE...
+      </div>
+    </div>
+  ),
+});
 
 export default function Home() {
+  const [layers, setLayers] = useState<LayerConfig[]>(DEFAULT_LAYERS);
+  const [activeView, setActiveView] = useState("map");
+  const [cameras, setCameras] = useState<CameraData[]>([]);
+  const [cableData, setCableData] = useState<CableData | null>(null);
+  const [layerData, setLayerData] = useState<Record<string, GeoJSON.FeatureCollection>>({});
+  const [loadingStatus, setLoadingStatus] = useState<string>("");
+  const [selectedCamera, setSelectedCamera] = useState<CameraData | null>(null);
+  const mapNavRef = useRef<{ flyTo: (lat: number, lng: number, zoom: number) => void } | null>(null);
+
+  const toggleLayer = useCallback((id: string) => {
+    setLayers((prev) =>
+      prev.map((l) => (l.id === id ? { ...l, enabled: !l.enabled } : l))
+    );
+  }, []);
+
+  const handleCameraClick = useCallback((camera: CameraData) => {
+    setSelectedCamera(camera);
+  }, []);
+
+  const handleQuickNav = useCallback((lat: number, lng: number, zoom: number) => {
+    mapNavRef.current?.flyTo(lat, lng, zoom);
+  }, []);
+
+  // Fetch camera data
+  useEffect(() => {
+    async function fetchCameras() {
+      setLoadingStatus("Fetching camera feeds...");
+      try {
+        const res = await fetch("/api/cameras");
+        const data = await res.json();
+        if (data.cameras) {
+          setCameras(data.cameras);
+          setLayers((prev) =>
+            prev.map((l) =>
+              l.id === "cameras" ? { ...l, count: data.cameras.length } : l
+            )
+          );
+        }
+      } catch (err) {
+        console.error("Failed to fetch cameras:", err);
+      }
+      setLoadingStatus("");
+    }
+    fetchCameras();
+  }, []);
+
+  // Fetch cable data
+  useEffect(() => {
+    async function fetchCables() {
+      try {
+        const res = await fetch("/api/layers?layer=cables");
+        const data = await res.json();
+        if (data.features) {
+          setCableData(data);
+          setLayers((prev) =>
+            prev.map((l) =>
+              l.id === "cables" ? { ...l, count: data.features.length } : l
+            )
+          );
+        }
+      } catch (err) {
+        console.error("Failed to fetch cables:", err);
+      }
+    }
+    fetchCables();
+  }, []);
+
+  // Fetch HIFLD / dynamic layers when toggled on
+  useEffect(() => {
+    const layersToFetch = layers.filter(
+      (l) =>
+        l.enabled &&
+        l.id !== "cameras" &&
+        l.id !== "cables" &&
+        !layerData[l.id]
+    );
+
+    if (layersToFetch.length === 0) return;
+
+    layersToFetch.forEach(async (layer) => {
+      setLoadingStatus(`Loading ${layer.name}...`);
+      try {
+        const res = await fetch(`/api/layers?layer=${layer.id}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data.features) {
+          setLayerData((prev) => ({ ...prev, [layer.id]: data }));
+          setLayers((prev) =>
+            prev.map((l) =>
+              l.id === layer.id ? { ...l, count: data.features.length } : l
+            )
+          );
+        }
+      } catch (err) {
+        console.error(`Failed to fetch ${layer.name}:`, err);
+      }
+      setLoadingStatus("");
+    });
+  }, [layers, layerData]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    function handleKey(e: KeyboardEvent) {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (e.key === "Escape") setSelectedCamera(null);
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="h-screen flex flex-col overflow-hidden">
+      <TopBar />
+
+      {loadingStatus && (
+        <div className="h-6 bg-surface-2 border-b border-border flex items-center px-4">
+          <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse mr-2" />
+          <span className="text-[10px] text-text-dim tracking-wider">
+            {loadingStatus}
+          </span>
+        </div>
+      )}
+
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar
+          layers={layers}
+          onToggleLayer={toggleLayer}
+          activeView={activeView}
+          onChangeView={setActiveView}
+          onQuickNav={handleQuickNav}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+
+        <main className="flex-1 overflow-hidden">
+          {activeView === "map" && (
+            <ResizablePanelGroup direction="horizontal">
+              <ResizablePanel defaultSize={selectedCamera ? 50 : 65} minSize={30}>
+                <MapEngine
+                  layers={layers}
+                  cameras={cameras}
+                  cableData={cableData}
+                  layerData={layerData}
+                  onCameraClick={handleCameraClick}
+                  navRef={mapNavRef}
+                />
+              </ResizablePanel>
+              <ResizableHandle />
+              <ResizablePanel defaultSize={selectedCamera ? 50 : 35} minSize={20}>
+                {selectedCamera ? (
+                  <ResizablePanelGroup direction="vertical">
+                    <ResizablePanel defaultSize={60} minSize={30}>
+                      <CameraPanel
+                        camera={selectedCamera}
+                        onClose={() => setSelectedCamera(null)}
+                      />
+                    </ResizablePanel>
+                    <ResizableHandle />
+                    <ResizablePanel defaultSize={40} minSize={20}>
+                      <ChatPanel />
+                    </ResizablePanel>
+                  </ResizablePanelGroup>
+                ) : (
+                  <ChatPanel />
+                )}
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          )}
+
+          {activeView === "chat" && <ChatPanel />}
+
+          {activeView === "canvas" && (
+            <div className="w-full h-full bg-background flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-text-dim text-[11px] tracking-wider mb-2">
+                  CANVAS — VISUAL RESEARCH BOARD
+                </div>
+                <div className="text-text-dim/50 text-[10px]">
+                  Phase 3 — React Flow + Obsidian Import
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeView === "ingest" && (
+            <div className="w-full h-full bg-background flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-text-dim text-[11px] tracking-wider mb-2">
+                  INGEST — DOCUMENT PIPELINE
+                </div>
+                <div className="text-text-dim/50 text-[10px]">
+                  Phase 2 — Upload, chunk, embed, store
+                </div>
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }
