@@ -285,7 +285,7 @@ export default function MapEngine({
 
     const cameraIcon = L.divIcon({
       className: "",
-      html: `<div style="width:8px;height:8px;border-radius:50%;background:#00ff88;box-shadow:0 0 6px #00ff88;"></div>`,
+      html: `<div style="width:8px;height:8px;border-radius:50%;background:#ff3b3b;box-shadow:0 0 6px #ff3b3b;"></div>`,
       iconSize: [8, 8],
       iconAnchor: [4, 4],
     });
@@ -375,6 +375,8 @@ export default function MapEngine({
       const isOsmCameras = layerConfig.id === "osm-cameras";
       const isAlpr = layerConfig.id === "alpr";
       const isWeatherAlerts = layerConfig.id === "weather-alerts";
+      const isEffAtlas = layerConfig.id.startsWith("eff-");
+      const isDeflock = layerConfig.id === "deflock-alpr";
 
       let newLayer: L.LayerGroup;
 
@@ -472,10 +474,12 @@ export default function MapEngine({
         newLayer = L.geoJSON(data, {
           pointToLayer: (_feature, latlng) => {
             return L.circleMarker(latlng, {
-              radius: 2.5,
-              fillColor: "#6a6a7a",
-              color: "transparent",
-              fillOpacity: 0.6,
+              radius: 5,
+              fillColor: "#b0b0c0",
+              color: "#d0d0e0",
+              fillOpacity: 0.9,
+              weight: 1.5,
+              opacity: 0.8,
             });
           },
           onEachFeature: (feature, layer) => {
@@ -485,7 +489,7 @@ export default function MapEngine({
             const operator = props.operator !== "Unknown" ? props.operator : "";
             layer.bindPopup(
               `<div style="font-family:monospace;font-size:10px;min-width:180px;">
-                <div style="color:#6a6a7a;font-weight:bold;font-size:11px;">SURVEILLANCE CAMERA</div>
+                <div style="color:#8a8a9a;font-weight:bold;font-size:11px;">STREET / MUNICIPAL CAMERA</div>
                 ${zone ? `<div style="color:#d4d4e0;margin-top:3px;">Zone: ${zone}</div>` : ""}
                 ${cameraType ? `<div style="color:#d4d4e0;">Type: ${cameraType}</div>` : ""}
                 ${operator ? `<div style="color:#d4d4e0;">Operator: ${operator}</div>` : ""}
@@ -520,6 +524,62 @@ export default function MapEngine({
                 <div style="color:#5a5a72;margin-top:4px;font-size:9px;">Source: OpenStreetMap</div>
               </div>`,
               { maxWidth: 250 }
+            );
+          },
+        });
+      } else if (isDeflock) {
+        // DeFlock ALPR crowdsourced locations
+        newLayer = L.geoJSON(data, {
+          pointToLayer: (_feature, latlng) => {
+            return L.circleMarker(latlng, {
+              radius: 4,
+              fillColor: "#ff6b35",
+              color: "#ff6b35",
+              fillOpacity: 0.7,
+              weight: 1,
+              opacity: 0.8,
+            });
+          },
+          onEachFeature: (feature, layer) => {
+            const props = feature.properties || {};
+            layer.bindPopup(
+              `<div style="font-family:monospace;font-size:10px;min-width:200px;">
+                <div style="color:#ff6b35;font-weight:bold;font-size:11px;">ALPR CAMERA</div>
+                ${props.operator ? `<div style="color:#d4d4e0;margin-top:3px;">Operator: ${props.operator}</div>` : ""}
+                ${props.manufacturer ? `<div style="color:#d4d4e0;">Manufacturer: ${props.manufacturer}</div>` : ""}
+                ${props.direction ? `<div style="color:#d4d4e0;">Direction: ${props.direction}</div>` : ""}
+                <div style="color:#5a5a72;margin-top:4px;font-size:9px;">OSM Node: ${props.osmId || ""}</div>
+                <div style="color:#5a5a72;font-size:9px;">Source: DeFlock / OpenStreetMap</div>
+              </div>`,
+              { maxWidth: 250 }
+            );
+          },
+        });
+      } else if (isEffAtlas) {
+        // EFF Atlas of Surveillance layers
+        newLayer = L.geoJSON(data, {
+          pointToLayer: (_feature, latlng) => {
+            return L.circleMarker(latlng, {
+              radius: 5,
+              fillColor: layerConfig.color,
+              color: layerConfig.color,
+              fillOpacity: 0.8,
+              weight: 1.5,
+              opacity: 0.9,
+            });
+          },
+          onEachFeature: (feature, layer) => {
+            const props = feature.properties || {};
+            layer.bindPopup(
+              `<div style="font-family:monospace;font-size:10px;min-width:200px;">
+                <div style="color:${layerConfig.color};font-weight:bold;font-size:11px;">${props.technology || "SURVEILLANCE"}</div>
+                <div style="color:#e0e0e8;margin-top:4px;font-weight:bold;">${props.agency || ""}</div>
+                <div style="color:#d4d4e0;margin-top:2px;">${props.city || ""}${props.state ? `, ${props.state}` : ""}</div>
+                ${props.vendor ? `<div style="color:#8888a0;margin-top:3px;">Vendor: ${props.vendor}</div>` : ""}
+                ${props.summary ? `<div style="color:#8888a0;margin-top:3px;font-size:9px;line-height:1.3;">${props.summary}</div>` : ""}
+                <div style="color:#5a5a72;margin-top:4px;font-size:9px;">Source: EFF Atlas of Surveillance</div>
+              </div>`,
+              { maxWidth: 300 }
             );
           },
         });

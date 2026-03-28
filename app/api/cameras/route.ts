@@ -302,6 +302,100 @@ function parseMassDot(data: MassDotCamera[]): NormalizedCamera[] {
     });
 }
 
+// ─── NJTA (NJ Turnpike Authority — Turnpike + Garden State Parkway) ───
+
+const NJTA_PAGE = "https://www.njta.gov/travel-resources/camera-list/";
+
+interface NjtaCamera {
+  id: number;
+  lat: number;
+  lng: number;
+  mile_marker: number | null;
+  relative_direction: string;
+  relative_text: string;
+  video_url: string;
+  section: string;
+  type: string;
+}
+
+interface NjtaBlockConfig {
+  mode: string;
+  initialData: {
+    cameras: {
+      turnpike: NjtaCamera[];
+      parkway: NjtaCamera[];
+    };
+  };
+}
+
+function parseNjta(config: NjtaBlockConfig): NormalizedCamera[] {
+  const cameras: NormalizedCamera[] = [];
+  const { turnpike = [], parkway = [] } = config.initialData?.cameras || {};
+
+  for (const cam of turnpike) {
+    if (!cam.lat || !cam.lng) continue;
+    cameras.push({
+      id: `njta-tp-${cam.id}`,
+      name: cam.relative_text
+        ? `NJ Turnpike MP ${cam.mile_marker ?? ""} — ${cam.relative_text}`
+        : `NJ Turnpike Camera ${cam.id}`,
+      lat: cam.lat,
+      lng: cam.lng,
+      imageUrl: null,
+      streamUrl: cam.video_url || null,
+      road: "NJ Turnpike",
+      direction: cam.relative_direction || "",
+      county: "",
+      state: "NJ",
+      source: "njta",
+      inService: !!cam.video_url,
+    });
+  }
+
+  for (const cam of parkway) {
+    if (!cam.lat || !cam.lng) continue;
+    cameras.push({
+      id: `njta-gsp-${cam.id}`,
+      name: cam.relative_text
+        ? `Garden State Parkway MP ${cam.mile_marker ?? ""} — ${cam.relative_text}`
+        : `GSP Camera ${cam.id}`,
+      lat: cam.lat,
+      lng: cam.lng,
+      imageUrl: null,
+      streamUrl: cam.video_url || null,
+      road: "Garden State Parkway",
+      direction: cam.relative_direction || "",
+      county: "",
+      state: "NJ",
+      source: "njta",
+      inService: !!cam.video_url,
+    });
+  }
+
+  return cameras;
+}
+
+async function fetchNjtaCameras(): Promise<NormalizedCamera[]> {
+  const res = await fetch(NJTA_PAGE, { next: { revalidate: 3600 } });
+  if (!res.ok) throw new Error(`NJTA HTTP ${res.status}`);
+  const html = await res.text();
+
+  // Extract data-block-config JSON from the map block element
+  const match = html.match(/data-block-config="([^"]+)"/);
+  if (!match) throw new Error("NJTA: no data-block-config found");
+
+  // HTML-decode the attribute value
+  const decoded = match[1]
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'");
+
+  const config: NjtaBlockConfig = JSON.parse(decoded);
+  return parseNjta(config);
+}
+
 // ─── Main handler ───
 
 export async function GET() {
@@ -360,6 +454,15 @@ export async function GET() {
     sourceCounts.massdot = cameras.length;
   } catch (err) {
     errors.push(`MassDOT: ${err instanceof Error ? err.message : "failed"}`);
+  }
+
+  // NJTA cameras (NJ Turnpike + Garden State Parkway)
+  try {
+    const cameras = await fetchNjtaCameras();
+    allCameras.push(...cameras);
+    sourceCounts.njta = cameras.length;
+  } catch (err) {
+    errors.push(`NJTA: ${err instanceof Error ? err.message : "failed"}`);
   }
 
   return NextResponse.json({

@@ -5,6 +5,12 @@ import {
   fetchAlprCamerasByArea,
   osmCamerasToGeoJSON,
 } from "@/lib/osm-cameras";
+import {
+  ATLAS_TECH_LAYERS,
+  getAtlasByTechnology,
+  atlasToGeoJSON,
+} from "@/lib/eff-atlas";
+import { fetchDeflockALPR } from "@/lib/deflock";
 
 const CABLE_API = "https://www.submarinecablemap.com/api/v3/cable/cable-geo.json";
 const LANDING_POINTS_API =
@@ -59,18 +65,53 @@ export async function GET(request: Request) {
     }
 
     // OSM Surveillance cameras (Overpass API)
+    // Query by individual states in batches to avoid Overpass timeout
     if (layer === "osm-cameras") {
-      const area = state || "United States";
-      const cameras = await fetchOsmCamerasByArea(area, 180);
-      const geojson = osmCamerasToGeoJSON(cameras);
+      if (state) {
+        const cameras = await fetchOsmCamerasByArea(state, 120);
+        const geojson = osmCamerasToGeoJSON(cameras);
+        return NextResponse.json(geojson);
+      }
+      // Batch states in groups of 4 to avoid overwhelming Overpass
+      const batches = [
+        ["New Jersey", "New York", "Connecticut", "Delaware"],
+        ["Pennsylvania", "Massachusetts", "Maryland", "Virginia"],
+        ["California", "Florida", "Georgia", "Texas"],
+      ];
+      const allCameras = [];
+      for (const batch of batches) {
+        const results = await Promise.allSettled(
+          batch.map((s) => fetchOsmCamerasByArea(s, 60))
+        );
+        for (const r of results) {
+          if (r.status === "fulfilled") allCameras.push(...r.value);
+        }
+      }
+      const geojson = osmCamerasToGeoJSON(allCameras);
       return NextResponse.json(geojson);
     }
 
     // ALPR / License Plate Readers (Overpass API)
     if (layer === "alpr") {
-      const area = state || "United States";
-      const cameras = await fetchAlprCamerasByArea(area, 120);
-      const geojson = osmCamerasToGeoJSON(cameras);
+      if (state) {
+        const cameras = await fetchAlprCamerasByArea(state, 120);
+        const geojson = osmCamerasToGeoJSON(cameras);
+        return NextResponse.json(geojson);
+      }
+      const batches = [
+        ["New Jersey", "New York", "Pennsylvania", "California"],
+        ["Florida", "Georgia", "Massachusetts", "Virginia"],
+      ];
+      const allCameras = [];
+      for (const batch of batches) {
+        const results = await Promise.allSettled(
+          batch.map((s) => fetchAlprCamerasByArea(s, 60))
+        );
+        for (const r of results) {
+          if (r.status === "fulfilled") allCameras.push(...r.value);
+        }
+      }
+      const geojson = osmCamerasToGeoJSON(allCameras);
       return NextResponse.json(geojson);
     }
 
@@ -89,6 +130,22 @@ export async function GET(request: Request) {
       if (!res.ok) throw new Error(`NOAA API error: ${res.status}`);
       const data = await res.json();
       return NextResponse.json(data);
+    }
+
+    // DeFlock ALPR locations (crowdsourced from OpenStreetMap)
+    if (layer === "deflock-alpr") {
+      const data = await fetchDeflockALPR();
+      return NextResponse.json(data);
+    }
+
+    // EFF Atlas of Surveillance layers
+    const atlasLayer = ATLAS_TECH_LAYERS.find((l) => l.id === layer);
+    if (atlasLayer) {
+      const records = getAtlasByTechnology(atlasLayer.tech);
+      const filtered = state
+        ? records.filter((r) => r.state === state)
+        : records;
+      return NextResponse.json(atlasToGeoJSON(filtered));
     }
 
     // HIFLD layers

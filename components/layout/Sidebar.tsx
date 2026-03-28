@@ -24,6 +24,13 @@ import {
   Cloud,
   Eye,
   ScanLine,
+  Shield,
+  Crosshair,
+  Scan,
+  UserSearch,
+  Wifi,
+  Video,
+  MapPin,
 } from "lucide-react";
 
 export interface LayerConfig {
@@ -74,10 +81,20 @@ const LAYER_ICONS: Record<string, React.ReactNode> = {
   airports: <Plane className="w-3.5 h-3.5" />,
   ports: <Ship className="w-3.5 h-3.5" />,
   bridges: <Building2 className="w-3.5 h-3.5" />,
+  "eff-alpr": <Scan className="w-3.5 h-3.5" />,
+  "eff-shotspotter": <Crosshair className="w-3.5 h-3.5" />,
+  "eff-drones": <Plane className="w-3.5 h-3.5" />,
+  "eff-face-rec": <UserSearch className="w-3.5 h-3.5" />,
+  "eff-cell-sim": <Wifi className="w-3.5 h-3.5" />,
+  "eff-rtcc": <Shield className="w-3.5 h-3.5" />,
+  "eff-bodycam": <Video className="w-3.5 h-3.5" />,
+  "eff-camera-reg": <MapPin className="w-3.5 h-3.5" />,
+  "deflock-alpr": <Scan className="w-3.5 h-3.5" />,
 };
 
 const GROUP_ORDER = [
   "surveillance",
+  "police",
   "infrastructure",
   "energy",
   "emergency",
@@ -89,6 +106,7 @@ const GROUP_ORDER = [
 
 const GROUP_LABELS: Record<string, string> = {
   surveillance: "SURVEILLANCE",
+  police: "POLICE SURVEILLANCE",
   infrastructure: "INFRASTRUCTURE",
   energy: "ENERGY",
   emergency: "EMERGENCY",
@@ -100,6 +118,7 @@ const GROUP_LABELS: Record<string, string> = {
 
 const GROUP_COLORS: Record<string, string> = {
   surveillance: "#00e87b",
+  police: "#ff6b35",
   infrastructure: "#00b4ff",
   energy: "#f5a623",
   emergency: "#ff2b4e",
@@ -339,9 +358,19 @@ export default function Sidebar({
 
 export const DEFAULT_LAYERS: LayerConfig[] = [
   // SURVEILLANCE
-  { id: "cameras", name: "Live Highway Cams", group: "surveillance", enabled: true, color: "#00e87b" },
-  { id: "osm-cameras", name: "All Mapped Cameras (OSM)", group: "surveillance", enabled: false, color: "#6a6a7a" },
+  { id: "cameras", name: "Live Highway Cams", group: "surveillance", enabled: true, color: "#ff3b3b" },
+  { id: "osm-cameras", name: "Street & Municipal Cameras", group: "surveillance", enabled: false, color: "#6a6a7a" },
   { id: "alpr", name: "ALPR / Plate Readers", group: "surveillance", enabled: false, color: "#00b4ff" },
+  { id: "deflock-alpr", name: "DeFlock ALPR Map (OSM)", group: "surveillance", enabled: false, color: "#ff6b35" },
+  // POLICE SURVEILLANCE (EFF Atlas)
+  { id: "eff-alpr", name: "Flock / ALPR Deployments", group: "police", enabled: false, color: "#ff6b35" },
+  { id: "eff-shotspotter", name: "ShotSpotter / Gunshot", group: "police", enabled: false, color: "#ff2b4e" },
+  { id: "eff-drones", name: "Police Drones / UAVs", group: "police", enabled: false, color: "#8b5cf6" },
+  { id: "eff-face-rec", name: "Facial Recognition", group: "police", enabled: false, color: "#f5a623" },
+  { id: "eff-cell-sim", name: "Cell-Site Simulators", group: "police", enabled: false, color: "#ff2b4e" },
+  { id: "eff-rtcc", name: "Real-Time Crime Centers", group: "police", enabled: false, color: "#00b4ff" },
+  { id: "eff-bodycam", name: "Body-Worn Cameras", group: "police", enabled: false, color: "#34d399" },
+  { id: "eff-camera-reg", name: "Camera Registries", group: "police", enabled: false, color: "#9a9aaa" },
   // INFRASTRUCTURE
   { id: "cables", name: "Submarine Cables", group: "infrastructure", enabled: true, color: "#00b4ff" },
   { id: "gas-pipelines", name: "Natural Gas Pipelines", group: "infrastructure", enabled: false, color: "#f5a623" },

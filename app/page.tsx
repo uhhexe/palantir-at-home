@@ -110,7 +110,11 @@ export default function Home() {
     layersToFetch.forEach(async (layer) => {
       setLoadingStatus(`Loading ${layer.name}...`);
       try {
-        const res = await fetch(`/api/layers?layer=${layer.id}`);
+        const isSlowLayer = ["osm-cameras", "alpr"].includes(layer.id);
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), isSlowLayer ? 300000 : 60000);
+        const res = await fetch(`/api/layers?layer=${layer.id}`, { signal: controller.signal });
+        clearTimeout(timeout);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         if (data.features) {
