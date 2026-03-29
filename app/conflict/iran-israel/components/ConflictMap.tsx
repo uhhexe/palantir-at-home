@@ -389,28 +389,7 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
       layerGroupsRef.current["oil-facilities"] = L.layerGroup(markers).addTo(map);
     }
 
-    // ── Infrastructure: Pipelines ──
-    if (isEnabled("pipelines") && infrastructure?.pipelines) {
-      const lines: L.Polyline[] = [];
-      for (const p of infrastructure.pipelines) {
-        const color = p.type === "shipping" ? "#388bfd" : "#d4962a";
-        const line = L.polyline(p.coords.map(c => [c[0], c[1]] as L.LatLngTuple), {
-          color,
-          weight: 2,
-          opacity: 0.6,
-          dashArray: "6 4",
-        });
-        line.bindPopup(`
-          <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:180px">
-            <div style="color:#d4962a;font-weight:600;font-size:13px">${p.name}</div>
-            <div style="color:#5c6c78;font-size:11px">${p.type.toUpperCase()} — ${p.country}</div>
-            <div style="margin:4px 0;font-size:11px">${p.notes}</div>
-          </div>
-        `, { className: "war-room-popup" });
-        lines.push(line);
-      }
-      layerGroupsRef.current["pipelines"] = L.layerGroup(lines).addTo(map);
-    }
+    // ── Pipelines placeholder — rendered by separate useEffect from Overpass API ──
 
     // ── Infrastructure: Chokepoints ──
     if (isEnabled("chokepoints") && infrastructure?.chokepoints) {
@@ -498,12 +477,67 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
       }
     }
 
-    // ── OpenSeaMap maritime overlay ──
+    // ── OpenSeaMap maritime overlay + shipping lanes + ports ──
     if (isEnabled("sea-lanes")) {
       if (!seaMapRef.current) {
         seaMapRef.current = L.tileLayer(OPENSEAMAP_URL, { maxZoom: 18, opacity: 0.7 });
       }
       seaMapRef.current.addTo(map);
+
+      const maritimeLayers: L.Layer[] = [];
+
+      // Shipping lanes
+      const SHIPPING_LANES = [
+        { name: "Hormuz Inbound Lane", coords: [[25.5, 56.8], [26.2, 56.5], [26.5, 56.3], [26.8, 56.2], [27.1, 56.3]], type: "lane" },
+        { name: "Hormuz Outbound Lane", coords: [[27.0, 56.1], [26.7, 56.0], [26.4, 56.1], [26.1, 56.3], [25.6, 56.5]], type: "lane" },
+        { name: "Gulf Route (Qatar-Hormuz)", coords: [[25.3, 51.6], [25.8, 52.5], [26.0, 53.5], [26.2, 54.5], [26.3, 55.5], [26.5, 56.3]], type: "route" },
+        { name: "Gulf Route (Kuwait-Hormuz)", coords: [[29.3, 48.2], [28.5, 49.0], [27.8, 50.0], [27.2, 51.5], [26.8, 53.0], [26.5, 54.5], [26.5, 56.3]], type: "route" },
+        { name: "Red Sea Route (Bab el-Mandeb to Suez)", coords: [[12.5, 43.3], [13.5, 43.0], [15.0, 42.0], [18.0, 39.5], [22.0, 37.0], [26.0, 35.0], [29.6, 32.6]], type: "route" },
+        { name: "Fujairah Bypass Route", coords: [[25.1, 56.4], [24.5, 57.0], [24.0, 58.0], [23.5, 59.0]], type: "route" },
+      ];
+
+      for (const lane of SHIPPING_LANES) {
+        const color = lane.type === "lane" ? "#388bfd" : "#5c6c78";
+        const weight = lane.type === "lane" ? 2 : 1;
+        const line = L.polyline(lane.coords as L.LatLngTuple[], { color, weight, opacity: 0.3, dashArray: "8 6" });
+        line.bindPopup(`<div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4"><div style="color:${color};font-weight:600">${lane.name}</div><div style="color:#5c6c78;font-size:11px">${lane.type.toUpperCase()}</div></div>`, { className: "war-room-popup" });
+        maritimeLayers.push(line);
+      }
+
+      // Anchorage zones
+      const ANCHORAGE_ZONES = [
+        { name: "Hormuz Anchorage", lat: 25.3, lng: 57.0, count: "~50+ tankers", status: "CONGESTED" },
+        { name: "Fujairah Anchorage", lat: 25.2, lng: 56.5, count: "~30+ vessels", status: "CONGESTED" },
+        { name: "Khorfakkan Anchorage", lat: 25.35, lng: 56.35, count: "~15 vessels", status: "WAITING" },
+      ];
+
+      for (const zone of ANCHORAGE_ZONES) {
+        const circle = L.circle([zone.lat, zone.lng], { radius: 15000, color: "#d4962a", fillColor: "#d4962a", fillOpacity: 0.08, weight: 1, opacity: 0.3, dashArray: "4 4" });
+        circle.bindPopup(`<div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:180px"><div style="color:#d4962a;font-weight:600;font-size:13px">${zone.name}</div><div style="margin:4px 0">${zone.count}</div><div style="color:#e8364a">STATUS: ${zone.status}</div></div>`, { className: "war-room-popup" });
+        maritimeLayers.push(circle);
+      }
+
+      // Ports & terminals
+      const PORTS = [
+        { name: "Fujairah Port", lat: 25.12, lng: 56.36, type: "oil_terminal", status: "STRUCK", color: "#e8364a" },
+        { name: "Ras Tanura", lat: 26.64, lng: 50.16, type: "oil_terminal", status: "AT RISK", color: "#d4962a" },
+        { name: "Kharg Island", lat: 29.23, lng: 50.32, type: "oil_terminal", status: "IRAN — ACTIVE", color: "#e8364a" },
+        { name: "Bandar Abbas", lat: 27.18, lng: 56.27, type: "naval_port", status: "IRAN — ACTIVE", color: "#e8364a" },
+        { name: "Jebel Ali Port", lat: 25.01, lng: 55.06, type: "commercial", status: "AT RISK", color: "#d4962a" },
+        { name: "Mina Salman (Bahrain)", lat: 26.2, lng: 50.6, type: "naval_port", status: "US 5TH FLEET", color: "#388bfd" },
+        { name: "Duqm Port (Oman)", lat: 19.67, lng: 57.7, type: "commercial", status: "BYPASS OPTION", color: "#00d4aa" },
+        { name: "Yanbu Terminal", lat: 24.09, lng: 38.06, type: "oil_terminal", status: "ACTIVE — BYPASS", color: "#00d4aa" },
+        { name: "Ain Sukhna (SUMED)", lat: 29.6, lng: 32.34, type: "oil_terminal", status: "OPERATIONAL", color: "#00d4aa" },
+        { name: "Hodeidah Port", lat: 14.8, lng: 42.95, type: "contested", status: "HOUTHI — CONTESTED", color: "#d4962a" },
+      ];
+
+      for (const port of PORTS) {
+        const m = L.circleMarker([port.lat, port.lng], { radius: 4, color: port.color, fillColor: port.color, fillOpacity: 0.8, weight: 1 });
+        m.bindPopup(`<div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:180px"><div style="color:${port.color};font-weight:600;font-size:13px">${port.name}</div><div style="color:#5c6c78;font-size:11px">${port.type.toUpperCase()}</div><div style="color:${port.color};margin-top:4px">${port.status}</div></div>`, { className: "war-room-popup" });
+        maritimeLayers.push(m);
+      }
+
+      layerGroupsRef.current["sea-lanes"] = L.layerGroup(maritimeLayers).addTo(map);
     } else {
       if (seaMapRef.current && map.hasLayer(seaMapRef.current)) {
         map.removeLayer(seaMapRef.current);
@@ -622,6 +656,149 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
       }
       map.off("zoomend", onZoom);
     };
+  }, [layers]);
+
+  // ── OSM Pipeline layer (fetched from Overpass API) ──
+  const pipelineLayerRef = useRef<L.LayerGroup | null>(null);
+  const pipelineDataRef = useRef<unknown>(null);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const pipelinesEnabled = layers.find((l) => l.id === "pipelines")?.enabled;
+
+    // Remove if disabled
+    if (!pipelinesEnabled) {
+      if (pipelineLayerRef.current) {
+        map.removeLayer(pipelineLayerRef.current);
+        pipelineLayerRef.current = null;
+      }
+      return;
+    }
+
+    // If we already have data, just re-render
+    if (pipelineDataRef.current) {
+      renderPipelines(map, pipelineDataRef.current as GeoJSON.FeatureCollection);
+      return;
+    }
+
+    // Fetch from API
+    fetch("/api/conflict/pipelines")
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.features) return;
+        pipelineDataRef.current = data;
+        const oilGasCount = (data.stats?.oil || 0) + (data.stats?.gas || 0) + (data.stats?.petrochemical || 0);
+        console.log(`Loaded ${data.stats?.total || data.features.length} pipeline segments (${oilGasCount} oil/gas)`);
+        // Update layer count
+        const pipeLayer = layers.find((l) => l.id === "pipelines");
+        if (pipeLayer) pipeLayer.count = oilGasCount;
+        if (layers.find((l) => l.id === "pipelines")?.enabled) {
+          renderPipelines(map, data);
+        }
+      })
+      .catch((err) => console.error("Pipeline load error:", err));
+
+    function renderPipelines(m: L.Map, data: GeoJSON.FeatureCollection) {
+      if (pipelineLayerRef.current) {
+        m.removeLayer(pipelineLayerRef.current);
+      }
+
+      const group = L.layerGroup();
+
+      const getPipelineColor = (type: string) => {
+        switch (type) {
+          case "oil": return "#d4962a";
+          case "gas": return "#00d4aa";
+          case "water": return "#388bfd";
+          case "petrochemical": return "#c8b832";
+          default: return "#5c6c78";
+        }
+      };
+      const getPipelineWeight = (type: string) => {
+        switch (type) {
+          case "oil": return 2;
+          case "gas": return 2;
+          case "water": return 1;
+          case "petrochemical": return 1.5;
+          default: return 1;
+        }
+      };
+      const getPipelineOpacity = (type: string) => {
+        switch (type) {
+          case "oil": return 0.7;
+          case "gas": return 0.6;
+          case "water": return 0.3;
+          case "petrochemical": return 0.5;
+          default: return 0.25;
+        }
+      };
+      const getPipelineDash = (type: string) => {
+        switch (type) {
+          case "oil": return "8 4";
+          case "gas": return "4 4";
+          case "water": return "";
+          case "petrochemical": return "2 4";
+          default: return "2 6";
+        }
+      };
+
+      for (const feature of data.features) {
+        if (!feature.geometry || feature.geometry.type !== "LineString") continue;
+        const coords = (feature.geometry as GeoJSON.LineString).coordinates;
+        if (coords.length < 2) continue;
+
+        const props = feature.properties || {};
+        const type = props.pipelineType || "unknown";
+        // Skip water and unknown pipelines — they're not conflict-relevant and there are thousands
+        if (type === "water" || type === "unknown") continue;
+        const color = getPipelineColor(type);
+        const weight = getPipelineWeight(type);
+        const opacity = getPipelineOpacity(type);
+        const dashArray = getPipelineDash(type);
+
+        // Simplify long segments — keep every Nth point to reduce rendering load
+        let simplified = coords;
+        if (coords.length > 20) {
+          const step = Math.ceil(coords.length / 20);
+          simplified = coords.filter((_: number[], i: number) => i === 0 || i === coords.length - 1 || i % step === 0);
+        }
+        const latLngs = simplified.map((c: number[]) => [c[1], c[0]] as L.LatLngTuple);
+        const line = L.polyline(latLngs, { color, weight, opacity, dashArray, interactive: true });
+
+        const name = props.name || "Unnamed Pipeline";
+        const substance = props.substance || "unknown";
+        const operator = props.operator || "";
+        const typeLabel = type.charAt(0).toUpperCase() + type.slice(1);
+
+        line.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:10px;color:#9aa8b4;min-width:200px">
+            <div style="font-family:Rajdhani,sans-serif;font-size:13px;font-weight:600;color:${color}">${name}</div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+              <span style="font-size:8px;padding:1px 5px;background:${color}15;color:${color};border:1px solid ${color}30">${typeLabel.toUpperCase()}</span>
+            </div>
+            ${substance !== "unknown" ? `<div style="display:flex;justify-content:space-between"><span style="color:#344050">Substance</span><span>${substance}</span></div>` : ""}
+            ${operator ? `<div style="display:flex;justify-content:space-between"><span style="color:#344050">Operator</span><span>${operator}</span></div>` : ""}
+            ${props.diameter ? `<div style="display:flex;justify-content:space-between"><span style="color:#344050">Diameter</span><span>${props.diameter}</span></div>` : ""}
+            ${props.location ? `<div style="display:flex;justify-content:space-between"><span style="color:#344050">Location</span><span>${props.location}</span></div>` : ""}
+          </div>
+        `, { className: "war-room-popup" });
+
+        // Hover highlight
+        line.on("mouseover", () => {
+          line.setStyle({ weight: 4, opacity: 1 });
+        });
+        line.on("mouseout", () => {
+          line.setStyle({ weight, opacity });
+        });
+
+        line.addTo(group);
+      }
+
+      group.addTo(m);
+      pipelineLayerRef.current = group;
+    }
   }, [layers]);
 
   // Cumulative wave markers (static dots showing war footprint buildup)

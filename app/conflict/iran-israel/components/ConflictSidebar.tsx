@@ -143,8 +143,39 @@ export default function ConflictSidebar({ layers, onToggleLayer, conflictDay, to
               <span className="text-warning">RESTRICTED</span>
             </div>
             <div className="flex justify-between">
+              <span>Suez</span>
+              <span className="text-accent">OPERATIONAL</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Ships Targeted</span>
+              <span className="text-danger">10+</span>
+            </div>
+            <div className="flex justify-between">
               <span>Tankers Anchored</span>
-              <span className="text-text">~50+</span>
+              <span className="text-warning">~50+</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Oil Price</span>
+              <span className="text-warning">$85+/bbl</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="h-px bg-border" />
+
+        {/* Pipelines */}
+        <div>
+          <div className="font-heading text-[14px] tracking-[1.5px] text-accent uppercase flex items-center gap-1">
+            <span>◆</span> Pipelines
+          </div>
+          <div className="font-mono text-[14px] text-text-dim space-y-0.5 mt-1">
+            <div className="flex justify-between">
+              <span>Total Segments</span>
+              <span className="text-text">{layers.find((l) => l.id === "pipelines")?.count || "..."}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Source</span>
+              <span className="text-text-muted">OSM Overpass</span>
             </div>
           </div>
         </div>
