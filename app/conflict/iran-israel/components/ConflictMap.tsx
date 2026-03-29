@@ -63,12 +63,127 @@ export interface InfrastructureData {
   airspace: { name: string; status: string; country: string }[];
 }
 
+// ─── Leadership Types ───
+export interface LeadershipLeader {
+  name: string;
+  role: string;
+  status: string;
+  date: string | null;
+  location: string;
+  lat: number;
+  lng: number;
+  killedBy: string | null;
+  details: string;
+  successor?: string;
+  importance: string;
+}
+
+// ─── Multi-Theater Types ───
+export interface LebanonTarget {
+  name: string;
+  lat: number;
+  lng: number;
+  type: string;
+  status: string;
+  notes: string;
+}
+
+export interface LebanonMilitary {
+  name: string;
+  lat: number;
+  lng: number;
+  side: string;
+  type: string;
+  notes: string;
+}
+
+export interface HezbollahStrike {
+  date: string;
+  attacker: string;
+  target: string;
+  lat: number;
+  lng: number;
+  country: string;
+  weaponType: string;
+  notes: string;
+}
+
+export interface HouthiData {
+  positions: { name: string; lat: number; lng: number; type: string; notes: string }[];
+  shipping_attacks: { date: string; target: string; lat: number; lng: number; type: string; notes: string }[];
+  shipping_lanes: { name: string; coordinates: [number, number][] }[];
+  chokepoint_status: Record<string, { status: string; notes: string; polygon: [number, number][] }>;
+}
+
+export interface IraqData {
+  us_bases: { name: string; lat: number; lng: number; side: string; type: string; notes: string }[];
+  proxy_attacks: { date: string; attacker: string; target: string; lat: number; lng: number; weaponType: string; notes: string }[];
+  kurdish_groups: { name: string; lat: number; lng: number; type: string; notes: string }[];
+}
+
+export interface EnergyStrike {
+  date: string;
+  attacker?: string;
+  target: string;
+  lat?: number;
+  lng?: number;
+  type: string;
+  damage: string;
+  country?: string;
+  note?: string;
+  event?: string;
+}
+
 export interface CumulativeWaveTarget {
   lat: number;
   lng: number;
   name: string;
   attacker: string;
   round: string;
+}
+
+export interface NotableIncident {
+  date: string;
+  event: string;
+  killed: string;
+  type: string;
+  details: string;
+  lat: number;
+  lng: number;
+}
+
+export interface OrefAlert {
+  data: string;       // city/area name
+  title: string;      // alert type
+  desc: string;       // description
+  cat?: string;       // category
+}
+
+export interface FirmsPoint {
+  lat: number;
+  lng: number;
+  brightness: number;
+  confidence: string;
+  acq_date: string;
+  acq_time: string;
+  satellite: string;
+  frp: number;
+}
+
+export interface AcledEvent {
+  event_id_cnty: string;
+  event_date: string;
+  event_type: string;
+  sub_event_type: string;
+  actor1: string;
+  actor2: string;
+  country: string;
+  admin1: string;
+  location: string;
+  lat: number;
+  lng: number;
+  fatalities: number;
+  notes: string;
 }
 
 interface ConflictMapProps {
@@ -80,6 +195,18 @@ interface ConflictMapProps {
   infrastructure: InfrastructureData | null;
   waveTargets?: { lat: number; lng: number; name: string }[];
   cumulativeWaveTargets?: CumulativeWaveTarget[];
+  lebanonTargets?: LebanonTarget[];
+  lebanonMilitary?: LebanonMilitary[];
+  hezbollahStrikes?: HezbollahStrike[];
+  houthiData?: HouthiData | null;
+  iraqData?: IraqData | null;
+  leadershipLeaders?: LeadershipLeader[];
+  energyStrikes?: EnergyStrike[];
+  notableIncidents?: NotableIncident[];
+  orefAlerts?: OrefAlert[];
+  firmsPoints?: FirmsPoint[];
+  acledEvents?: AcledEvent[];
+  weaponsRangeRings?: { name: string; range_km: number; color: string; deployed_at: { name: string; lat: number; lng: number }[] }[];
 }
 
 const ATTACKER_COLORS: Record<string, string> = {
@@ -88,11 +215,11 @@ const ATTACKER_COLORS: Record<string, string> = {
   IRAN: "#e8364a",
   HOUTHI: "#d4962a",
   HEZBOLLAH: "#c8b832",
-  UNKNOWN: "#5c6c78",
+  UNKNOWN: "#8b949e",
 };
 
 const TILE_URLS: Record<string, string> = {
-  dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+  dark: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
   satellite: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   topo: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
 };
@@ -104,7 +231,7 @@ const STATUS_COLORS: Record<string, string> = {
   DAMAGED: "#d4962a",
   OPERATIONAL: "#00d4aa",
   STRUCK: "#e8364a",
-  SHUTDOWN: "#5c6c78",
+  SHUTDOWN: "#8b949e",
   CLOSED: "#e8364a",
   RESTRICTED: "#d4962a",
 };
@@ -122,52 +249,83 @@ const CHOKEPOINT_BORDERS: Record<string, string> = {
 };
 
 function makeCircleSvg(color: string): string {
-  return `<svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5" fill="${color}" fill-opacity="0.8" stroke="${color}" stroke-width="1" stroke-opacity="0.4"/></svg>`;
+  return `<svg width="18" height="18" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="8" fill="${color}" fill-opacity="0.12" stroke="${color}" stroke-width="0.5" stroke-opacity="0.2"/><circle cx="9" cy="9" r="5" fill="${color}" fill-opacity="0.85" stroke="${color}" stroke-width="1.5" stroke-opacity="0.5"/></svg>`;
 }
 
 function makeDiamondSvg(color: string): string {
-  return `<svg width="14" height="14" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="8" height="8" rx="1" fill="${color}" fill-opacity="0.8" stroke="${color}" stroke-width="1" stroke-opacity="0.4" transform="rotate(45 7 7)"/></svg>`;
+  return `<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" fill="${color}" fill-opacity="0.1" stroke="none"/><rect x="4" y="4" width="10" height="10" rx="1" fill="${color}" fill-opacity="0.85" stroke="${color}" stroke-width="1.5" stroke-opacity="0.5" transform="rotate(45 10 10)"/></svg>`;
 }
 
 function makeSquareSvg(color: string): string {
-  return `<svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="10" height="10" rx="1" fill="${color}" fill-opacity="0.8" stroke="${color}" stroke-width="1" stroke-opacity="0.4"/></svg>`;
+  return `<svg width="18" height="18" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="8" fill="${color}" fill-opacity="0.1" stroke="none"/><rect x="3" y="3" width="12" height="12" rx="1" fill="${color}" fill-opacity="0.85" stroke="${color}" stroke-width="1.5" stroke-opacity="0.5"/></svg>`;
 }
 
 function makeTriangleSvg(color: string): string {
-  return `<svg width="14" height="14" xmlns="http://www.w3.org/2000/svg"><polygon points="7,1 13,13 1,13" fill="${color}" fill-opacity="0.8" stroke="${color}" stroke-width="1" stroke-opacity="0.4"/></svg>`;
+  return `<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" fill="${color}" fill-opacity="0.1" stroke="none"/><polygon points="10,2 18,18 2,18" fill="${color}" fill-opacity="0.85" stroke="${color}" stroke-width="1.5" stroke-opacity="0.5"/></svg>`;
 }
 
 function makeLabelSvg(label: string, color: string): string {
-  const w = 8 + label.length * 7;
-  return `<svg width="${w}" height="16" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="${w}" height="16" rx="2" fill="${color}" fill-opacity="0.25" stroke="${color}" stroke-width="1" stroke-opacity="0.6"/><text x="${w / 2}" y="12" text-anchor="middle" font-family="Inconsolata,monospace" font-size="10" fill="${color}" font-weight="600">${label}</text></svg>`;
+  const w = 10 + label.length * 8;
+  return `<svg width="${w}" height="20" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="${w}" height="20" rx="2" fill="${color}" fill-opacity="0.3" stroke="${color}" stroke-width="1.5" stroke-opacity="0.7"/><text x="${w / 2}" y="14" text-anchor="middle" font-family="Inconsolata,monospace" font-size="11" fill="${color}" font-weight="700">${label}</text></svg>`;
 }
 
 function makeDefenseSvg(status: string): string {
   const color = STATUS_COLORS[status] || "#00d4aa";
   if (status === "DESTROYED") {
-    return `<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" fill="${color}" fill-opacity="0.3" stroke="${color}" stroke-width="1.5"/><line x1="4" y1="4" x2="12" y2="12" stroke="${color}" stroke-width="2"/><line x1="12" y1="4" x2="4" y2="12" stroke="${color}" stroke-width="2"/></svg>`;
+    return `<svg width="22" height="22" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="10" fill="${color}" fill-opacity="0.12" stroke="none"/><circle cx="11" cy="11" r="7" fill="${color}" fill-opacity="0.3" stroke="${color}" stroke-width="1.5"/><line x1="6" y1="6" x2="16" y2="16" stroke="${color}" stroke-width="2.5"/><line x1="16" y1="6" x2="6" y2="16" stroke="${color}" stroke-width="2.5"/></svg>`;
   }
   if (status === "DAMAGED") {
-    return `<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" fill="${color}" fill-opacity="0.3" stroke="${color}" stroke-width="1.5"/><text x="8" y="12" text-anchor="middle" font-size="11" fill="${color}" font-weight="bold">!</text></svg>`;
+    return `<svg width="22" height="22" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="10" fill="${color}" fill-opacity="0.12" stroke="none"/><circle cx="11" cy="11" r="7" fill="${color}" fill-opacity="0.3" stroke="${color}" stroke-width="1.5"/><text x="11" y="15" text-anchor="middle" font-size="14" fill="${color}" font-weight="bold">!</text></svg>`;
   }
-  return `<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.5"><animate attributeName="r" from="4" to="7" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite"/></circle><circle cx="8" cy="8" r="3" fill="${color}" fill-opacity="0.8"/></svg>`;
+  return `<svg width="22" height="22" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="9" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.4"><animate attributeName="r" from="5" to="10" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite"/></circle><circle cx="11" cy="11" r="4" fill="${color}" fill-opacity="0.9"/></svg>`;
 }
 
 function makeWaterSvg(): string {
-  return `<svg width="14" height="14" xmlns="http://www.w3.org/2000/svg"><circle cx="7" cy="7" r="6" fill="#388bfd" fill-opacity="0.3" stroke="#388bfd" stroke-width="1"/><text x="7" y="11" text-anchor="middle" font-family="Inconsolata,monospace" font-size="8" fill="#388bfd" font-weight="bold">H₂O</text></svg>`;
+  return `<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" fill="#388bfd" fill-opacity="0.1" stroke="none"/><circle cx="10" cy="10" r="7" fill="#388bfd" fill-opacity="0.3" stroke="#388bfd" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-family="Inconsolata,monospace" font-size="9" fill="#60a5ff" font-weight="bold">H₂O</text></svg>`;
 }
 
 function makeNuclearSvg(): string {
-  return `<svg width="18" height="18" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="8" fill="none" stroke="#ffb020" stroke-width="1.5" opacity="0.5"><animate attributeName="r" from="5" to="9" dur="1.5s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.7" to="0" dur="1.5s" repeatCount="indefinite"/></circle><circle cx="9" cy="9" r="4" fill="#ffb020" fill-opacity="0.9"/></svg>`;
+  return `<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="11" fill="#ffb020" fill-opacity="0.08" stroke="none"/><circle cx="12" cy="12" r="9" fill="none" stroke="#ffb020" stroke-width="1.5" opacity="0.5"><animate attributeName="r" from="6" to="11" dur="1.5s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.7" to="0" dur="1.5s" repeatCount="indefinite"/></circle><circle cx="12" cy="12" r="5" fill="#ffb020" fill-opacity="0.9"/></svg>`;
 }
 
-function svgIcon(svg: string, size: [number, number] = [12, 12]): L.DivIcon {
+function svgIcon(svg: string, size: [number, number] = [18, 18]): L.DivIcon {
   return L.divIcon({
     html: svg,
     className: "",
     iconSize: size,
     iconAnchor: [size[0] / 2, size[1] / 2],
   });
+}
+
+// ─── Live Awareness: Recency helpers ───
+function getRecencyIntensity(strikeDate: string): number {
+  const now = Date.now();
+  const strikeTime = new Date(strikeDate).getTime();
+  const ageMs = now - strikeTime;
+  const ageHours = ageMs / (1000 * 60 * 60);
+  if (ageHours > 24) return 0;
+  if (ageHours < 0) return 0;
+  return 1 - (ageHours / 24);
+}
+
+function getPulseSpeed(intensity: number): number {
+  if (intensity <= 0) return 0;
+  return 1 + (1 - intensity) * 3;
+}
+
+function makePulseIcon(color: string, shape: "circle" | "diamond" | "triangle", pulseSpeed: number, intensity: number): L.DivIcon {
+  const opacity = (intensity * 0.4).toFixed(2);
+  let shapeSvg: string;
+  if (shape === "diamond") shapeSvg = `<rect x="4" y="4" width="10" height="10" rx="1" fill="${color}" fill-opacity="0.85" stroke="${color}" stroke-width="1.5" stroke-opacity="0.5" transform="rotate(45 10 10)"/>`;
+  else if (shape === "triangle") shapeSvg = `<polygon points="10,2 18,18 2,18" fill="${color}" fill-opacity="0.85" stroke="${color}" stroke-width="1.5" stroke-opacity="0.5"/>`;
+  else shapeSvg = `<circle cx="10" cy="10" r="5" fill="${color}" fill-opacity="0.85" stroke="${color}" stroke-width="1.5" stroke-opacity="0.5"/>`;
+
+  const html = `<div class="strike-pulse-container" style="--pulse-speed:${pulseSpeed}s;--pulse-opacity:${opacity};--dot-color:${color}">
+    <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:0;left:0">${shapeSvg}</svg>
+    <div class="strike-pulse-ring" style="border-color:${color}"></div>
+    <div class="strike-pulse-ring strike-pulse-ring-2" style="border-color:${color}"></div>
+  </div>`;
+  return L.divIcon({ html, className: "", iconSize: [20, 20], iconAnchor: [10, 10] });
 }
 
 function getFlightColor(ac: { isMilitary: boolean; country: string }): string {
@@ -184,7 +342,23 @@ function getFlightColor(ac: { isMilitary: boolean; country: string }): string {
   if (country.includes("israel")) return "#e6edf350";
   if (country.includes("united states")) return "#388bfd30";
   if (country.includes("qatar") || country.includes("emirates") || country.includes("saudi") || country.includes("kuwait")) return "#d4962a30";
-  return "#5c6c7820";
+  return "#8b949e20";
+}
+
+function makeSkullSvg(): string {
+  return `<svg width="22" height="22" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="10" fill="#e8364a" fill-opacity="0.12" stroke="none"/><circle cx="11" cy="11" r="8" fill="#e8364a" fill-opacity="0.3" stroke="#e8364a" stroke-width="1.5"/><text x="11" y="15" text-anchor="middle" font-size="14" fill="#e8364a">&#10006;</text></svg>`;
+}
+
+function makeShieldSvg(): string {
+  return `<svg width="22" height="22" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="10" fill="#00d4aa" fill-opacity="0.08" stroke="none"/><path d="M11 2 L19 6 L19 12 Q19 18 11 20 Q3 18 3 12 L3 6 Z" fill="#00d4aa" fill-opacity="0.3" stroke="#00d4aa" stroke-width="1.5"/><circle cx="11" cy="11" r="3" fill="#00d4aa" fill-opacity="0.9"/></svg>`;
+}
+
+function makeXSvg(color: string): string {
+  return `<svg width="18" height="18" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="8" fill="${color}" fill-opacity="0.1" stroke="none"/><line x1="4" y1="4" x2="14" y2="14" stroke="${color}" stroke-width="2.5" opacity="0.9"/><line x1="14" y1="4" x2="4" y2="14" stroke="${color}" stroke-width="2.5" opacity="0.9"/></svg>`;
+}
+
+function makePulseDotSvg(color: string): string {
+  return `<svg width="22" height="22" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="9" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.4"><animate attributeName="r" from="5" to="11" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite"/></circle><circle cx="11" cy="11" r="4" fill="${color}" fill-opacity="0.9"/></svg>`;
 }
 
 function getAttackerColor(attacker: string): string {
@@ -194,10 +368,10 @@ function getAttackerColor(attacker: string): string {
   if (a.includes("iran") || a.includes("irgc")) return "#e8364a";
   if (a.includes("houthi")) return "#d4962a";
   if (a.includes("hezbollah")) return "#c8b832";
-  return "#5c6c78";
+  return "#8b949e";
 }
 
-export default function ConflictMap({ layers, strikes, militaryBases, nuclearSites, countriesGeo, infrastructure, waveTargets, cumulativeWaveTargets }: ConflictMapProps) {
+export default function ConflictMap({ layers, strikes, militaryBases, nuclearSites, countriesGeo, infrastructure, waveTargets, cumulativeWaveTargets, lebanonTargets, lebanonMilitary, hezbollahStrikes, houthiData, iraqData, leadershipLeaders, energyStrikes, notableIncidents, orefAlerts, firmsPoints, acledEvents, weaponsRangeRings }: ConflictMapProps) {
   const mapRef = useRef<L.Map | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const layerGroupsRef = useRef<Record<string, L.LayerGroup>>({});
@@ -246,7 +420,7 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
 
     bordersRef.current = L.geoJSON(countriesGeo, {
       style: {
-        color: "#344050",
+        color: "#7d8590",
         weight: 1,
         fillOpacity: 0,
         opacity: 0.5,
@@ -282,21 +456,32 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
 
       if (!strikeGroups[layerId]) strikeGroups[layerId] = [];
 
-      const color = ATTACKER_COLORS[strike.attacker] || "#5c6c78";
+      const color = ATTACKER_COLORS[strike.attacker] || "#8b949e";
+      const intensity = strike.date ? getRecencyIntensity(strike.date) : 0;
+      const isRecent = intensity > 0;
       let icon: L.DivIcon;
-      if (strike.attacker === "ISRAEL") icon = svgIcon(makeDiamondSvg(color), [14, 14]);
-      else if (strike.attacker === "HOUTHI" || strike.attacker === "HEZBOLLAH") icon = svgIcon(makeTriangleSvg(color), [14, 14]);
-      else icon = svgIcon(makeCircleSvg(color));
+
+      if (isRecent) {
+        const pulseSpeed = getPulseSpeed(intensity);
+        const shape = strike.attacker === "ISRAEL" ? "diamond" : (strike.attacker === "HOUTHI" || strike.attacker === "HEZBOLLAH") ? "triangle" : "circle";
+        icon = makePulseIcon(color, shape, pulseSpeed, intensity);
+      } else if (strike.attacker === "ISRAEL") {
+        icon = svgIcon(makeDiamondSvg(color), [20, 20]);
+      } else if (strike.attacker === "HOUTHI" || strike.attacker === "HEZBOLLAH") {
+        icon = svgIcon(makeTriangleSvg(color), [20, 20]);
+      } else {
+        icon = svgIcon(makeCircleSvg(color));
+      }
 
       const marker = L.marker([strike.lat, strike.lng], { icon });
       marker.bindPopup(`
         <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:200px">
-          <div style="color:${color};font-weight:600;font-size:13px;margin-bottom:4px">${strike.attacker} STRIKE</div>
-          <div style="color:#5c6c78;font-size:11px;margin-bottom:4px">${strike.date || "Date unknown"}</div>
+          <div style="color:${color};font-weight:700;font-size:14px;margin-bottom:4px">${strike.attacker} STRIKE</div>
+          <div style="color:#8b949e;font-size:11px;margin-bottom:4px">${strike.date || "Date unknown"}</div>
           <div style="margin-bottom:4px">${strike.target || strike.location || "Unknown target"}</div>
           ${strike.weaponType ? `<div style="color:#d4962a;font-size:11px">WEAPON: ${strike.weaponType}</div>` : ""}
           ${strike.country ? `<div style="font-size:11px">${strike.country}</div>` : ""}
-          <div style="color:#344050;font-size:10px;margin-top:4px;border-top:1px solid rgba(0,212,170,0.1);padding-top:4px">
+          <div style="color:#7d8590;font-size:10px;margin-top:4px;border-top:1px solid rgba(0,212,170,0.1);padding-top:4px">
             ${strike.confidence} — ${strike.source || "Unknown"}
           </div>
         </div>
@@ -319,8 +504,8 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
         const m = L.marker([base.lat, base.lng], { icon: svgIcon(makeSquareSvg("#388bfd")) });
         m.bindPopup(`
           <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:200px">
-            <div style="color:#388bfd;font-weight:600;font-size:13px">${base.name}</div>
-            <div style="color:#5c6c78;font-size:11px">${base.type} — ${base.country}</div>
+            <div style="color:#388bfd;font-weight:700;font-size:14px">${base.name}</div>
+            <div style="color:#8b949e;font-size:11px">${base.type} — ${base.country}</div>
             <div style="margin:4px 0;font-size:11px">${base.assets}</div>
             <div style="color:${base.threat === "HIGH" ? "#e8364a" : "#d4962a"};font-size:11px">
               THREAT: ${base.threat} — STATUS: ${base.status}
@@ -340,8 +525,8 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
         const m = L.marker([base.lat, base.lng], { icon: svgIcon(makeSquareSvg("#388bfd")) });
         m.bindPopup(`
           <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:200px">
-            <div style="color:#388bfd;font-weight:600;font-size:13px">${base.name}</div>
-            <div style="color:#5c6c78;font-size:11px">${base.type} — Israel</div>
+            <div style="color:#388bfd;font-weight:700;font-size:14px">${base.name}</div>
+            <div style="color:#8b949e;font-size:11px">${base.type} — Israel</div>
             <div style="margin:4px 0;font-size:11px">${base.assets}</div>
           </div>
         `, { className: "war-room-popup" });
@@ -354,11 +539,11 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
     if (isEnabled("nuclear")) {
       const markers: L.Marker[] = [];
       for (const site of nuclearSites.iran || []) {
-        const m = L.marker([site.lat, site.lng], { icon: svgIcon(makeNuclearSvg(), [18, 18]) });
+        const m = L.marker([site.lat, site.lng], { icon: svgIcon(makeNuclearSvg(), [24, 24]) });
         m.bindPopup(`
           <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:220px">
-            <div style="color:#ffb020;font-weight:600;font-size:13px">${site.name}</div>
-            <div style="color:#5c6c78;font-size:11px">${site.type}${site.enrichment ? ` — ${site.enrichment} enrichment` : ""}</div>
+            <div style="color:#ffb020;font-weight:700;font-size:14px">${site.name}</div>
+            <div style="color:#8b949e;font-size:11px">${site.type}${site.enrichment ? ` — ${site.enrichment} enrichment` : ""}</div>
             <div style="margin:4px 0">${site.detail}</div>
             <div style="color:${site.status === "INTACT" ? "#00d4aa" : "#e8364a"};font-size:11px">
               STATUS: ${site.status} — THREAT: ${site.threat}
@@ -374,12 +559,12 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
     if (isEnabled("oil-facilities") && infrastructure?.oilFacilities) {
       const markers: L.Marker[] = [];
       for (const f of infrastructure.oilFacilities) {
-        const color = f.status === "STRUCK" || f.status === "DAMAGED" ? "#e8364a" : f.status === "SHUTDOWN" ? "#5c6c78" : "#d4962a";
-        const m = L.marker([f.lat, f.lng], { icon: svgIcon(makeLabelSvg(f.type, color), [8 + f.type.length * 7, 16]) });
+        const color = f.status === "STRUCK" || f.status === "DAMAGED" ? "#e8364a" : f.status === "SHUTDOWN" ? "#8b949e" : "#d4962a";
+        const m = L.marker([f.lat, f.lng], { icon: svgIcon(makeLabelSvg(f.type, color), [10 + f.type.length * 8, 20]) });
         m.bindPopup(`
           <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:200px">
-            <div style="color:#d4962a;font-weight:600;font-size:13px">${f.name}</div>
-            <div style="color:#5c6c78;font-size:11px">${f.type} — ${f.country}</div>
+            <div style="color:#d4962a;font-weight:700;font-size:14px">${f.name}</div>
+            <div style="color:#8b949e;font-size:11px">${f.type} — ${f.country}</div>
             <div style="margin:4px 0;font-size:11px">${f.notes}</div>
             <div style="color:${STATUS_COLORS[f.status] || "#00d4aa"};font-size:11px">STATUS: ${f.status}</div>
           </div>
@@ -404,7 +589,7 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
         });
         poly.bindPopup(`
           <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:200px">
-            <div style="color:${CHOKEPOINT_BORDERS[cp.status]};font-weight:600;font-size:13px">${cp.name}</div>
+            <div style="color:${CHOKEPOINT_BORDERS[cp.status]};font-weight:700;font-size:14px">${cp.name}</div>
             <div style="color:${CHOKEPOINT_BORDERS[cp.status]};font-size:12px;margin:4px 0">STATUS: ${cp.status}</div>
             <div style="font-size:11px">${cp.notes}</div>
           </div>
@@ -418,11 +603,11 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
     if (isEnabled("desalination") && infrastructure?.desalination) {
       const markers: L.Marker[] = [];
       for (const d of infrastructure.desalination) {
-        const m = L.marker([d.lat, d.lng], { icon: svgIcon(makeWaterSvg(), [14, 14]) });
+        const m = L.marker([d.lat, d.lng], { icon: svgIcon(makeWaterSvg(), [20, 20]) });
         m.bindPopup(`
           <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:180px">
-            <div style="color:#388bfd;font-weight:600;font-size:13px">${d.name}</div>
-            <div style="color:#5c6c78;font-size:11px">${d.country} — ${d.capacity}</div>
+            <div style="color:#388bfd;font-weight:700;font-size:14px">${d.name}</div>
+            <div style="color:#8b949e;font-size:11px">${d.country} — ${d.capacity}</div>
             <div style="color:${STATUS_COLORS[d.status] || "#00d4aa"};font-size:11px;margin-top:4px">STATUS: ${d.status}</div>
           </div>
         `, { className: "war-room-popup" });
@@ -435,11 +620,11 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
     if (isEnabled("air-defense") && infrastructure?.airDefense) {
       const markers: L.Marker[] = [];
       for (const ad of infrastructure.airDefense) {
-        const m = L.marker([ad.lat, ad.lng], { icon: svgIcon(makeDefenseSvg(ad.status), [16, 16]) });
+        const m = L.marker([ad.lat, ad.lng], { icon: svgIcon(makeDefenseSvg(ad.status), [22, 22]) });
         m.bindPopup(`
           <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:220px">
-            <div style="color:${STATUS_COLORS[ad.status] || "#00d4aa"};font-weight:600;font-size:13px">${ad.name}</div>
-            <div style="color:#5c6c78;font-size:11px">${ad.type} — ${ad.country}</div>
+            <div style="color:${STATUS_COLORS[ad.status] || "#00d4aa"};font-weight:700;font-size:14px">${ad.name}</div>
+            <div style="color:#8b949e;font-size:11px">${ad.type} — ${ad.country}</div>
             <div style="margin:4px 0;font-size:11px">${ad.notes}</div>
             <div style="color:${STATUS_COLORS[ad.status] || "#00d4aa"};font-size:11px">STATUS: ${ad.status}</div>
           </div>
@@ -447,6 +632,33 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
         markers.push(m);
       }
       layerGroupsRef.current["air-defense"] = L.layerGroup(markers).addTo(map);
+    }
+
+    // ── Defense Range Rings ──
+    if (isEnabled("range-rings") && weaponsRangeRings && weaponsRangeRings.length > 0) {
+      const rings: L.Layer[] = [];
+      for (const system of weaponsRangeRings) {
+        for (const loc of system.deployed_at) {
+          const circle = L.circle([loc.lat, loc.lng], {
+            radius: system.range_km * 1000,
+            color: system.color,
+            weight: 1,
+            opacity: 0.5,
+            fillColor: system.color,
+            fillOpacity: 0.04,
+            dashArray: "6 4",
+          });
+          circle.bindPopup(`
+            <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:180px">
+              <div style="color:${system.color};font-weight:700;font-size:14px">${system.name}</div>
+              <div style="color:#8b949e;font-size:11px">${loc.name}</div>
+              <div style="color:${system.color};font-size:12px;margin-top:4px">RANGE: ${system.range_km.toLocaleString()} km</div>
+            </div>
+          `, { className: "war-room-popup" });
+          rings.push(circle);
+        }
+      }
+      layerGroupsRef.current["range-rings"] = L.layerGroup(rings).addTo(map);
     }
 
     // ── Airspace / NOTAMs ──
@@ -465,7 +677,7 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
           });
           layer.bindPopup(`
             <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4">
-              <div style="color:${border};font-weight:600;font-size:13px">${as_.name}</div>
+              <div style="color:${border};font-weight:700;font-size:14px">${as_.name}</div>
               <div style="color:${border};font-size:12px">AIRSPACE: ${as_.status}</div>
             </div>
           `, { className: "war-room-popup" });
@@ -475,6 +687,199 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
       if (polys.length > 0) {
         layerGroupsRef.current["airspace"] = L.layerGroup(polys).addTo(map);
       }
+    }
+
+    // ── Leadership: Eliminated Leaders ──
+    if (isEnabled("leaders-eliminated") && leadershipLeaders) {
+      const markers: L.Marker[] = [];
+      for (const leader of leadershipLeaders) {
+        if (leader.status !== "ELIMINATED") continue;
+        const m = L.marker([leader.lat, leader.lng], { icon: svgIcon(makeSkullSvg(), [22, 22]) });
+        const dateStr = leader.date ? new Date(leader.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "Unknown";
+        m.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:10px;color:#9aa8b4;min-width:200px">
+            <div style="font-size:14px;font-weight:600;color:#e8364a">ELIMINATED</div>
+            <div style="font-family:Rajdhani,sans-serif;font-size:15px;font-weight:700;color:#e6edf3;margin:4px 0">${leader.name}</div>
+            <div style="color:#8b949e;font-size:9px">${leader.role}</div>
+            <div style="margin-top:6px">
+              <div style="display:flex;justify-content:space-between"><span style="color:#7d8590">DATE</span><span>${dateStr}</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#7d8590">LOCATION</span><span>${leader.location}</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#7d8590">STRIKE</span><span>${leader.killedBy || "Unknown"}</span></div>
+              ${leader.successor ? `<div style="display:flex;justify-content:space-between"><span style="color:#7d8590">SUCCESSOR</span><span style="color:#00d4aa">${leader.successor}</span></div>` : ""}
+            </div>
+            <div style="margin-top:6px;color:#8b949e;font-size:9px">${leader.details}</div>
+          </div>
+        `, { className: "war-room-popup" });
+        markers.push(m);
+      }
+      layerGroupsRef.current["leaders-eliminated"] = L.layerGroup(markers).addTo(map);
+    }
+
+    // ── Leadership: Surviving Leaders ──
+    if (isEnabled("leaders-surviving") && leadershipLeaders) {
+      const markers: L.Marker[] = [];
+      for (const leader of leadershipLeaders) {
+        if (leader.status === "ELIMINATED") continue;
+        const color = leader.status === "SURVIVED" || leader.status === "ALIVE" ? "#00d4aa" : "#d4962a";
+        const icon = leader.status === "SURVIVED" || leader.status === "ALIVE"
+          ? svgIcon(makeShieldSvg(), [22, 22])
+          : svgIcon(makePulseDotSvg(color), [22, 22]);
+        const m = L.marker([leader.lat, leader.lng], { icon });
+        m.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:10px;color:#9aa8b4;min-width:200px">
+            <div style="font-size:14px;font-weight:600;color:${color}">${leader.status}</div>
+            <div style="font-family:Rajdhani,sans-serif;font-size:15px;font-weight:700;color:#e6edf3;margin:4px 0">${leader.name}</div>
+            <div style="color:#8b949e;font-size:9px">${leader.role}</div>
+            <div style="margin-top:6px;color:#8b949e;font-size:9px">${leader.details}</div>
+          </div>
+        `, { className: "war-room-popup" });
+        markers.push(m);
+      }
+      layerGroupsRef.current["leaders-surviving"] = L.layerGroup(markers).addTo(map);
+    }
+
+    // ── Multi-Theater: Lebanon Targets ──
+    if (isEnabled("lebanon-targets") && lebanonTargets && lebanonTargets.length > 0) {
+      const markers: L.Marker[] = [];
+      for (const t of lebanonTargets) {
+        const statusColor = STATUS_COLORS[t.status] || "#c8b832";
+        const icon = t.status === "STRUCK" ? svgIcon(makeXSvg(statusColor), [18, 18])
+          : t.status === "GROUND OPS" ? svgIcon(makePulseDotSvg("#e8364a"), [22, 22])
+          : svgIcon(makeTriangleSvg(statusColor), [20, 20]);
+        const m = L.marker([t.lat, t.lng], { icon });
+        m.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:200px">
+            <div style="color:${statusColor};font-weight:700;font-size:14px">${t.name}</div>
+            <div style="color:#8b949e;font-size:11px">${t.type.toUpperCase()} — LEBANON</div>
+            <div style="margin:4px 0;font-size:11px">${t.notes}</div>
+            <div style="color:${statusColor};font-size:11px">STATUS: ${t.status}</div>
+          </div>
+        `, { className: "war-room-popup" });
+        markers.push(m);
+      }
+      layerGroupsRef.current["lebanon-targets"] = L.layerGroup(markers).addTo(map);
+    }
+
+    // ── Multi-Theater: Lebanon Military Positions ──
+    if (isEnabled("lebanon-military") && lebanonMilitary && lebanonMilitary.length > 0) {
+      const markers: L.Marker[] = [];
+      for (const pos of lebanonMilitary) {
+        const color = pos.side === "Hezbollah" ? "#c8b832" : pos.side === "Israel" ? "#388bfd" : "#00d4aa";
+        const m = L.marker([pos.lat, pos.lng], { icon: svgIcon(makeSquareSvg(color)) });
+        m.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:200px">
+            <div style="color:${color};font-weight:700;font-size:14px">${pos.name}</div>
+            <div style="color:#8b949e;font-size:11px">${pos.type} — ${pos.side}</div>
+            <div style="margin:4px 0;font-size:11px">${pos.notes}</div>
+          </div>
+        `, { className: "war-room-popup" });
+        markers.push(m);
+      }
+      layerGroupsRef.current["lebanon-military"] = L.layerGroup(markers).addTo(map);
+    }
+
+    // ── Multi-Theater: Houthi/Yemen Positions ──
+    if (isEnabled("houthi-positions") && houthiData?.positions) {
+      const markers: L.Marker[] = [];
+      for (const pos of houthiData.positions) {
+        const color = pos.type === "contested" ? "#d4962a" : pos.type === "port" ? "#388bfd" : "#e8364a";
+        const m = L.marker([pos.lat, pos.lng], { icon: svgIcon(makePulseDotSvg(color), [22, 22]) });
+        m.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:200px">
+            <div style="color:${color};font-weight:700;font-size:14px">${pos.name}</div>
+            <div style="color:#8b949e;font-size:11px">${pos.type.toUpperCase()} — YEMEN</div>
+            <div style="margin:4px 0;font-size:11px">${pos.notes}</div>
+          </div>
+        `, { className: "war-room-popup" });
+        markers.push(m);
+      }
+      layerGroupsRef.current["houthi-positions"] = L.layerGroup(markers).addTo(map);
+    }
+
+    // ── Multi-Theater: Shipping Attacks ──
+    if (isEnabled("shipping-attacks") && houthiData?.shipping_attacks) {
+      const markers: L.Marker[] = [];
+      for (const atk of houthiData.shipping_attacks) {
+        const m = L.marker([atk.lat, atk.lng], { icon: svgIcon(makeXSvg("#d4962a"), [18, 18]) });
+        m.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:200px">
+            <div style="color:#d4962a;font-weight:700;font-size:14px">SHIPPING ATTACK</div>
+            <div style="color:#8b949e;font-size:11px">${atk.date} — ${atk.type.toUpperCase()}</div>
+            <div style="margin:4px 0;font-size:11px">${atk.target}</div>
+            <div style="font-size:11px">${atk.notes}</div>
+          </div>
+        `, { className: "war-room-popup" });
+        markers.push(m);
+      }
+      layerGroupsRef.current["shipping-attacks"] = L.layerGroup(markers).addTo(map);
+    }
+
+    // ── Multi-Theater: Red Sea Shipping Lanes (Houthi) ──
+    if (isEnabled("shipping-lanes-houthi") && houthiData?.shipping_lanes) {
+      const lanes: L.Layer[] = [];
+      for (const lane of houthiData.shipping_lanes) {
+        const latLngs = lane.coordinates.map((c) => [c[0], c[1]] as L.LatLngTuple);
+        const line = L.polyline(latLngs, { color: "#d4962a", weight: 1.5, opacity: 0.35, dashArray: "6 6" });
+        line.bindPopup(`<div style="font-family:Inconsolata,monospace;font-size:12px;color:#d4962a;font-weight:600">${lane.name}</div>`, { className: "war-room-popup" });
+        lanes.push(line);
+      }
+      // Bab el-Mandeb chokepoint
+      if (houthiData.chokepoint_status?.bab_el_mandeb) {
+        const cp = houthiData.chokepoint_status.bab_el_mandeb;
+        const poly = L.polygon(cp.polygon.map((c) => [c[0], c[1]] as L.LatLngTuple), {
+          color: CHOKEPOINT_BORDERS[cp.status] || "#d4962a",
+          weight: 2,
+          fillColor: CHOKEPOINT_COLORS[cp.status] || "rgba(212,150,42,0.10)",
+          fillOpacity: 1,
+          opacity: 0.8,
+        });
+        poly.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:200px">
+            <div style="color:#d4962a;font-weight:700;font-size:14px">Bab el-Mandeb Strait</div>
+            <div style="color:${CHOKEPOINT_BORDERS[cp.status]};font-size:12px;margin:4px 0">STATUS: ${cp.status}</div>
+            <div style="font-size:11px">${cp.notes}</div>
+          </div>
+        `, { className: "war-room-popup" });
+        lanes.push(poly);
+      }
+      layerGroupsRef.current["shipping-lanes-houthi"] = L.layerGroup(lanes).addTo(map);
+    }
+
+    // ── Multi-Theater: Iraq US Bases ──
+    if (isEnabled("iraq-bases") && iraqData?.us_bases) {
+      const markers: L.Marker[] = [];
+      for (const base of iraqData.us_bases) {
+        const color = base.side === "US" ? "#388bfd" : "#6ac0ff";
+        const m = L.marker([base.lat, base.lng], { icon: svgIcon(makeSquareSvg(color)) });
+        m.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:200px">
+            <div style="color:${color};font-weight:700;font-size:14px">${base.name}</div>
+            <div style="color:#8b949e;font-size:11px">${base.type} — ${base.side}</div>
+            <div style="margin:4px 0;font-size:11px">${base.notes}</div>
+          </div>
+        `, { className: "war-room-popup" });
+        markers.push(m);
+      }
+      layerGroupsRef.current["iraq-bases"] = L.layerGroup(markers).addTo(map);
+    }
+
+    // ── Multi-Theater: Iraq Proxy Attacks ──
+    if (isEnabled("iraq-proxy") && iraqData?.proxy_attacks) {
+      const markers: L.Marker[] = [];
+      for (const atk of iraqData.proxy_attacks) {
+        const m = L.marker([atk.lat, atk.lng], { icon: svgIcon(makeTriangleSvg("#e8364a"), [20, 20]) });
+        m.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:200px">
+            <div style="color:#e8364a;font-weight:700;font-size:14px">PROXY ATTACK</div>
+            <div style="color:#8b949e;font-size:11px">${atk.date} — ${atk.weaponType}</div>
+            <div style="margin:4px 0;font-size:11px"><b>${atk.attacker}</b></div>
+            <div style="font-size:11px">${atk.target}</div>
+            <div style="font-size:11px;color:#8b949e">${atk.notes}</div>
+          </div>
+        `, { className: "war-room-popup" });
+        markers.push(m);
+      }
+      layerGroupsRef.current["iraq-proxy"] = L.layerGroup(markers).addTo(map);
     }
 
     // ── OpenSeaMap maritime overlay + shipping lanes + ports ──
@@ -497,10 +902,10 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
       ];
 
       for (const lane of SHIPPING_LANES) {
-        const color = lane.type === "lane" ? "#388bfd" : "#5c6c78";
+        const color = lane.type === "lane" ? "#388bfd" : "#8b949e";
         const weight = lane.type === "lane" ? 2 : 1;
         const line = L.polyline(lane.coords as L.LatLngTuple[], { color, weight, opacity: 0.3, dashArray: "8 6" });
-        line.bindPopup(`<div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4"><div style="color:${color};font-weight:600">${lane.name}</div><div style="color:#5c6c78;font-size:11px">${lane.type.toUpperCase()}</div></div>`, { className: "war-room-popup" });
+        line.bindPopup(`<div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4"><div style="color:${color};font-weight:600">${lane.name}</div><div style="color:#8b949e;font-size:11px">${lane.type.toUpperCase()}</div></div>`, { className: "war-room-popup" });
         maritimeLayers.push(line);
       }
 
@@ -513,7 +918,7 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
 
       for (const zone of ANCHORAGE_ZONES) {
         const circle = L.circle([zone.lat, zone.lng], { radius: 15000, color: "#d4962a", fillColor: "#d4962a", fillOpacity: 0.08, weight: 1, opacity: 0.3, dashArray: "4 4" });
-        circle.bindPopup(`<div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:180px"><div style="color:#d4962a;font-weight:600;font-size:13px">${zone.name}</div><div style="margin:4px 0">${zone.count}</div><div style="color:#e8364a">STATUS: ${zone.status}</div></div>`, { className: "war-room-popup" });
+        circle.bindPopup(`<div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:180px"><div style="color:#d4962a;font-weight:700;font-size:14px">${zone.name}</div><div style="margin:4px 0">${zone.count}</div><div style="color:#e8364a">STATUS: ${zone.status}</div></div>`, { className: "war-room-popup" });
         maritimeLayers.push(circle);
       }
 
@@ -532,8 +937,8 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
       ];
 
       for (const port of PORTS) {
-        const m = L.circleMarker([port.lat, port.lng], { radius: 4, color: port.color, fillColor: port.color, fillOpacity: 0.8, weight: 1 });
-        m.bindPopup(`<div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:180px"><div style="color:${port.color};font-weight:600;font-size:13px">${port.name}</div><div style="color:#5c6c78;font-size:11px">${port.type.toUpperCase()}</div><div style="color:${port.color};margin-top:4px">${port.status}</div></div>`, { className: "war-room-popup" });
+        const m = L.circleMarker([port.lat, port.lng], { radius: 6, color: port.color, fillColor: port.color, fillOpacity: 0.85, weight: 1.5 });
+        m.bindPopup(`<div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:180px"><div style="color:${port.color};font-weight:700;font-size:14px">${port.name}</div><div style="color:#8b949e;font-size:11px">${port.type.toUpperCase()}</div><div style="color:${port.color};margin-top:4px">${port.status}</div></div>`, { className: "war-room-popup" });
         maritimeLayers.push(m);
       }
 
@@ -543,7 +948,241 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
         map.removeLayer(seaMapRef.current);
       }
     }
-  }, [layers, strikes, militaryBases, nuclearSites, infrastructure, countriesGeo]);
+    // ── Energy Strike Events ──
+    if (layerGroupsRef.current["energy-strikes"]) {
+      layerGroupsRef.current["energy-strikes"].remove();
+    }
+    if (isEnabled("energy-strikes") && energyStrikes?.length) {
+      const markers: L.Layer[] = [];
+      for (const es of energyStrikes) {
+        if (!es.lat || !es.lng) continue;
+        const isGas = es.type.includes("gas") || es.type.includes("lng") || es.type === "gas_field";
+        const fillColor = isGas ? "#00b4d8" : "#d4962a";
+        const borderColor = es.attacker === "Israel" ? "#e6edf3" : "#e8364a";
+        const isField = es.type.includes("field");
+        const radius = isField ? 11 : 8;
+
+        // Outer glow halo
+        const halo = L.circleMarker([es.lat, es.lng], {
+          radius: radius + 5,
+          fillColor,
+          color: "transparent",
+          weight: 0,
+          fillOpacity: 0.12,
+        });
+        markers.push(halo);
+
+        const circle = L.circleMarker([es.lat, es.lng], {
+          radius,
+          fillColor,
+          color: borderColor,
+          weight: 2,
+          opacity: 0.9,
+          fillOpacity: 0.55,
+        });
+
+        const label = isGas ? (es.type === "lng" ? "LNG" : "GAS") : "OIL";
+        circle.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:12px;color:#9aa8b4;min-width:220px">
+            <div style="color:${fillColor};font-weight:700;font-size:14px">${es.target}</div>
+            <div style="color:#8b949e;font-size:11px;margin:2px 0">${es.date} — ${es.attacker || "Unknown"} ${label}</div>
+            <div style="color:${borderColor};font-size:11px">${es.damage}</div>
+            ${es.country ? `<div style="color:#7d8590;font-size:10px;margin-top:2px">${es.country}</div>` : ""}
+            ${es.note ? `<div style="color:#d4962a;font-size:10px;margin-top:2px;font-style:italic">${es.note}</div>` : ""}
+          </div>
+        `, { className: "war-room-popup" });
+        markers.push(circle);
+
+        // Pulsing ring for gas fields (strategic targets)
+        if (isField) {
+          const pulse = L.marker([es.lat, es.lng], {
+            icon: L.divIcon({
+              className: "",
+              html: `<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="14" fill="none" stroke="${fillColor}" stroke-width="1.5" opacity="0.5"><animate attributeName="r" from="8" to="16" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.7" to="0" dur="2s" repeatCount="indefinite"/></circle></svg>`,
+              iconSize: [32, 32],
+              iconAnchor: [16, 16],
+            }),
+          });
+          markers.push(pulse);
+        }
+      }
+      layerGroupsRef.current["energy-strikes"] = L.layerGroup(markers).addTo(map);
+    }
+
+    // ── Notable Incidents (Casualty Tracker) ──
+    if (layerGroupsRef.current["notable-incidents"]) {
+      layerGroupsRef.current["notable-incidents"].remove();
+    }
+    if (isEnabled("notable-incidents") && notableIncidents?.length) {
+      const incMarkers: L.Layer[] = [];
+      for (const inc of notableIncidents) {
+        if (!inc.lat || !inc.lng) continue;
+        const typeColor =
+          inc.type === "civilian" ? "#d06090" :
+          inc.type === "us_military" ? "#388bfd" :
+          inc.type === "leadership" ? "#e8364a" :
+          "#e6edf3";
+        const icon = inc.type === "civilian"
+          ? `<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="11" fill="${typeColor}" fill-opacity="0.15" stroke="none"/><circle cx="12" cy="12" r="8" fill="${typeColor}" fill-opacity="0.3" stroke="${typeColor}" stroke-width="2"/><line x1="6" y1="6" x2="18" y2="18" stroke="${typeColor}" stroke-width="2.5"/><line x1="18" y1="6" x2="6" y2="18" stroke="${typeColor}" stroke-width="2.5"/></svg>`
+          : inc.type === "us_military"
+          ? `<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="11" fill="${typeColor}" fill-opacity="0.12" stroke="none"/><circle cx="12" cy="12" r="8" fill="${typeColor}" fill-opacity="0.3" stroke="${typeColor}" stroke-width="2"/><text x="12" y="16" text-anchor="middle" font-size="12" fill="${typeColor}" font-weight="bold">&#9733;</text></svg>`
+          : `<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="11" fill="${typeColor}" fill-opacity="0.12" stroke="none"/><circle cx="12" cy="12" r="8" fill="${typeColor}" fill-opacity="0.3" stroke="${typeColor}" stroke-width="2"/><text x="12" y="16" text-anchor="middle" font-size="14" fill="${typeColor}">&#10006;</text></svg>`;
+
+        const m = L.marker([inc.lat, inc.lng], {
+          icon: L.divIcon({ className: "", html: icon, iconSize: [24, 24], iconAnchor: [12, 12] }),
+        });
+        m.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:12px;color:#c0cad4;min-width:240px">
+            <div style="color:${typeColor};font-weight:700;font-size:14px">${inc.event}</div>
+            <div style="color:#7a8a96;font-size:11px;margin:2px 0">${inc.date} — ${inc.type.replace("_", " ").toUpperCase()}</div>
+            <div style="color:#e6edf3;font-size:14px;font-weight:700;margin:4px 0">${inc.killed} killed</div>
+            <div style="color:#7a8a96;font-size:11px">${inc.details}</div>
+          </div>
+        `, { className: "war-room-popup" });
+        incMarkers.push(m);
+
+        // Pulse ring for major incidents
+        const pulse = L.marker([inc.lat, inc.lng], {
+          icon: L.divIcon({
+            className: "",
+            html: `<svg width="36" height="36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="14" fill="none" stroke="${typeColor}" stroke-width="1.5" opacity="0.4"><animate attributeName="r" from="8" to="18" dur="2.5s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.5" to="0" dur="2.5s" repeatCount="indefinite"/></circle></svg>`,
+            iconSize: [36, 36],
+            iconAnchor: [18, 18],
+          }),
+        });
+        incMarkers.push(pulse);
+      }
+      layerGroupsRef.current["notable-incidents"] = L.layerGroup(incMarkers).addTo(map);
+    }
+
+    // ── OREF Red Alerts (Israel) ──
+    if (layerGroupsRef.current["oref-alerts"]) {
+      layerGroupsRef.current["oref-alerts"].remove();
+    }
+    if (isEnabled("oref-alerts") && orefAlerts?.length) {
+      const alertMarkers: L.Layer[] = [];
+      // OREF alerts don't have lat/lng — they have city names
+      // We use approximate coordinates for known Israeli cities
+      const cityCoords: Record<string, [number, number]> = {
+        "תל אביב": [32.08, 34.78], "חיפה": [32.79, 34.99], "באר שבע": [31.25, 34.79],
+        "ירושלים": [31.77, 35.23], "אשדוד": [31.80, 34.65], "אשקלון": [31.67, 34.57],
+        "נתניה": [32.33, 34.86], "רמת גן": [32.08, 34.81], "פתח תקווה": [32.09, 34.88],
+        "הרצליה": [32.16, 34.84], "כפר סבא": [32.18, 34.91], "רעננה": [32.18, 34.87],
+        "רחובות": [31.90, 34.81], "לוד": [31.95, 34.90], "רמלה": [31.93, 34.87],
+        "עכו": [32.93, 35.08], "צפת": [32.97, 35.50], "טבריה": [32.79, 35.53],
+        "אילת": [29.56, 34.95], "דימונה": [31.07, 35.03], "ערד": [31.26, 35.21],
+      };
+      for (const alert of orefAlerts) {
+        const coords = cityCoords[alert.data];
+        if (!coords) continue;
+        const m = L.circleMarker(coords, {
+          radius: 10,
+          fillColor: "#ff0000",
+          fillOpacity: 0.5,
+          color: "#ff0000",
+          weight: 2,
+          opacity: 0.9,
+        });
+        m.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:12px;color:#c0cad4;min-width:180px">
+            <div style="color:#ff0000;font-weight:700;font-size:14px">⚠ RED ALERT</div>
+            <div style="color:#e6edf3;font-size:13px;margin:2px 0">${alert.data}</div>
+            <div style="color:#7a8a96;font-size:11px">${alert.title}</div>
+            <div style="color:#7a8a96;font-size:10px">${alert.desc}</div>
+          </div>
+        `, { className: "war-room-popup" });
+        alertMarkers.push(m);
+
+        // Red pulsing ring
+        const pulse = L.marker(coords, {
+          icon: L.divIcon({
+            className: "",
+            html: `<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="16" fill="none" stroke="#ff0000" stroke-width="2" opacity="0.6"><animate attributeName="r" from="8" to="20" dur="1.5s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.8" to="0" dur="1.5s" repeatCount="indefinite"/></circle></svg>`,
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+          }),
+        });
+        alertMarkers.push(pulse);
+      }
+      layerGroupsRef.current["oref-alerts"] = L.layerGroup(alertMarkers).addTo(map);
+    }
+
+    // ── NASA FIRMS Fire/Thermal Anomalies ──
+    if (layerGroupsRef.current["firms-fires"]) {
+      layerGroupsRef.current["firms-fires"].remove();
+    }
+    if (isEnabled("firms-fires") && firmsPoints?.length) {
+      const fireMarkers: L.Layer[] = [];
+      for (const pt of firmsPoints) {
+        if (!pt.lat || !pt.lng) continue;
+        const intensity = Math.min(1, pt.frp / 100);
+        const radius = Math.max(4, Math.min(12, 4 + intensity * 8));
+        const color = intensity > 0.6 ? "#ff4400" : intensity > 0.3 ? "#ff8800" : "#ffaa44";
+        const m = L.circleMarker([pt.lat, pt.lng], {
+          radius,
+          fillColor: color,
+          fillOpacity: 0.5 + intensity * 0.3,
+          color,
+          weight: 1,
+          opacity: 0.7,
+        });
+        m.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:12px;color:#c0cad4;min-width:180px">
+            <div style="color:${color};font-weight:700;font-size:14px">🔥 THERMAL ANOMALY</div>
+            <div style="color:#e6edf3;font-size:12px;margin:2px 0">FRP: ${pt.frp.toFixed(1)} MW</div>
+            <div style="color:#7a8a96;font-size:11px">Brightness: ${pt.brightness.toFixed(1)}K</div>
+            <div style="color:#7a8a96;font-size:11px">Confidence: ${pt.confidence}</div>
+            <div style="color:#7a8a96;font-size:10px">${pt.acq_date} ${pt.acq_time} — ${pt.satellite}</div>
+          </div>
+        `, { className: "war-room-popup" });
+        fireMarkers.push(m);
+      }
+      layerGroupsRef.current["firms-fires"] = L.layerGroup(fireMarkers).addTo(map);
+    }
+
+    // ── ACLED Armed Conflict Events ──
+    if (layerGroupsRef.current["acled-events"]) {
+      layerGroupsRef.current["acled-events"].remove();
+    }
+    if (isEnabled("acled-events") && acledEvents?.length) {
+      const eventMarkers: L.Layer[] = [];
+      const acledTypeColors: Record<string, string> = {
+        "Battles": "#388bfd",
+        "Violence against civilians": "#d06090",
+        "Explosions/Remote violence": "#e8364a",
+        "Riots": "#d4962a",
+        "Protests": "#c8b832",
+        "Strategic developments": "#00d4aa",
+      };
+      for (const ev of acledEvents) {
+        if (!ev.lat || !ev.lng) continue;
+        const color = acledTypeColors[ev.event_type] || "#8b949e";
+        const hasDeaths = ev.fatalities > 0;
+        const radius = hasDeaths ? Math.max(5, Math.min(12, 5 + ev.fatalities / 5)) : 4;
+        const m = L.circleMarker([ev.lat, ev.lng], {
+          radius,
+          fillColor: color,
+          fillOpacity: 0.45,
+          color,
+          weight: 1.5,
+          opacity: 0.8,
+        });
+        m.bindPopup(`
+          <div style="font-family:Inconsolata,monospace;font-size:12px;color:#c0cad4;min-width:220px">
+            <div style="color:${color};font-weight:700;font-size:13px">${ev.event_type}</div>
+            <div style="color:#e6edf3;font-size:12px;margin:2px 0">${ev.sub_event_type}</div>
+            <div style="color:#7a8a96;font-size:11px">${ev.event_date} — ${ev.location}, ${ev.admin1}</div>
+            ${hasDeaths ? `<div style="color:#e8364a;font-weight:700;font-size:13px;margin:3px 0">${ev.fatalities} fatalities</div>` : ""}
+            <div style="color:#7a8a96;font-size:11px">${ev.actor1}${ev.actor2 ? ` vs ${ev.actor2}` : ""}</div>
+            <div style="color:#8b949e;font-size:10px;margin-top:3px;max-width:250px;word-break:break-word">${ev.notes.slice(0, 200)}${ev.notes.length > 200 ? "..." : ""}</div>
+          </div>
+        `, { className: "war-room-popup" });
+        eventMarkers.push(m);
+      }
+      layerGroupsRef.current["acled-events"] = L.layerGroup(eventMarkers).addTo(map);
+    }
+
+  }, [layers, strikes, militaryBases, nuclearSites, infrastructure, countriesGeo, lebanonTargets, lebanonMilitary, hezbollahStrikes, houthiData, iraqData, leadershipLeaders, energyStrikes, notableIncidents, orefAlerts, firmsPoints, acledEvents, weaponsRangeRings]);
 
   // ── Live aircraft tracking layer ──
   const flightLayerRef = useRef<L.LayerGroup | null>(null);
@@ -615,13 +1254,13 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
                 ${ac.callsign || ac.icao}
                 ${ac.isMilitary ? ' <span style="color:#ff2a6d;font-size:9px">\u2605 MIL</span>' : ""}
               </div>
-              <div style="color:#5c6c78;font-size:9px;margin-bottom:6px">${ac.country}</div>
-              <div style="display:flex;justify-content:space-between"><span style="color:#344050">ALT</span><span>${altFt} ft</span></div>
-              <div style="display:flex;justify-content:space-between"><span style="color:#344050">SPD</span><span>${speedKts} kts</span></div>
-              <div style="display:flex;justify-content:space-between"><span style="color:#344050">HDG</span><span>${Math.round(heading)}\u00b0</span></div>
-              ${vrFpm ? `<div style="display:flex;justify-content:space-between"><span style="color:#344050">V/S</span><span>${vr} ${vrFpm} fpm</span></div>` : ""}
-              <div style="display:flex;justify-content:space-between"><span style="color:#344050">ICAO</span><span>${ac.icao}</span></div>
-              ${ac.squawk ? `<div style="display:flex;justify-content:space-between"><span style="color:#344050">SQK</span><span>${ac.squawk}</span></div>` : ""}
+              <div style="color:#8b949e;font-size:9px;margin-bottom:6px">${ac.country}</div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#7d8590">ALT</span><span>${altFt} ft</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#7d8590">SPD</span><span>${speedKts} kts</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#7d8590">HDG</span><span>${Math.round(heading)}\u00b0</span></div>
+              ${vrFpm ? `<div style="display:flex;justify-content:space-between"><span style="color:#7d8590">V/S</span><span>${vr} ${vrFpm} fpm</span></div>` : ""}
+              <div style="display:flex;justify-content:space-between"><span style="color:#7d8590">ICAO</span><span>${ac.icao}</span></div>
+              ${ac.squawk ? `<div style="display:flex;justify-content:space-between"><span style="color:#7d8590">SQK</span><span>${ac.squawk}</span></div>` : ""}
             </div>
           `, { className: "war-room-popup" });
 
@@ -713,7 +1352,7 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
           case "gas": return "#00d4aa";
           case "water": return "#388bfd";
           case "petrochemical": return "#c8b832";
-          default: return "#5c6c78";
+          default: return "#8b949e";
         }
       };
       const getPipelineWeight = (type: string) => {
@@ -778,10 +1417,10 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
             <div style="display:flex;justify-content:space-between;margin-bottom:6px">
               <span style="font-size:8px;padding:1px 5px;background:${color}15;color:${color};border:1px solid ${color}30">${typeLabel.toUpperCase()}</span>
             </div>
-            ${substance !== "unknown" ? `<div style="display:flex;justify-content:space-between"><span style="color:#344050">Substance</span><span>${substance}</span></div>` : ""}
-            ${operator ? `<div style="display:flex;justify-content:space-between"><span style="color:#344050">Operator</span><span>${operator}</span></div>` : ""}
-            ${props.diameter ? `<div style="display:flex;justify-content:space-between"><span style="color:#344050">Diameter</span><span>${props.diameter}</span></div>` : ""}
-            ${props.location ? `<div style="display:flex;justify-content:space-between"><span style="color:#344050">Location</span><span>${props.location}</span></div>` : ""}
+            ${substance !== "unknown" ? `<div style="display:flex;justify-content:space-between"><span style="color:#7d8590">Substance</span><span>${substance}</span></div>` : ""}
+            ${operator ? `<div style="display:flex;justify-content:space-between"><span style="color:#7d8590">Operator</span><span>${operator}</span></div>` : ""}
+            ${props.diameter ? `<div style="display:flex;justify-content:space-between"><span style="color:#7d8590">Diameter</span><span>${props.diameter}</span></div>` : ""}
+            ${props.location ? `<div style="display:flex;justify-content:space-between"><span style="color:#7d8590">Location</span><span>${props.location}</span></div>` : ""}
           </div>
         `, { className: "war-room-popup" });
 

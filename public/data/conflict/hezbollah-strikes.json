@@ -1,0 +1,11 @@
+[
+  {"date": "2026-03-02", "attacker": "HEZBOLLAH", "target": "Northern Israel positions", "lat": 33.10, "lng": 35.50, "country": "Israel", "weaponType": "Rockets/Missiles", "notes": "Full-scale re-entry into war"},
+  {"date": "2026-03-04", "attacker": "HEZBOLLAH", "target": "Tel Aviv metropolitan area", "lat": 32.07, "lng": 34.78, "country": "Israel", "weaponType": "Ballistic missile", "notes": "Deepest Hezbollah strike ever"},
+  {"date": "2026-03-02", "attacker": "HEZBOLLAH", "target": "IDF Merkava tanks, Kfar Kila", "lat": 33.32, "lng": 35.55, "country": "Lebanon", "weaponType": "Kornet ATGM", "notes": "Multiple tank kills claimed"},
+  {"date": "2026-03-02", "attacker": "HEZBOLLAH", "target": "Metula border town", "lat": 33.28, "lng": 35.58, "country": "Israel", "weaponType": "Rockets", "notes": "Residential area struck"},
+  {"date": "2026-03-02", "attacker": "HEZBOLLAH", "target": "IDF Rawiya Base (Golan)", "lat": 33.10, "lng": 35.75, "country": "Israel", "weaponType": "Drone swarm", "notes": "Base damaged"},
+  {"date": "2026-03-02", "attacker": "HEZBOLLAH", "target": "Meron Air Ops Base", "lat": 33.00, "lng": 35.40, "country": "Israel", "weaponType": "Ballistic missile", "notes": "Runway damaged"},
+  {"date": "2026-03-02", "attacker": "ISRAEL", "target": "60+ Hezbollah targets, southern Lebanon", "lat": 33.35, "lng": 35.50, "country": "Lebanon", "weaponType": "Air strikes", "notes": "Massive response wave"},
+  {"date": "2026-03-02", "attacker": "ISRAEL", "target": "IRGC Quds Force commander, Beirut", "lat": 33.86, "lng": 35.54, "country": "Lebanon", "weaponType": "Precision strike", "notes": "Senior IRGC commander killed"},
+  {"date": "2026-02-28", "attacker": "ISRAEL", "target": "Hezbollah tunnel shafts + rocket sites", "lat": 33.30, "lng": 35.48, "country": "Lebanon", "weaponType": "Bunker busters", "notes": "Pre-emptive strikes"}
+]

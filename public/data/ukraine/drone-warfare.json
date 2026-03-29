@@ -1,0 +1,129 @@
+{
+  "asOf": "2026-03-29",
+  "source": "ISIS Reports, CSIS, Kyiv Post, UNITED24, Ukrainian Air Force, CNN, Al Jazeera",
+  "russianDronesOnUkraine": {
+    "totalLaunched": {
+      "allTime": 35000,
+      "2025": 19000,
+      "jan2026": 4500,
+      "feb2026": 5059,
+      "mar2026": 5500,
+      "note": "Approximate — includes strike UAVs and decoys"
+    },
+    "monthlyRecord": {
+      "month": "February 2026",
+      "drones": 5059,
+      "missiles": 288,
+      "note": "Highest monthly missile total since early 2023. Drones up 13% from January."
+    },
+    "interceptRate": 0.90,
+    "strikeEffectiveness": {
+      "jan2025": 0.03,
+      "jan2026": 0.22,
+      "note": "Strike UAV effectiveness jumped from 2-3% to 22% due to Russian tech upgrades: CRPA antennas, AI navigation, relay drones"
+    },
+    "dailyProduction": {
+      "current": 404,
+      "planned": 1000,
+      "plannedBy": "Late 2026",
+      "source": "Commander-in-Chief Syrskyi statement"
+    },
+    "costPerDrone": {
+      "low": 20000,
+      "high": 70000,
+      "currency": "USD",
+      "note": "vs $1-3M per Patriot/NASAMS interceptor"
+    },
+    "types": [
+      {"name": "Shahed-136/Geran-2", "type": "Strike UAV", "speed": "185 km/h", "range": "2000 km", "payload": "40 kg warhead"},
+      {"name": "Geran-3", "type": "Strike UAV (fast)", "speed": "300+ km/h", "range": "2000 km", "payload": "Unknown"},
+      {"name": "Geran-5", "type": "Strike UAV (advanced)", "speed": "300+ km/h", "range": "2000+ km", "payload": "Unknown — AI-guided"},
+      {"name": "Gerbera/Parody", "type": "Decoy", "speed": "Variable", "range": "Limited", "payload": "None — radar signature mimics cruise missile"}
+    ],
+    "launchSites": [
+      {"name": "Primorsko-Akhtarsk", "lat": 46.05, "lng": 38.17, "launches": 1682, "note": "Primary launch site — Sea of Azov coast"},
+      {"name": "Yeysk", "lat": 46.71, "lng": 38.28, "launches": 37, "note": "Sea of Azov coast secondary site"},
+      {"name": "Chauda (Crimea)", "lat": 45.01, "lng": 36.47, "launches": 160, "note": "Crimean peninsula launch site"},
+      {"name": "Kursk Oblast", "lat": 51.73, "lng": 36.19, "launches": 248, "note": "Close to Ukrainian border — short flight time"},
+      {"name": "Bryansk Oblast", "lat": 53.24, "lng": 34.36, "launches": 113, "note": "Northern approach route"},
+      {"name": "Oryol Oblast", "lat": 52.97, "lng": 36.06, "launches": 130, "note": "Central Russia launch point"},
+      {"name": "Millerovo", "lat": 48.93, "lng": 40.39, "launches": 100, "note": "Rostov Oblast — southern route"},
+      {"name": "Alabuga (production)", "lat": 55.72, "lng": 52.07, "launches": 0, "note": "IESZ Alabuga — primary Shahed production facility. 404/day current, 1000/day planned."}
+    ],
+    "techUpgrades2026": [
+      "16-element CRPA antennas (anti-jamming GPS)",
+      "Starlink connectivity attempts (neutralize EW)",
+      "Relay drones forming airborne mesh networks",
+      "Online cameras + modems for real-time flight adjustment",
+      "AI-guided visual navigation",
+      "Tungsten ball fragmentation warheads",
+      "Toxic agent lacing (maximize civilian harm)",
+      "Fiber-optic FPV drones (jam-proof control)"
+    ]
+  },
+  "ukrainianDronesOnRussia": {
+    "summary": {
+      "strikePackages_jan_mar_2026": 110,
+      "avgDronesPerNight": "100-200 (doubled from 50-70 in late 2025)",
+      "largestSwarm": "250-300 drones, night of Mar 17-18",
+      "targetsPerNight": 4,
+      "note": "By March 2026, Ukraine launching as many or more drones at Russia as Russia launches at Ukraine"
+    },
+    "majorTargets": [
+      {"name": "Afipsky Oil Refinery", "lat": 44.89, "lng": 38.85, "type": "Energy", "hits": "Struck multiple times, fires lasting days"},
+      {"name": "Tikhoretsk Oil Depot", "lat": 45.85, "lng": 40.13, "type": "Energy", "hits": "Struck repeatedly — ammo depot also hit nearby"},
+      {"name": "Labinsk Oil Depot", "lat": 44.63, "lng": 40.73, "type": "Energy", "hits": "Struck Mar 2026"},
+      {"name": "Kavkaz Port (rail ferries)", "lat": 45.37, "lng": 36.63, "type": "Infrastructure", "hits": "Rail ferry terminal attacked, disrupting Crimea supply"},
+      {"name": "Stavropol Chemical/Explosives Factory", "lat": 45.04, "lng": 41.98, "type": "Military-Industrial", "hits": "Explosives factory struck — secondary explosions"},
+      {"name": "Sevastopol Military Electronics Factory", "lat": 44.62, "lng": 33.53, "type": "Military-Industrial", "hits": "Military electronics production hit"},
+      {"name": "Mariupol Russian Troop Base", "lat": 47.10, "lng": 37.54, "type": "Military", "hits": "Troop concentration struck"},
+      {"name": "Engels-2 Air Base (Tu-95/Tu-160)", "lat": 51.48, "lng": 46.20, "type": "Strategic", "hits": "Strategic bomber base — multiple attacks 2023-2026"},
+      {"name": "Moscow (residential areas)", "lat": 55.75, "lng": 37.62, "type": "Capital", "hits": "Multiple drone attacks on Moscow — psychological impact"},
+      {"name": "Morozovsk Air Base (Su-34)", "lat": 48.32, "lng": 41.80, "type": "Military", "hits": "Fighter-bomber base struck repeatedly"}
+    ],
+    "antiAirDefenseHunting": {
+      "pantsirDestroyed": "~50% of operational stockpile",
+      "destroyedBy": "SBU Alpha unit + USF",
+      "systemsKilledOneNight": "4 systems (Buk, Tor, S-300V, Pantsir-S1) on Mar 6-7",
+      "method": "FP-2 drones with 100+ kg warheads, combined air force + HUMINT + satellite intel",
+      "note": "Deliberately hunting Russian air defense to clear path for larger drone swarms"
+    }
+  },
+  "interceptMethods": [
+    {"method": "SAM systems (Patriot, NASAMS, IRIS-T)", "share": "30%", "cost": "High ($1-3M/shot)"},
+    {"method": "Gepard anti-aircraft guns", "share": "15%", "cost": "Low ($500/burst)"},
+    {"method": "Mobile fire teams (truck-mounted MGs)", "share": "15%", "cost": "Very low"},
+    {"method": "Electronic warfare (jamming)", "share": "25%", "cost": "Low"},
+    {"method": "Interceptor drones", "share": "15%", "cost": "Low ($1-5K)"}
+  ],
+  "recentAttacks": [
+    {"date": "2026-03-23", "attacker": "Russia", "drones": 1089, "missiles": 4, "intercepted": "~90%", "note": "Massive single-day barrage"},
+    {"date": "2026-03-17", "attacker": "Ukraine", "drones": 250, "target": "Moscow, Stavropol, Krasnodar", "note": "Largest Ukrainian swarm to date"},
+    {"date": "2026-03-06", "attacker": "Ukraine", "drones": 0, "note": "FP-2 drones destroyed 4 Russian air defense systems in one night"},
+    {"date": "2026-02-02", "attacker": "Russia", "drones": 400, "note": "Most massive combined strike — 400 drones + missiles in single wave"},
+    {"date": "2026-01-15", "attacker": "Russia", "drones": 0, "note": "Shahed strike effectiveness reported at 22%, up from 3% a year prior"}
+  ],
+  "droneRoutes": [
+    {
+      "name": "Southern Route (Primorsko-Akhtarsk to Kyiv)",
+      "from": [46.05, 38.17],
+      "waypoints": [[45.5, 35.0], [46.0, 32.0], [47.0, 30.0], [48.5, 30.5], [50.4, 30.5]],
+      "to": [50.45, 30.52],
+      "color": "#e8364a"
+    },
+    {
+      "name": "Crimean Route (Chauda to Western Ukraine)",
+      "from": [45.01, 36.47],
+      "waypoints": [[45.5, 33.0], [46.5, 30.0], [48.0, 27.0], [49.0, 25.0]],
+      "to": [49.84, 24.03],
+      "color": "#e8364a"
+    },
+    {
+      "name": "Northern Route (Bryansk to Kyiv)",
+      "from": [53.24, 34.36],
+      "waypoints": [[52.0, 33.0], [51.0, 32.0]],
+      "to": [50.45, 30.52],
+      "color": "#e8364a"
+    }
+  ]
+}

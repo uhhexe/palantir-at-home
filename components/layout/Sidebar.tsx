@@ -162,7 +162,7 @@ export default function Sidebar({
   return (
     <div
       className={`bg-surface border-r border-border flex flex-col shrink-0 transition-all duration-200 ${
-        collapsed ? "w-[36px]" : "w-[200px]"
+        collapsed ? "w-[42px]" : "w-[240px]"
       }`}
     >
       {/* Nav */}
@@ -174,7 +174,7 @@ export default function Sidebar({
             <button
               key={item.id}
               onClick={() => onChangeView(item.id)}
-              className={`flex items-center gap-2 px-2 py-1.5 text-[7px] font-heading tracking-[1.5px] uppercase transition-colors ${
+              className={`flex items-center gap-2 px-2 py-1.5 text-[12px] font-heading tracking-[1.5px] uppercase transition-colors ${
                 active
                   ? "bg-accent-glow text-accent"
                   : "text-text-dim hover:text-text hover:bg-surface-2"
@@ -192,10 +192,10 @@ export default function Sidebar({
         <div className="flex-1 overflow-y-auto">
           {/* Active layers summary */}
           <div className="px-2 py-1.5 border-b border-border flex items-center justify-between">
-            <span className="text-[7px] font-heading tracking-[1.5px] text-text-muted uppercase">
+            <span className="text-[12px] font-heading tracking-[1.5px] text-text-muted uppercase">
               Data Layers
             </span>
-            <span className="text-[7px] font-mono text-accent">
+            <span className="text-[12px] font-mono text-accent">
               {enabledCount}
             </span>
           </div>
@@ -203,7 +203,7 @@ export default function Sidebar({
           {Object.entries(groupedLayers).map(([group, groupLayers]) => {
             const isExpanded = expandedGroups.has(group);
             const activeInGroup = groupLayers.filter((l) => l.enabled).length;
-            const groupColor = GROUP_COLORS[group] || "#5c6c78";
+            const groupColor = GROUP_COLORS[group] || "#8b949e";
 
             return (
               <div key={group} className="border-b border-border">
@@ -217,13 +217,13 @@ export default function Sidebar({
                     style={{ backgroundColor: groupColor }}
                   />
                   <span
-                    className="text-[7px] font-heading tracking-[1.5px] flex-1 text-left uppercase"
+                    className="text-[12px] font-heading tracking-[1.5px] flex-1 text-left uppercase"
                     style={{ color: groupColor }}
                   >
                     {GROUP_LABELS[group] || group.toUpperCase()}
                   </span>
                   {activeInGroup > 0 && (
-                    <span className="text-[7px] font-mono text-text-dim">
+                    <span className="text-[12px] font-mono text-text-dim">
                       {activeInGroup}
                     </span>
                   )}
@@ -264,7 +264,7 @@ export default function Sidebar({
                         </div>
                         {/* Name */}
                         <span
-                          className={`flex-1 text-left text-[9px] font-body transition-colors truncate ${
+                          className={`flex-1 text-left text-[13px] font-body transition-colors truncate ${
                             layer.enabled ? "text-white" : "text-text-dim"
                           }`}
                         >
@@ -272,7 +272,7 @@ export default function Sidebar({
                         </span>
                         {/* Count */}
                         {layer.count !== undefined && layer.count > 0 && (
-                          <span className="text-[7px] font-mono text-text-dim tabular-nums">
+                          <span className="text-[12px] font-mono text-text-dim tabular-nums">
                             {layer.count.toLocaleString()}
                           </span>
                         )}
@@ -304,7 +304,7 @@ export default function Sidebar({
 export const DEFAULT_LAYERS: LayerConfig[] = [
   // SURVEILLANCE
   { id: "cameras", name: "Live Highway Cams", group: "surveillance", enabled: true, color: "#e8364a" },
-  { id: "osm-cameras", name: "Street & Municipal Cameras", group: "surveillance", enabled: false, color: "#5c6c78" },
+  { id: "osm-cameras", name: "Street & Municipal Cameras", group: "surveillance", enabled: false, color: "#8b949e" },
   { id: "alpr", name: "ALPR / Plate Readers", group: "surveillance", enabled: false, color: "#00b4ff" },
   { id: "deflock-alpr", name: "DeFlock ALPR Map (OSM)", group: "surveillance", enabled: false, color: "#ff6b35" },
   // POLICE SURVEILLANCE (EFF Atlas)
@@ -315,7 +315,7 @@ export const DEFAULT_LAYERS: LayerConfig[] = [
   { id: "eff-cell-sim", name: "Cell-Site Simulators", group: "police", enabled: false, color: "#e8364a" },
   { id: "eff-rtcc", name: "Real-Time Crime Centers", group: "police", enabled: false, color: "#00b4ff" },
   { id: "eff-bodycam", name: "Body-Worn Cameras", group: "police", enabled: false, color: "#34d399" },
-  { id: "eff-camera-reg", name: "Camera Registries", group: "police", enabled: false, color: "#5c6c78" },
+  { id: "eff-camera-reg", name: "Camera Registries", group: "police", enabled: false, color: "#8b949e" },
   // INFRASTRUCTURE
   { id: "cables", name: "Submarine Cables", group: "infrastructure", enabled: true, color: "#00b4ff" },
   { id: "gas-pipelines", name: "Natural Gas Pipelines", group: "infrastructure", enabled: false, color: "#d4962a" },

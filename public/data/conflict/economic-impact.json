@@ -1,0 +1,191 @@
+{
+  "asOf": "2026-03-29",
+  "source": "Pentagon/Congress briefing, CSIS, Fortune, NPR, Time, WEF, CFR, Wikipedia",
+
+  "warCosts": {
+    "us_first_100_hours": {
+      "total": 3700000000,
+      "source": "CSIS (Cancian & Park)",
+      "breakdown": {
+        "interceptors": 1200000000,
+        "to": 3700000000,
+        "note": "CSIS estimates $1.2B-$3.7B for interceptors alone in first 100 hours"
+      }
+    },
+    "us_first_6_days": {
+      "total": 11300000000,
+      "source": "Pentagon briefing to Congress (closed-door)",
+      "breakdown": {
+        "interceptors_and_missiles": 5600000000,
+        "air_operations": 2300000000,
+        "f15_replacements": 310000000,
+        "other": 3090000000
+      }
+    },
+    "daily_ongoing": {
+      "low": 800000000,
+      "high": 1000000000,
+      "source": "Penn Wharton (Smetters) / John Phillips",
+      "note": "Running rate after initial surge"
+    },
+    "pre_war_buildup": {
+      "naval_repositioning": 630000000,
+      "total_mideast_fy2024_25": { "low": 9650000000, "high": 12070000000 },
+      "source": "AEI (McCusker)"
+    },
+    "pentagon_supplemental_request": 200000000000,
+    "projected_60_day_total": {
+      "direct_military": 65000000000,
+      "with_interest": 66400000000,
+      "source": "Fortune / Penn Wharton"
+    },
+    "projected_total_with_economic": {
+      "low": 40000000000,
+      "high": 210000000000,
+      "source": "Penn Wharton Budget Model"
+    }
+  },
+
+  "oilPrices": {
+    "preWar": {
+      "date": "2026-02-27",
+      "brent": 73,
+      "wti": 70
+    },
+    "timeline": [
+      {"date": "2026-02-28", "brent": 76, "event": "War begins"},
+      {"date": "2026-03-02", "brent": 82, "event": "Hormuz closure announced"},
+      {"date": "2026-03-05", "brent": 83, "event": "Tanker traffic halted"},
+      {"date": "2026-03-09", "brent": 100, "event": "Oil breaks $100/bbl"},
+      {"date": "2026-03-12", "brent": 105, "event": "Gulf energy strikes begin"},
+      {"date": "2026-03-18", "brent": 110, "event": "South Pars struck by Israel"},
+      {"date": "2026-03-19", "brent": 119, "event": "Iran retaliates — Ras Laffan hit. Peak."},
+      {"date": "2026-03-23", "brent": 108, "event": "Trump hints at talks — $580M short bets"},
+      {"date": "2026-03-28", "brent": 112, "event": "Prices re-stabilize high"}
+    ],
+    "peak": 119.50,
+    "peakDate": "2026-03-19",
+    "changePercent": 63,
+    "hormuzShare": "20% of world oil",
+    "note": "IEA head called it 'greatest global energy security challenge in history'"
+  },
+
+  "gasPrices": {
+    "us_average": {
+      "preWar": 2.92,
+      "sotu_date": "2026-02-14",
+      "inauguration": 3.11,
+      "mar_9": 3.48,
+      "mar_12": 3.60,
+      "weeklyJump": 0.35,
+      "note": "Fastest weekly increase since Russia's Ukraine invasion 2022",
+      "source": "AAA Motor Club"
+    },
+    "sanFrancisco": {
+      "regular": 6.50,
+      "date": "2026-03-12",
+      "source": "Getty Images (Shell station photo)"
+    }
+  },
+
+  "strategicReserves": {
+    "iea_release": {
+      "total_barrels": 400000000,
+      "note": "Largest coordinated release in IEA history"
+    },
+    "us_spr_release": {
+      "barrels": 172000000,
+      "note": "US share of IEA release from Strategic Petroleum Reserve"
+    }
+  },
+
+  "globalGdpImpact": {
+    "wto": {
+      "gdp_reduction": -0.3,
+      "condition": "If oil/gas prices remain high for rest of year",
+      "source": "WTO statement Mar 19"
+    },
+    "europe": {
+      "gdp_reduction": -1.0,
+      "note": "Heavy energy importer. ECB postponed rate cuts, raised inflation forecast",
+      "source": "WTO"
+    },
+    "gulfStates": {
+      "kuwait_qatar": -14,
+      "saudi": -3,
+      "uae": -5,
+      "note": "Goldman Sachs forecast. Preceded Ras Laffan damage which will worsen Qatar's outlook",
+      "source": "Goldman Sachs via CFR"
+    },
+    "ecb": {
+      "action": "Postponed planned interest rate reductions",
+      "date": "2026-03-19",
+      "note": "Raised 2026 inflation forecast, cut GDP growth projections"
+    }
+  },
+
+  "householdImpact": {
+    "avg_cost_per_household_2026": {
+      "tariffs_alone": {"low": 600, "high": 1000},
+      "war_additional": "Significant but unquantified",
+      "source": "Yale Budget Lab"
+    },
+    "fertilizer": {
+      "urea_price_increase": 35,
+      "gulf_share_global_urea": 49,
+      "gulf_share_global_ammonia": 30,
+      "hormuz_share_urea_transit": 33,
+      "impact": "If fertilizer can't reach market, farmers use less → reduced crop yields → higher food prices",
+      "source": "American Farm Bureau, CRU Group"
+    },
+    "helium": {
+      "note": "Middle East produces significant share of world helium (byproduct of gas processing). Disruption threatens medical, semiconductor, and scientific supply chains.",
+      "source": "Time"
+    }
+  },
+
+  "interceptorEconomics": {
+    "costRatio": 106,
+    "source": "IranWarLive cost tracker",
+    "data": [
+      {"attack": "Shahed-136 drone", "cost": 30000, "defense": "PAC-3 MSE Patriot", "defenseCost": 4000000, "ratio": "133:1"},
+      {"attack": "Shahed-136 drone", "cost": 30000, "defense": "Tamir (Iron Dome)", "defenseCost": 50000, "ratio": "1.7:1"},
+      {"attack": "Shahab-3 MRBM", "cost": 3000000, "defense": "Arrow-3", "defenseCost": 3000000, "ratio": "1:1"},
+      {"attack": "Fattah-1 hypersonic", "cost": 8000000, "defense": "THAAD interceptor", "defenseCost": 11000000, "ratio": "1.4:1"},
+      {"attack": "Iranian drone ($10K)", "cost": 10000, "defense": "AN/TPY-2 radar destroyed", "defenseCost": 600000000, "ratio": "60,000:1"}
+    ],
+    "iran_first_wave": {
+      "drones_launched": 2000,
+      "missiles_launched": 500,
+      "interceptor_cost_100_hours": {"low": 1200000000, "high": 3700000000},
+      "source": "CSIS"
+    }
+  },
+
+  "marketDisruption": {
+    "naturalGas": {
+      "ttf_change_single_day": "+24%",
+      "doubled_in_month": true,
+      "shellCeo": "Europe could face shortage of fuel by April",
+      "source": "Shell plc CEO, NPR, NBC"
+    },
+    "shipping": {
+      "hormuz_status": "Functionally impaired — commercial traffic halted",
+      "ships_stranded": 200,
+      "insurance": "Suspended for Hormuz transit",
+      "source": "WEF, Lloyd's List"
+    },
+    "insiderTrading": {
+      "amount": 580000000,
+      "type": "Short bets on oil futures",
+      "timing": "15 minutes before Trump's statement on postponing attacks for talks",
+      "date": "2026-03-23",
+      "source": "Financial Times investigation"
+    }
+  },
+
+  "targets_hit": 15000,
+  "targets_source": "Hegseth and Gen. Caine (as of Mar 13)",
+  "iranian_vessels_damaged": 90,
+  "iranian_minelayers_destroyed": 30
+}

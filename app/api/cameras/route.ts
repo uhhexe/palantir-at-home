@@ -129,6 +129,13 @@ const PLATFORM_511_SOURCES: Array<{
     sourceId: "padot",
     streamsPublic: false,
   },
+  {
+    name: "New York",
+    baseUrl: "https://511ny.org",
+    stateCode: "NY",
+    sourceId: "nydot",
+    streamsPublic: true,
+  },
 ];
 
 function parseWKTPoint(wkt: string): { lat: number; lng: number } | null {

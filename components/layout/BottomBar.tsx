@@ -30,7 +30,7 @@ export default function BottomBar({
   onQuickNav,
 }: BottomBarProps) {
   return (
-    <div className="h-[28px] bg-surface border-t border-border flex items-center justify-between px-3 shrink-0 select-none relative">
+    <div className="h-[34px] bg-surface border-t border-border flex items-center justify-between px-4 shrink-0 select-none relative">
       {/* Teal accent line — left-aligned gradient */}
       <div
         className="absolute bottom-0 left-0 right-0 h-px"
@@ -40,7 +40,7 @@ export default function BottomBar({
       />
 
       {/* Left: Coordinates */}
-      <div className="flex items-center gap-2 font-mono text-[8px] text-text-dim min-w-[160px]">
+      <div className="flex items-center gap-2 font-mono text-[12px] text-text-dim min-w-[160px]">
         {coords ? (
           <>
             <span className="text-accent">{coords.lat.toFixed(5)}</span>
@@ -62,7 +62,7 @@ export default function BottomBar({
             <button
               key={nav.label}
               onClick={() => onQuickNav(nav.lat, nav.lng, nav.zoom)}
-              className="px-1.5 py-0.5 text-[7px] font-heading tracking-[1px] text-text-dim hover:text-accent hover:bg-accent-glow transition-colors"
+              className="px-1.5 py-0.5 text-[12px] font-heading tracking-[1px] text-text-dim hover:text-accent hover:bg-accent-glow transition-colors"
             >
               {nav.label}
             </button>
@@ -71,7 +71,7 @@ export default function BottomBar({
       )}
 
       {/* Right: Stats */}
-      <div className="flex items-center gap-3 font-mono text-[8px] text-text-dim min-w-[160px] justify-end">
+      <div className="flex items-center gap-3 font-mono text-[12px] text-text-dim min-w-[160px] justify-end">
         <span>
           <span className="text-white">{enabledLayers}</span> LAYERS
         </span>

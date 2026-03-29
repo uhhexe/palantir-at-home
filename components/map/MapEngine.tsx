@@ -65,7 +65,7 @@ function buildPopupHtml(cam: CameraData): string {
   const proxiedSrc = imgSrc ? proxyImageUrl(imgSrc) : null;
   const timestamp = Date.now();
 
-  return `<div style="font-family:'JetBrains Mono',monospace;font-size:11px;min-width:280px;">
+  return `<div style="font-family:'JetBrains Mono',monospace;font-size:13px;min-width:280px;">
     <div style="color:#00d4aa;font-weight:bold;margin-bottom:4px;font-size:12px;">${cam.name}</div>
     <div style="color:#6a6a7a;margin-bottom:6px;display:flex;gap:8px;flex-wrap:wrap;">
       ${cam.road ? `<span>Route ${cam.road}</span>` : ""}
@@ -82,27 +82,27 @@ function buildPopupHtml(cam: CameraData): string {
               style="width:300px;border-radius:1px;border:1px solid rgba(0,210,170,0.14);display:block;background:#12121a;"
               onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex';"
             />
-            <div style="display:none;width:300px;height:180px;border-radius:1px;border:1px solid rgba(0,210,170,0.14);background:#12121a;align-items:center;justify-content:center;color:#ff3355;font-size:10px;">
+            <div style="display:none;width:300px;height:180px;border-radius:1px;border:1px solid rgba(0,210,170,0.14);background:#12121a;align-items:center;justify-content:center;color:#ff3355;font-size:12px;">
               FEED UNAVAILABLE
             </div>
-            <div style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.7);border-radius:1px;padding:2px 6px;font-size:9px;color:#00d4aa;">
+            <div style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.7);border-radius:1px;padding:2px 6px;font-size:13px;color:#00d4aa;">
               LIVE
             </div>
           </div>
           <div style="margin-top:6px;display:flex;gap:6px;align-items:center;">
-            <button onclick="(function(){var img=document.getElementById('cam-img-${cam.id}');if(img)img.src='${proxiedSrc}&t='+Date.now();})()" style="background:#13181d;border:1px solid rgba(0,210,170,0.14);color:#00d4aa;padding:3px 8px;border-radius:1px;font-size:10px;cursor:pointer;font-family:monospace;">
+            <button onclick="(function(){var img=document.getElementById('cam-img-${cam.id}');if(img)img.src='${proxiedSrc}&t='+Date.now();})()" style="background:#13181d;border:1px solid rgba(0,210,170,0.14);color:#00d4aa;padding:3px 8px;border-radius:1px;font-size:12px;cursor:pointer;font-family:monospace;">
               ↻ REFRESH
             </button>
             ${
               cam.streamUrl
-                ? `<span style="background:#13181d;border:1px solid rgba(0,210,170,0.14);color:#40e8c4;padding:3px 8px;border-radius:1px;font-size:10px;font-family:monospace;">
+                ? `<span style="background:#13181d;border:1px solid rgba(0,210,170,0.14);color:#40e8c4;padding:3px 8px;border-radius:1px;font-size:12px;font-family:monospace;">
                     ▶ STREAM — click marker for panel
                   </span>`
                 : ""
             }
-            <span style="margin-left:auto;font-size:9px;color:#6a6a7a;">${cam.source || ""}</span>
+            <span style="margin-left:auto;font-size:13px;color:#6a6a7a;">${cam.source || ""}</span>
           </div>`
-        : '<div style="color:#6a6a7a;margin-top:4px;font-size:10px;">No feed URL available</div>'
+        : '<div style="color:#6a6a7a;margin-top:4px;font-size:12px;">No feed URL available</div>'
     }
   </div>`;
 }
@@ -145,14 +145,14 @@ function buildFeaturePopup(feature: GeoJSON.Feature, layerConfig: LayerConfig): 
     .map(
       (f) =>
         `<div style="display:flex;justify-content:space-between;gap:8px;">
-          <span style="color:#6a6a7a;text-transform:uppercase;font-size:9px;">${f.replace(/_/g, " ")}</span>
+          <span style="color:#6a6a7a;text-transform:uppercase;font-size:13px;">${f.replace(/_/g, " ")}</span>
           <span style="color:#9aa8b4;text-align:right;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${props[f]}</span>
         </div>`
     )
     .join("");
 
-  return `<div style="font-family:'JetBrains Mono',monospace;font-size:10px;min-width:200px;">
-    <div style="color:${layerConfig.color};font-weight:bold;margin-bottom:6px;font-size:11px;">${title}</div>
+  return `<div style="font-family:'JetBrains Mono',monospace;font-size:12px;min-width:200px;">
+    <div style="color:${layerConfig.color};font-weight:bold;margin-bottom:6px;font-size:13px;">${title}</div>
     <div style="display:flex;flex-direction:column;gap:3px;">${rows}</div>
   </div>`;
 }
@@ -164,11 +164,11 @@ function buildEarthquakePopup(feature: GeoJSON.Feature): string {
   const place = props.place || "Unknown location";
   const time = props.time ? new Date(props.time).toLocaleString() : "";
 
-  return `<div style="font-family:'JetBrains Mono',monospace;font-size:10px;min-width:200px;">
+  return `<div style="font-family:'JetBrains Mono',monospace;font-size:12px;min-width:200px;">
     <div style="color:#ff2b4e;font-weight:bold;font-size:13px;margin-bottom:4px;">M${mag}</div>
     <div style="color:#9aa8b4;margin-bottom:4px;">${place}</div>
-    <div style="color:#6a6a7a;font-size:9px;">${time}</div>
-    ${props.tsunami ? '<div style="color:#f5a623;margin-top:4px;font-size:9px;">TSUNAMI WARNING</div>' : ""}
+    <div style="color:#6a6a7a;font-size:13px;">${time}</div>
+    ${props.tsunami ? '<div style="color:#f5a623;margin-top:4px;font-size:13px;">TSUNAMI WARNING</div>' : ""}
   </div>`;
 }
 
@@ -234,7 +234,7 @@ export default function MapEngine({
             background:rgba(0,212,170,0.1);
             border:1px solid rgba(0,212,170,0.4);
             display:flex;align-items:center;justify-content:center;
-            color:#00d4aa;font-size:10px;font-weight:600;font-family:'Inconsolata',monospace;
+            color:#00d4aa;font-size:12px;font-weight:600;font-family:'Inconsolata',monospace;
             box-shadow:0 0 8px rgba(0,212,170,0.15);
           ">${count}</div>`,
           className: "",
@@ -252,7 +252,7 @@ export default function MapEngine({
       onEachFeature: (feature, layer) => {
         if (feature.properties?.name) {
           layer.bindPopup(
-            `<div style="font-family:monospace;font-size:11px;">
+            `<div style="font-family:monospace;font-size:13px;">
               <div style="color:#40e8c4;font-weight:bold;">${feature.properties.name}</div>
               ${feature.properties.owners ? `<div style="color:#6a6a7a;margin-top:2px;">${feature.properties.owners}</div>` : ""}
               ${feature.properties.length ? `<div style="color:#6a6a7a;margin-top:2px;">${feature.properties.length}</div>` : ""}
@@ -409,7 +409,7 @@ export default function MapEngine({
             const name = props.poly_IncidentName || props.irwin_IncidentName || "Wildfire";
             const acres = props.poly_GISAcres ? Math.round(props.poly_GISAcres).toLocaleString() : "?";
             layer.bindPopup(
-              `<div style="font-family:monospace;font-size:10px;">
+              `<div style="font-family:monospace;font-size:12px;">
                 <div style="color:#f5a623;font-weight:bold;font-size:12px;">${name}</div>
                 <div style="color:#9aa8b4;margin-top:4px;">${acres} acres</div>
               </div>`,
@@ -442,11 +442,11 @@ export default function MapEngine({
             const urgency = props.urgency || "";
             const areas = props.areaDesc || "";
             layer.bindPopup(
-              `<div style="font-family:monospace;font-size:10px;min-width:220px;">
+              `<div style="font-family:monospace;font-size:12px;min-width:220px;">
                 <div style="color:${severity === "Extreme" ? "#ff2b4e" : severity === "Severe" ? "#f5a623" : "#00b4ff"};font-weight:bold;font-size:12px;">${event}</div>
-                <div style="color:#9aa8b4;margin-top:4px;font-size:10px;">${headline}</div>
-                <div style="color:#6a6a7a;margin-top:4px;font-size:9px;">Severity: ${severity} · Urgency: ${urgency}</div>
-                <div style="color:#6a6a7a;margin-top:2px;font-size:9px;max-height:60px;overflow:auto;">${areas}</div>
+                <div style="color:#9aa8b4;margin-top:4px;font-size:12px;">${headline}</div>
+                <div style="color:#6a6a7a;margin-top:4px;font-size:13px;">Severity: ${severity} · Urgency: ${urgency}</div>
+                <div style="color:#6a6a7a;margin-top:2px;font-size:13px;max-height:60px;overflow:auto;">${areas}</div>
               </div>`,
               { maxWidth: 300 }
             );
@@ -488,13 +488,13 @@ export default function MapEngine({
             const cameraType = props.cameraType !== "unknown" ? props.cameraType : "";
             const operator = props.operator !== "Unknown" ? props.operator : "";
             layer.bindPopup(
-              `<div style="font-family:monospace;font-size:10px;min-width:180px;">
-                <div style="color:#8a8a9a;font-weight:bold;font-size:11px;">STREET / MUNICIPAL CAMERA</div>
+              `<div style="font-family:monospace;font-size:12px;min-width:180px;">
+                <div style="color:#8a8a9a;font-weight:bold;font-size:13px;">STREET / MUNICIPAL CAMERA</div>
                 ${zone ? `<div style="color:#9aa8b4;margin-top:3px;">Zone: ${zone}</div>` : ""}
                 ${cameraType ? `<div style="color:#9aa8b4;">Type: ${cameraType}</div>` : ""}
                 ${operator ? `<div style="color:#9aa8b4;">Operator: ${operator}</div>` : ""}
                 ${props.direction ? `<div style="color:#9aa8b4;">Direction: ${props.direction}</div>` : ""}
-                <div style="color:#5c6c78;margin-top:4px;font-size:9px;">Source: OpenStreetMap</div>
+                <div style="color:#8b949e;margin-top:4px;font-size:13px;">Source: OpenStreetMap</div>
               </div>`,
               { maxWidth: 250 }
             );
@@ -517,11 +517,11 @@ export default function MapEngine({
             const props = feature.properties || {};
             const operator = props.operator !== "Unknown" ? props.operator : "";
             layer.bindPopup(
-              `<div style="font-family:monospace;font-size:10px;min-width:180px;">
-                <div style="color:#00b4ff;font-weight:bold;font-size:11px;">LICENSE PLATE READER</div>
+              `<div style="font-family:monospace;font-size:12px;min-width:180px;">
+                <div style="color:#00b4ff;font-weight:bold;font-size:13px;">LICENSE PLATE READER</div>
                 ${operator ? `<div style="color:#9aa8b4;margin-top:3px;">Operator: ${operator}</div>` : ""}
                 ${props.direction ? `<div style="color:#9aa8b4;">Direction: ${props.direction}</div>` : ""}
-                <div style="color:#5c6c78;margin-top:4px;font-size:9px;">Source: OpenStreetMap</div>
+                <div style="color:#8b949e;margin-top:4px;font-size:13px;">Source: OpenStreetMap</div>
               </div>`,
               { maxWidth: 250 }
             );
@@ -543,13 +543,13 @@ export default function MapEngine({
           onEachFeature: (feature, layer) => {
             const props = feature.properties || {};
             layer.bindPopup(
-              `<div style="font-family:monospace;font-size:10px;min-width:200px;">
-                <div style="color:#ff6b35;font-weight:bold;font-size:11px;">ALPR CAMERA</div>
+              `<div style="font-family:monospace;font-size:12px;min-width:200px;">
+                <div style="color:#ff6b35;font-weight:bold;font-size:13px;">ALPR CAMERA</div>
                 ${props.operator ? `<div style="color:#9aa8b4;margin-top:3px;">Operator: ${props.operator}</div>` : ""}
                 ${props.manufacturer ? `<div style="color:#9aa8b4;">Manufacturer: ${props.manufacturer}</div>` : ""}
                 ${props.direction ? `<div style="color:#9aa8b4;">Direction: ${props.direction}</div>` : ""}
-                <div style="color:#5c6c78;margin-top:4px;font-size:9px;">OSM Node: ${props.osmId || ""}</div>
-                <div style="color:#5c6c78;font-size:9px;">Source: DeFlock / OpenStreetMap</div>
+                <div style="color:#8b949e;margin-top:4px;font-size:13px;">OSM Node: ${props.osmId || ""}</div>
+                <div style="color:#8b949e;font-size:13px;">Source: DeFlock / OpenStreetMap</div>
               </div>`,
               { maxWidth: 250 }
             );
@@ -571,13 +571,13 @@ export default function MapEngine({
           onEachFeature: (feature, layer) => {
             const props = feature.properties || {};
             layer.bindPopup(
-              `<div style="font-family:monospace;font-size:10px;min-width:200px;">
-                <div style="color:${layerConfig.color};font-weight:bold;font-size:11px;">${props.technology || "SURVEILLANCE"}</div>
+              `<div style="font-family:monospace;font-size:12px;min-width:200px;">
+                <div style="color:${layerConfig.color};font-weight:bold;font-size:13px;">${props.technology || "SURVEILLANCE"}</div>
                 <div style="color:#e0e0e8;margin-top:4px;font-weight:bold;">${props.agency || ""}</div>
                 <div style="color:#9aa8b4;margin-top:2px;">${props.city || ""}${props.state ? `, ${props.state}` : ""}</div>
                 ${props.vendor ? `<div style="color:#8888a0;margin-top:3px;">Vendor: ${props.vendor}</div>` : ""}
-                ${props.summary ? `<div style="color:#8888a0;margin-top:3px;font-size:9px;line-height:1.3;">${props.summary}</div>` : ""}
-                <div style="color:#5c6c78;margin-top:4px;font-size:9px;">Source: EFF Atlas of Surveillance</div>
+                ${props.summary ? `<div style="color:#8888a0;margin-top:3px;font-size:13px;line-height:1.3;">${props.summary}</div>` : ""}
+                <div style="color:#8b949e;margin-top:4px;font-size:13px;">Source: EFF Atlas of Surveillance</div>
               </div>`,
               { maxWidth: 300 }
             );
@@ -642,7 +642,7 @@ export default function MapEngine({
           <button
             key={style}
             onClick={() => handleStyleChange(style)}
-            className={`px-2 py-1 text-[7px] font-heading tracking-[1.5px] uppercase transition-colors ${
+            className={`px-2 py-1 text-[12px] font-heading tracking-[1.5px] uppercase transition-colors ${
               mapStyle === style
                 ? "bg-accent-glow text-accent"
                 : "text-text-dim hover:text-text"

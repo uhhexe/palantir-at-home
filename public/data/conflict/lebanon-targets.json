@@ -1,0 +1,12 @@
+[
+  {"name": "Beirut Southern Suburbs (Dahieh)", "lat": 33.84, "lng": 35.49, "type": "urban", "status": "STRUCK", "notes": "Hezbollah HQ area — massive Israeli airstrikes"},
+  {"name": "Hazmiyeh", "lat": 33.86, "lng": 35.54, "type": "urban", "status": "STRUCK", "notes": "IRGC Quds Force commander killed in strike"},
+  {"name": "Tyre (Sour)", "lat": 33.27, "lng": 35.20, "type": "urban", "status": "AT RISK", "notes": "Southern Lebanon — evacuation warnings issued"},
+  {"name": "Nabatieh", "lat": 33.38, "lng": 35.48, "type": "urban", "status": "STRUCK", "notes": "Hezbollah stronghold — repeated IDF strikes"},
+  {"name": "Kfar Kila", "lat": 33.32, "lng": 35.55, "type": "border_village", "status": "GROUND OPS", "notes": "IDF ground forces operating"},
+  {"name": "Kfarchouba", "lat": 33.38, "lng": 35.65, "type": "border_village", "status": "GROUND OPS", "notes": "IDF ground incursion zone"},
+  {"name": "Marjaayoun", "lat": 33.36, "lng": 35.59, "type": "town", "status": "CONTESTED", "notes": "Near front line of ground ops"},
+  {"name": "Metula", "lat": 33.28, "lng": 35.58, "type": "israeli_border_town", "status": "UNDER FIRE", "notes": "Hezbollah rocket attacks daily"},
+  {"name": "Baalbek", "lat": 34.01, "lng": 36.21, "type": "city", "status": "STRUCK", "notes": "Deep strike — Hezbollah weapons depot"},
+  {"name": "Sidon", "lat": 33.56, "lng": 35.37, "type": "city", "status": "AT RISK", "notes": "Major city — displacement hub"}
+]

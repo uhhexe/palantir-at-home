@@ -1,0 +1,348 @@
+{
+  "asOf": "2026-03-28",
+  "russia": {
+    "aircraft": 435,
+    "helicopter": 351,
+    "tank": 11812,
+    "APC": 24297,
+    "field artillery": 38936,
+    "MRL": 1707,
+    "anti-aircraft warfare": 1337,
+    "drone": 200611,
+    "cruise missiles": 4491,
+    "naval ship": 33,
+    "submarines": 2,
+    "vehicles and fuel tanks": 85796,
+    "special equipment": 4105,
+    "personnel": 1294470
+  },
+  "oryx": {
+    "Russia": {
+      "Tanks": {
+        "total": 1420,
+        "destroyed": 818,
+        "captured": 442,
+        "abandoned": 53,
+        "damaged": 107
+      },
+      "Armoured Fighting Vehicles": {
+        "total": 684,
+        "destroyed": 423,
+        "captured": 219,
+        "abandoned": 23,
+        "damaged": 19
+      },
+      "Infantry Fighting Vehicles": {
+        "total": 1630,
+        "destroyed": 1009,
+        "captured": 473,
+        "abandoned": 77,
+        "damaged": 70
+      },
+      "Armoured Personnel Carriers": {
+        "total": 252,
+        "destroyed": 145,
+        "captured": 86,
+        "abandoned": 12,
+        "damaged": 9
+      },
+      "Mine-Resistant Ambush Protected Vehicles": {
+        "total": 41,
+        "destroyed": 26,
+        "captured": 9,
+        "abandoned": 1,
+        "damaged": 5
+      },
+      "Infantry Mobility Vehicles": {
+        "total": 159,
+        "destroyed": 104,
+        "captured": 46,
+        "abandoned": 1,
+        "damaged": 8
+      },
+      "Command Posts And Communications Stations": {
+        "total": 186,
+        "destroyed": 99,
+        "captured": 76,
+        "abandoned": 4,
+        "damaged": 7
+      },
+      "Engineering Vehicles And Equipment": {
+        "total": 236,
+        "destroyed": 96,
+        "captured": 94,
+        "abandoned": 38,
+        "damaged": 8
+      },
+      "Self-Propelled Anti-Tank Missile Systems": {
+        "total": 28,
+        "destroyed": 9,
+        "captured": 13,
+        "abandoned": 5,
+        "damaged": 1
+      },
+      "Heavy Mortars": {
+        "total": 25,
+        "destroyed": 11,
+        "captured": 14,
+        "abandoned": 0,
+        "damaged": 0
+      },
+      "Artillery Support Vehicles And Equipment": {
+        "total": 74,
+        "destroyed": 32,
+        "captured": 38,
+        "abandoned": 2,
+        "damaged": 2
+      },
+      "Towed Artillery": {
+        "total": 122,
+        "destroyed": 43,
+        "captured": 64,
+        "abandoned": 5,
+        "damaged": 9
+      },
+      "Self-Propelled Artillery": {
+        "total": 252,
+        "destroyed": 137,
+        "captured": 96,
+        "abandoned": 10,
+        "damaged": 9
+      },
+      "Multiple Rocket Launchers": {
+        "total": 147,
+        "destroyed": 92,
+        "captured": 43,
+        "abandoned": 2,
+        "damaged": 10
+      },
+      "Anti-Aircraft Guns": {
+        "total": 15,
+        "destroyed": 3,
+        "captured": 11,
+        "abandoned": 0,
+        "damaged": 1
+      },
+      "Self-Propelled Anti-Aircraft Guns": {
+        "total": 20,
+        "destroyed": 10,
+        "captured": 6,
+        "abandoned": 3,
+        "damaged": 1
+      },
+      "Surface-To-Air Missile Systems": {
+        "total": 77,
+        "destroyed": 46,
+        "captured": 20,
+        "abandoned": 7,
+        "damaged": 4
+      },
+      "Radars": {
+        "total": 16,
+        "destroyed": 7,
+        "captured": 9,
+        "abandoned": 0,
+        "damaged": 0
+      },
+      "Jammers And Deception Systems": {
+        "total": 18,
+        "destroyed": 10,
+        "captured": 6,
+        "abandoned": 0,
+        "damaged": 2
+      },
+      "Aircraft": {
+        "total": 63,
+        "destroyed": 58,
+        "captured": 0,
+        "abandoned": 0,
+        "damaged": 5
+      },
+      "Helicopters": {
+        "total": 57,
+        "destroyed": 54,
+        "captured": 0,
+        "abandoned": 0,
+        "damaged": 3
+      },
+      "Unmanned Aerial Vehicles": {
+        "total": 142,
+        "destroyed": 68,
+        "captured": 73,
+        "abandoned": 0,
+        "damaged": 1
+      },
+      "Naval Ships": {
+        "total": 12,
+        "destroyed": 8,
+        "captured": 0,
+        "abandoned": 0,
+        "damaged": 4
+      },
+      "Logistics Trains": {
+        "total": 6,
+        "destroyed": 6,
+        "captured": 0,
+        "abandoned": 0,
+        "damaged": 0
+      }
+    },
+    "Ukraine": {
+      "Tanks": {
+        "total": 341,
+        "destroyed": 188,
+        "captured": 115,
+        "abandoned": 14,
+        "damaged": 24
+      },
+      "Armoured Fighting Vehicles": {
+        "total": 186,
+        "destroyed": 106,
+        "captured": 73,
+        "abandoned": 4,
+        "damaged": 3
+      },
+      "Infantry Fighting Vehicles": {
+        "total": 349,
+        "destroyed": 243,
+        "captured": 75,
+        "abandoned": 20,
+        "damaged": 11
+      },
+      "Armoured Personnel Carriers": {
+        "total": 177,
+        "destroyed": 83,
+        "captured": 75,
+        "abandoned": 8,
+        "damaged": 11
+      },
+      "Mine-Resistant Ambush Protected Vehicles 4 Bushmaster Protected Mobility Vehicle: 3 Alvis 4 'Mamba': 2 Mastiff Protected Patrol: 1 Wolfhound Protected Patrol: 7 BMC Kirpi: 1 Vepr: 2 KrAZ-MPV Shrek One:": {
+        "total": 13,
+        "destroyed": 0,
+        "captured": 9,
+        "abandoned": 0,
+        "damaged": 4
+      },
+      "Infantry Mobility Vehicles": {
+        "total": 211,
+        "destroyed": 92,
+        "captured": 97,
+        "abandoned": 4,
+        "damaged": 18
+      },
+      "Command Posts And Communications Stations": {
+        "total": 7,
+        "destroyed": 4,
+        "captured": 3,
+        "abandoned": 0,
+        "damaged": 0
+      },
+      "Engineering Vehicles And Equipment": {
+        "total": 32,
+        "destroyed": 14,
+        "captured": 18,
+        "abandoned": 0,
+        "damaged": 0
+      },
+      "Self-Propelled Anti-Tank Missile Systems": {
+        "total": 20,
+        "destroyed": 8,
+        "captured": 10,
+        "abandoned": 1,
+        "damaged": 1
+      },
+      "Artillery Support Vehicles And Equipment": {
+        "total": 18,
+        "destroyed": 7,
+        "captured": 11,
+        "abandoned": 0,
+        "damaged": 0
+      },
+      "Towed Artillery": {
+        "total": 67,
+        "destroyed": 40,
+        "captured": 13,
+        "abandoned": 3,
+        "damaged": 11
+      },
+      "Self-Propelled Artillery": {
+        "total": 74,
+        "destroyed": 36,
+        "captured": 25,
+        "abandoned": 1,
+        "damaged": 12
+      },
+      "Multiple Rocket Launchers": {
+        "total": 29,
+        "destroyed": 20,
+        "captured": 9,
+        "abandoned": 0,
+        "damaged": 0
+      },
+      "Anti-Aircraft Guns": {
+        "total": 4,
+        "destroyed": 0,
+        "captured": 4,
+        "abandoned": 0,
+        "damaged": 0
+      },
+      "Self-Propelled Anti-Aircraft Guns": {
+        "total": 3,
+        "destroyed": 0,
+        "captured": 2,
+        "abandoned": 0,
+        "damaged": 1
+      },
+      "Surface-To-Air Missile Systems": {
+        "total": 66,
+        "destroyed": 56,
+        "captured": 6,
+        "abandoned": 1,
+        "damaged": 2
+      },
+      "Radars And Communications Equipment": {
+        "total": 32,
+        "destroyed": 17,
+        "captured": 11,
+        "abandoned": 0,
+        "damaged": 4
+      },
+      "Aircraft": {
+        "total": 55,
+        "destroyed": 53,
+        "captured": 1,
+        "abandoned": 0,
+        "damaged": 1
+      },
+      "Helicopters": {
+        "total": 22,
+        "destroyed": 18,
+        "captured": 3,
+        "abandoned": 0,
+        "damaged": 1
+      },
+      "Unmanned Aerial Vehicles": {
+        "total": 48,
+        "destroyed": 33,
+        "captured": 15,
+        "abandoned": 0,
+        "damaged": 0
+      },
+      "Naval Ships": {
+        "total": 21,
+        "destroyed": 7,
+        "captured": 12,
+        "abandoned": 0,
+        "damaged": 2
+      },
+      "Trucks, Vehicles and Jeeps": {
+        "total": 359,
+        "destroyed": 193,
+        "captured": 144,
+        "abandoned": 8,
+        "damaged": 14
+      }
+    }
+  },
+  "source": "PetroIvaniuk/2022-Ukraine-Russia-War-Dataset + Oryx"
+}

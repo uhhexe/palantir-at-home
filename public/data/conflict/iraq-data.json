@@ -1,0 +1,21 @@
+{
+  "us_bases": [
+    {"name": "Ain Al-Asad Air Base", "lat": 33.80, "lng": 42.44, "side": "US", "type": "Air Base", "notes": "Targeted by Iranian missiles Jan 2020 — under daily rocket fire"},
+    {"name": "Erbil Air Base", "lat": 36.24, "lng": 44.00, "side": "US", "type": "Air Base", "notes": "Kurdistan Region — drone attacks increasing"},
+    {"name": "Al-Harir Air Base", "lat": 36.54, "lng": 44.37, "side": "US", "type": "Air Base", "notes": "Special operations hub"},
+    {"name": "Balad Air Base", "lat": 34.09, "lng": 44.36, "side": "US/Iraq", "type": "Air Base", "notes": "Joint base — militia mortar fire"},
+    {"name": "Camp Victory / BIAP", "lat": 33.26, "lng": 44.23, "side": "US/Iraq", "type": "Base", "notes": "Baghdad International Airport complex"},
+    {"name": "US Embassy Baghdad (Green Zone)", "lat": 33.30, "lng": 44.39, "side": "US", "type": "Diplomatic", "notes": "Rocket attacks on Green Zone"}
+  ],
+  "proxy_attacks": [
+    {"date": "2026-03-03", "attacker": "Islamic Resistance of Iraq", "target": "Multiple US positions — 27 operations in single day", "lat": 33.80, "lng": 42.44, "weaponType": "Rockets/Drones/Missiles", "notes": "Unprecedented single-day attack volume"},
+    {"date": "2026-03-01", "attacker": "Iran IRGC", "target": "Kurdish militant positions, northern Iraq", "lat": 36.40, "lng": 45.00, "weaponType": "Ballistic missiles", "notes": "Cross-border strikes from Iran"},
+    {"date": "2026-03-02", "attacker": "Iranian-aligned militia", "target": "Ain Al-Asad Air Base", "lat": 33.80, "lng": 42.44, "weaponType": "One-way attack drones", "notes": "Multiple drones intercepted, some hit"},
+    {"date": "2026-03-04", "attacker": "Iranian-aligned militia", "target": "US Embassy Baghdad compound", "lat": 33.30, "lng": 44.39, "weaponType": "Rockets", "notes": "C-RAM intercepted most rounds"}
+  ],
+  "kurdish_groups": [
+    {"name": "Kurdistan Freedom Party (PAK)", "lat": 36.4, "lng": 45.0, "type": "militant", "notes": "Iranian Kurdish opposition — IRGC target"},
+    {"name": "PDKI (Democratic Party of Iranian Kurdistan)", "lat": 36.2, "lng": 45.5, "type": "militant", "notes": "Targeted by Iran missile strikes"},
+    {"name": "PKK Qandil Mountains", "lat": 36.5, "lng": 45.1, "type": "militant", "notes": "PKK mountain stronghold — Turkey/Iran both targeting"}
+  ]
+}

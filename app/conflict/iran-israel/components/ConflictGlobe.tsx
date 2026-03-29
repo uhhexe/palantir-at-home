@@ -29,7 +29,7 @@ function getStrikeColor(attacker: string): string {
   if (a.includes("iran") || a.includes("irgc")) return "#e8364a";
   if (a.includes("houthi")) return "#d4962a";
   if (a.includes("hezbollah")) return "#c8b832";
-  return "#5c6c78";
+  return "#8b949e";
 }
 
 export default function ConflictGlobe({ strikes, militaryBases, nuclearSites, selectedWave }: ConflictGlobeProps) {
@@ -329,7 +329,7 @@ export default function ConflictGlobe({ strikes, militaryBases, nuclearSites, se
           border: "1px solid rgba(0,210,170,0.1)",
           fontFamily: "'Inconsolata', monospace",
           fontSize: "9px",
-          color: "#5c6c78",
+          color: "#8b949e",
           letterSpacing: "0.5px",
         }}
       >
@@ -386,8 +386,8 @@ export default function ConflictGlobe({ strikes, militaryBases, nuclearSites, se
         className="absolute bottom-2 left-2 z-10 pointer-events-none"
         style={{
           fontFamily: "'Inconsolata', monospace",
-          fontSize: "8px",
-          color: "#344050",
+          fontSize: "9px",
+          color: "#7d8590",
           letterSpacing: "0.5px",
         }}
       >

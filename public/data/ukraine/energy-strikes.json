@@ -1,0 +1,41 @@
+{
+  "asOf": "2026-03-29",
+  "source": "ACLED, Ukrainian Air Force, Kyiv Post, CNN",
+
+  "russiaOnUkraineEnergy": {
+    "totalAttacks": 1900,
+    "note": "1,900+ attacks on Ukraine energy infrastructure since Feb 2022",
+    "winter2025_26": {
+      "period": "Dec 2025 - Feb 2026",
+      "drones": 19000,
+      "guidedBombs": 14000,
+      "missiles": 700,
+      "total": 34000,
+      "note": "90 days. Ukraine energy system meeting only 60% of needs. National energy emergency declared."
+    },
+    "majorTargets": [
+      {"name": "Kyiv power grid", "lat": 50.45, "lng": 30.52, "hits": "Dozens", "status": "Rolling blackouts"},
+      {"name": "Kharkiv power infrastructure", "lat": 49.99, "lng": 36.23, "hits": "Constant", "status": "Severely degraded"},
+      {"name": "Dnipro Hydroelectric Station", "lat": 48.46, "lng": 35.04, "hits": "Multiple", "status": "Destroyed — offline"},
+      {"name": "Dniester Hydropower Complex", "lat": 48.58, "lng": 27.27, "hits": "March 2026", "status": "Damaged"},
+      {"name": "Odesa power grid", "lat": 46.48, "lng": 30.72, "hits": "Regular", "status": "Frequent outages"},
+      {"name": "Zaporizhzhia power infrastructure", "lat": 47.84, "lng": 35.14, "hits": "Regular", "status": "Degraded"}
+    ]
+  },
+
+  "ukraineOnRussiaEnergy": {
+    "strategy": "Systematic targeting of Russian oil refineries and depots with long-range kamikaze drones and cruise missiles",
+    "majorTargets": [
+      {"name": "Afipsky Oil Refinery", "lat": 44.89, "lng": 38.85, "hits": "Multiple 2024-2026", "status": "Repeatedly struck — fires"},
+      {"name": "Tikhoretsk Oil Depot", "lat": 45.85, "lng": 40.13, "hits": "Massive explosion", "status": "Destroyed"},
+      {"name": "Labinsk Oil Depot", "lat": 44.63, "lng": 40.73, "hits": "Struck 2026", "status": "Damaged"},
+      {"name": "Kavkaz Port fuel storage", "lat": 45.37, "lng": 36.63, "hits": "Mar 2026", "status": "Struck"},
+      {"name": "Slavyansk-na-Kubani refinery", "lat": 45.26, "lng": 38.12, "hits": "Multiple", "status": "Damaged"},
+      {"name": "Novoshakhtinsk refinery", "lat": 47.76, "lng": 39.93, "hits": "2024", "status": "Struck"},
+      {"name": "Ilsky refinery", "lat": 44.87, "lng": 38.52, "hits": "2025", "status": "Struck"},
+      {"name": "Volgograd refinery", "lat": 48.72, "lng": 44.51, "hits": "2024", "status": "Struck"},
+      {"name": "Moscow-area fuel depots", "lat": 55.75, "lng": 37.62, "hits": "Mar 2026 swarm", "status": "Struck — fires"},
+      {"name": "Ryazan Oil Refinery", "lat": 54.61, "lng": 39.72, "hits": "2024-2025", "status": "Damaged"}
+    ]
+  }
+}

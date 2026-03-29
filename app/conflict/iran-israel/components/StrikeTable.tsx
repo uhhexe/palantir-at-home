@@ -13,13 +13,13 @@ const ATTACKER_COLORS: Record<string, string> = {
   IRAN: "#e8364a",
   HOUTHI: "#d4962a",
   HEZBOLLAH: "#c8b832",
-  UNKNOWN: "#5c6c78",
+  UNKNOWN: "#8b949e",
 };
 
 const CONFIDENCE_COLORS: Record<string, string> = {
   CONFIRMED: "#00d4aa",
   REPORTED: "#d4962a",
-  UNVERIFIED: "#5c6c78",
+  UNVERIFIED: "#8b949e",
 };
 
 type SortKey = "date" | "attacker" | "target" | "country" | "weapon" | "confidence";
@@ -160,7 +160,7 @@ export default function StrikeTable({ strikes }: StrikeTableProps) {
             <div className="w-[90px] px-2 py-1.5 shrink-0">
               <span
                 className="font-mono text-[15px] font-semibold"
-                style={{ color: ATTACKER_COLORS[strike.attacker] || "#5c6c78" }}
+                style={{ color: ATTACKER_COLORS[strike.attacker] || "#8b949e" }}
               >
                 {strike.attacker}
               </span>
@@ -196,7 +196,7 @@ export default function StrikeTable({ strikes }: StrikeTableProps) {
             <div className="w-[90px] px-2 py-1.5 shrink-0">
               <span
                 className="font-mono text-[14px]"
-                style={{ color: CONFIDENCE_COLORS[strike.confidence] || "#5c6c78" }}
+                style={{ color: CONFIDENCE_COLORS[strike.confidence] || "#8b949e" }}
               >
                 {strike.confidence}
               </span>

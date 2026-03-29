@@ -1,0 +1,166 @@
+{
+  "asOf": "2026-03-29",
+  "warStarted": "2026-02-28",
+  "dayOfWar": 29,
+  "note": "Casualty figures are contested and vary significantly by source. All should be treated as estimates.",
+
+  "bySource": {
+    "alJazeera": {
+      "name": "Al Jazeera Live Tracker",
+      "asOf": "2026-03-28",
+      "methodology": "Preliminary figures from official government sources and field reporting.",
+      "iran": { "killed": 1937, "injured": null, "note": "Majority of total deaths" },
+      "israel": { "killed": 19, "injured": null },
+      "us_military": { "killed": 13, "injured": null, "note": "Plus 6 crew in refueling aircraft crash" },
+      "gulf_states": { "killed": 25, "injured": null, "breakdown": "UAE: 11, Saudi: 2, Qatar: 0, Bahrain: 2, Kuwait: 0, Jordan: 0" },
+      "iraq": { "killed": 96, "injured": null, "note": "Mostly PMF paramilitary. Includes 1 FM-level leader." },
+      "lebanon": { "killed": null, "injured": null, "note": "Part of 2026 Lebanon war — 1,000+ killed separately tracked" },
+      "total": 2090
+    },
+    "hrana": {
+      "name": "HRANA (Human Rights Activists in Iran)",
+      "asOf": "2026-03-17",
+      "methodology": "Thousands of field reports, media data, local sources, multi-stage verification.",
+      "iran": {
+        "killed_total": 3114,
+        "killed_civilian": 1354,
+        "killed_military": 1138,
+        "killed_unclassified": 622,
+        "injured_civilian": 654,
+        "injured_military": 29,
+        "children_killed": 205,
+        "women_killed": 29,
+        "women_injured": 30,
+        "children_injured": 14,
+        "provinces_hit": 31,
+        "cities_hit": 209,
+        "attacks_recorded": 6000
+      },
+      "note": "HRANA states military casualties are 'significantly higher' than documented due to restricted access."
+    },
+    "hengaw": {
+      "name": "Hengaw Organization for Human Rights",
+      "asOf": "2026-03-17",
+      "methodology": "Ground-level documentation with focus on Kurdistan region. Includes military casualties from IRGC, Army, Air Force sources.",
+      "iran": {
+        "killed_total": 5300,
+        "killed_civilian": 511,
+        "killed_military": 4789,
+        "civilian_percent": 9.6,
+        "note": "Highest total — includes more military casualties than other sources. 178 children killed."
+      },
+      "highest_military_losses": "Air Force, IRGC, Army units",
+      "worst_provinces": "Tehran, Kermanshah, Hormozgan, Alborz, Kurdistan (Sanandaj), Sistan-Baluchestan"
+    },
+    "iranWarLive": {
+      "name": "IranWarLive OSINT Engine",
+      "asOf": "2026-03-15",
+      "methodology": "Mathematically deduplicated. Official OSINT sources only (Reuters, AP, AFP). Conservative methodology.",
+      "all_fronts_total": 4500,
+      "note": "Covers Israel, Iran, Lebanon, Gaza, Syria, Yemen combined"
+    },
+    "redCrescent": {
+      "name": "Iranian Red Crescent (IRCS)",
+      "asOf": "2026-03-13",
+      "methodology": "Official Iranian humanitarian agency figures",
+      "iran": {
+        "killed": 800,
+        "injured": 20000,
+        "note": "Widely considered an undercount. Government-controlled reporting."
+      }
+    },
+    "usIsraelClaims": {
+      "name": "US/Israeli Military Claims",
+      "asOf": "2026-03-15",
+      "methodology": "Official military briefings and intelligence assessments",
+      "iran_military_killed": 6000,
+      "note": "US and Israeli officials claim majority of Iranian deaths — potentially over 6,000 — are military. Not independently verified."
+    },
+    "washingtonPost": {
+      "name": "Washington Post Investigation",
+      "asOf": "2026-03-27",
+      "methodology": "Most comprehensive civilian estimates yet",
+      "iran_civilian_killed": 1500,
+      "note": "Nearly 1,500 Iranian civilians killed in US and Israeli strikes. Described as conservative estimate."
+    }
+  },
+
+  "usDeaths": {
+    "confirmed_killed": 13,
+    "killed_by_enemy_fire": 13,
+    "aviation_crash": 6,
+    "health_related": 1,
+    "total_including_accidents": 20,
+    "source": "CENTCOM, DoD",
+    "details": [
+      "3 killed at Al Asad Air Base, Iraq — ballistic missile strike (Feb 28-Mar 1)",
+      "6 killed in KC-135 refueling aircraft crash in western Iraq (Mar 13)",
+      "Additional deaths confirmed across Gulf bases",
+      "1 health-related death in Kuwait"
+    ]
+  },
+
+  "israelDeaths": {
+    "killed": 19,
+    "injured": "Hundreds",
+    "source": "Al Jazeera, Israeli reports",
+    "details": [
+      "Iranian missiles hit residential areas in Tel Aviv, Beer Sheva, Ramat Gan",
+      "4 killed in occupied West Bank by Iranian missile",
+      "15 killed within Israel proper",
+      "~50 missiles hit Israel without interception in one barrage"
+    ]
+  },
+
+  "gulfStateDeaths": {
+    "uae": { "killed": 11, "injured": 169, "military_killed": 2, "note": "398 ballistic missiles intercepted, 1,872 drones intercepted, 15 cruise missiles intercepted" },
+    "saudi": { "killed": 2, "injured": 20, "note": "Projectile hit residential area in Al Kharj" },
+    "bahrain": { "killed": 2, "injured": null, "note": "1 Asian worker killed by intercepted missile debris" },
+    "qatar": { "killed": 0, "injured": null, "note": "No deaths confirmed. Schools moved to remote learning." },
+    "kuwait": { "killed": 0, "injured": null },
+    "jordan": { "killed": 0, "injured": 28 }
+  },
+
+  "notableIncidents": [
+    {
+      "date": "2026-02-28",
+      "event": "Minab girls school strike",
+      "killed": "167-175",
+      "type": "civilian",
+      "details": "Shajareh Tayyebeh elementary school in Minab hit during opening US strikes. 167-175 girls killed. Only 58 identified by Mar 17. Deadliest single civilian incident.",
+      "lat": 27.14, "lng": 57.08
+    },
+    {
+      "date": "2026-02-28",
+      "event": "Khamenei compound strike",
+      "killed": "5+",
+      "type": "leadership",
+      "details": "Supreme Leader + daughter, son-in-law, grandchild, daughter-in-law killed. Decapitation strike on Day 1.",
+      "lat": 35.70, "lng": 51.40
+    },
+    {
+      "date": "2026-03-01",
+      "event": "First US combat deaths",
+      "killed": "3",
+      "type": "us_military",
+      "details": "Ballistic missile strike on Al Asad Air Base, Iraq. 12 wounded.",
+      "lat": 33.80, "lng": 42.44
+    },
+    {
+      "date": "2026-03-02",
+      "event": "Iranian Navy vessel IRIS Dena sunk",
+      "killed": "104",
+      "type": "military",
+      "details": "US submarine torpedo. 32 rescued, 101 missing. Ship was returning unarmed from India.",
+      "lat": 7.0, "lng": 80.0
+    },
+    {
+      "date": "2026-03-13",
+      "event": "US KC-135 refueling aircraft crash",
+      "killed": "6",
+      "type": "us_military",
+      "details": "All 6 crew killed in western Iraq. Classified as crash, not enemy fire.",
+      "lat": 33.5, "lng": 42.0
+    }
+  ]
+}

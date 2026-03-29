@@ -18,10 +18,22 @@ const ALLOWED_HOSTS = [
   "www.511pa.com",
   // NYC TMC
   "webcams.nyctmc.org",
+  // New York State
+  "511ny.org",
   // MassDOT
   "public.carsprogram.org",
   "api.trafficland.com",
 ];
+
+// Suffix-based matching for CDN subdomains (e.g. s58.nysdot.skyvdn.com)
+const ALLOWED_HOST_SUFFIXES = [
+  ".nysdot.skyvdn.com",
+];
+
+function isHostAllowed(hostname: string): boolean {
+  if (ALLOWED_HOSTS.includes(hostname)) return true;
+  return ALLOWED_HOST_SUFFIXES.some((suffix) => hostname.endsWith(suffix));
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -33,7 +45,7 @@ export async function GET(request: Request) {
 
   try {
     const parsed = new URL(imageUrl);
-    if (!ALLOWED_HOSTS.includes(parsed.hostname)) {
+    if (!isHostAllowed(parsed.hostname)) {
       return NextResponse.json({ error: "Host not allowed" }, { status: 403 });
     }
 

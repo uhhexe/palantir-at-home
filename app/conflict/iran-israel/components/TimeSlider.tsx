@@ -18,7 +18,7 @@ const ATTACKER_COLORS: Record<string, string> = {
   IRAN: "#e8364a",
   HOUTHI: "#d4962a",
   HEZBOLLAH: "#c8b832",
-  UNKNOWN: "#5c6c78",
+  UNKNOWN: "#8b949e",
 };
 
 function dateToDay(dateStr: string, baseDate: Date): number {
@@ -230,7 +230,7 @@ export default function TimeSlider({ minDate, maxDate, onRangeChange, strikeCoun
                     <div
                       key={i}
                       style={{
-                        backgroundColor: ATTACKER_COLORS[seg.attacker] || "#5c6c78",
+                        backgroundColor: ATTACKER_COLORS[seg.attacker] || "#8b949e",
                         height: `${segH}%`,
                         minHeight: 1,
                       }}

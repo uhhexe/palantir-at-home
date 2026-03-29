@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface TopBarProps {
   cameraCount?: number;
@@ -8,6 +10,7 @@ interface TopBarProps {
 }
 
 export default function TopBar({ cameraCount = 0, sourceCount = 0 }: TopBarProps) {
+  const pathname = usePathname();
   const [time, setTime] = useState<{ local: string; utc: string }>({
     local: "",
     utc: "",
@@ -27,7 +30,7 @@ export default function TopBar({ cameraCount = 0, sourceCount = 0 }: TopBarProps
   }, []);
 
   return (
-    <div className="h-[28px] bg-surface border-b border-border flex items-center justify-between px-3 shrink-0 select-none relative">
+    <div className="h-[42px] bg-surface border-b border-border flex items-center justify-between px-4 shrink-0 select-none relative">
       {/* Teal accent line — right-aligned gradient */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
@@ -39,14 +42,46 @@ export default function TopBar({ cameraCount = 0, sourceCount = 0 }: TopBarProps
       {/* Left: Brand */}
       <div className="flex items-center gap-2">
         <div className="w-1.5 h-1.5 bg-accent" />
-        <span className="font-heading text-[8px] font-semibold tracking-[2px] text-accent uppercase">
-          WAR ROOM
+        <span className="font-[family-name:var(--font-handwritten)] text-[26px] font-bold text-accent leading-none -mb-0.5">
+          palantir at home
         </span>
-        <span className="text-text-muted text-[8px] font-mono ml-1">v1.0</span>
+        <span className="text-text-muted text-[13px] font-mono ml-1">v1.0</span>
+        <div className="flex items-center gap-0.5 ml-3">
+          <Link
+            href="/"
+            className={`px-2.5 py-0.5 font-heading text-[15px] tracking-[2px] uppercase transition-colors ${
+              pathname === "/"
+                ? "text-accent border-b border-accent"
+                : "text-text-muted hover:text-text-dim"
+            }`}
+          >
+            Mainland
+          </Link>
+          <Link
+            href="/conflict/iran-israel"
+            className={`px-2.5 py-0.5 font-heading text-[15px] tracking-[2px] uppercase transition-colors ${
+              pathname?.startsWith("/conflict/iran")
+                ? "text-danger border-b border-danger"
+                : "text-text-muted hover:text-danger"
+            }`}
+          >
+            Iran / Israel
+          </Link>
+          <Link
+            href="/conflict/ukraine"
+            className={`px-2.5 py-0.5 font-heading text-[15px] tracking-[2px] uppercase transition-colors ${
+              pathname?.startsWith("/conflict/ukraine")
+                ? "text-[#005BBB] border-b border-[#005BBB]"
+                : "text-text-muted hover:text-[#005BBB]"
+            }`}
+          >
+            Ukraine
+          </Link>
+        </div>
       </div>
 
       {/* Center: Stats */}
-      <div className="flex items-center gap-3 text-[8px] font-mono text-text-dim">
+      <div className="flex items-center gap-3 text-[16px] font-mono text-text-dim">
         <span>
           <span className="text-white">{cameraCount.toLocaleString()}</span>{" "}
           FEEDS
@@ -61,7 +96,7 @@ export default function TopBar({ cameraCount = 0, sourceCount = 0 }: TopBarProps
       </div>
 
       {/* Right: Status + Time */}
-      <div className="flex items-center gap-3 text-[8px] font-mono">
+      <div className="flex items-center gap-3 text-[16px] font-mono">
         <div className="flex items-center gap-1.5">
           <div className="w-1 h-1 bg-accent" />
           <span className="text-text-dim">SUPABASE</span>

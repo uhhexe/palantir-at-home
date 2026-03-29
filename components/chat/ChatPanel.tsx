@@ -23,7 +23,7 @@ export default function ChatPanel() {
         id: "welcome",
         role: "assistant",
         content:
-          "WAR ROOM INTEL system online. Upload document sets via INGEST, then query them here. I can search across all ingested documents and cite specific sources.\n\nCurrently in standby — no document sets loaded.",
+          "palantir at home INTEL system online. Upload document sets via INGEST, then query them here. I can search across all ingested documents and cite specific sources.\n\nCurrently in standby — no document sets loaded.",
         timestamp: new Date(),
       },
     ]);
@@ -67,12 +67,12 @@ export default function ChatPanel() {
       {/* Header */}
       <div className="h-7 bg-surface border-b border-border flex items-center px-3 shrink-0">
         <Database className="w-3 h-3 text-accent mr-1.5" />
-        <span className="text-[7px] font-heading tracking-[1.5px] text-text-dim uppercase">
+        <span className="text-[12px] font-heading tracking-[1.5px] text-text-dim uppercase">
           Intel — RAG Query
         </span>
         <div className="ml-auto flex items-center gap-1.5">
           <div className="w-1 h-1 bg-warning animate-pulse" />
-          <span className="text-[7px] font-mono text-warning">STANDBY</span>
+          <span className="text-[12px] font-mono text-warning">STANDBY</span>
         </div>
       </div>
 
@@ -84,7 +84,7 @@ export default function ChatPanel() {
             className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-[90%] px-2.5 py-2 text-[9px] font-body leading-relaxed ${
+              className={`max-w-[90%] px-2.5 py-2 text-[13px] font-body leading-relaxed ${
                 msg.role === "user"
                   ? "bg-accent-glow text-accent border border-accent/20"
                   : "bg-surface border border-border text-text"
@@ -93,13 +93,13 @@ export default function ChatPanel() {
               <div className="whitespace-pre-wrap">{msg.content}</div>
               {msg.sources && msg.sources.length > 0 && (
                 <div className="mt-2 pt-1.5 border-t border-border space-y-1">
-                  <div className="text-[7px] font-heading tracking-[1.5px] text-text-dim uppercase">
+                  <div className="text-[12px] font-heading tracking-[1.5px] text-text-dim uppercase">
                     Sources
                   </div>
                   {msg.sources.map((src, i) => (
                     <div
                       key={i}
-                      className="text-[8px] font-mono text-accent hover:text-accent-bright cursor-pointer"
+                      className="text-[12px] font-mono text-accent hover:text-accent-bright cursor-pointer"
                     >
                       [{i + 1}] {src.filename}
                       {src.page ? `, p.${src.page}` : ""}
@@ -107,14 +107,14 @@ export default function ChatPanel() {
                   ))}
                 </div>
               )}
-              <div className="text-[7px] font-mono text-text-muted mt-1">
+              <div className="text-[12px] font-mono text-text-muted mt-1">
                 {msg.timestamp.toLocaleTimeString("en-US", { hour12: false })}
               </div>
             </div>
           </div>
         ))}
         {loading && (
-          <div className="flex items-center gap-1.5 text-text-dim text-[8px] font-mono">
+          <div className="flex items-center gap-1.5 text-text-dim text-[12px] font-mono">
             <Loader2 className="w-3 h-3 animate-spin" />
             <span>Querying intelligence database...</span>
           </div>
@@ -130,7 +130,7 @@ export default function ChatPanel() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="Query intelligence database..."
-            className="flex-1 bg-transparent text-[9px] font-body text-text placeholder:text-text-muted outline-none"
+            className="flex-1 bg-transparent text-[13px] font-body text-text placeholder:text-text-muted outline-none"
           />
           <button
             onClick={handleSend}

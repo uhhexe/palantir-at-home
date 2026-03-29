@@ -341,7 +341,7 @@ export default function WavePlayer({ waves, onWaveSelect, onCumulativeChange, se
             const pos = getPosition(wave.timestamp);
             const isSelected = wave.id === selectedWaveId;
             const isPlayed = currentIdx !== null && idx <= currentIdx;
-            const color = ROUND_COLORS[wave.round] || "#5c6c78";
+            const color = ROUND_COLORS[wave.round] || "#8b949e";
             return (
               <button
                 key={wave.id}

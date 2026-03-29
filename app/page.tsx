@@ -17,7 +17,7 @@ const MapEngine = dynamic(() => import("@/components/map/MapEngine"), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full bg-void flex items-center justify-center">
-      <div className="text-text-dim text-[9px] font-heading tracking-[2px] animate-pulse uppercase">
+      <div className="text-text-dim text-[13px] font-heading tracking-[2px] animate-pulse uppercase">
         Initializing Map Engine...
       </div>
     </div>
@@ -42,6 +42,10 @@ export default function Home() {
 
   const handleCameraClick = useCallback((camera: CameraData) => {
     setSelectedCamera(camera);
+    // Fly map to the selected camera
+    if (camera.lat && camera.lng) {
+      mapNavRef.current?.flyTo(camera.lat, camera.lng, 14);
+    }
   }, []);
 
   const handleQuickNav = useCallback((lat: number, lng: number, zoom: number) => {
@@ -93,22 +97,26 @@ export default function Home() {
   }, []);
 
   // Fetch HIFLD / dynamic layers when toggled on
+  const fetchingRef = useRef<Set<string>>(new Set());
   useEffect(() => {
     const layersToFetch = layers.filter(
       (l) =>
         l.enabled &&
         l.id !== "cameras" &&
         l.id !== "cables" &&
-        !layerData[l.id]
+        !layerData[l.id] &&
+        !fetchingRef.current.has(l.id)
     );
 
     if (layersToFetch.length === 0) return;
 
+    const controller = new AbortController();
+
     layersToFetch.forEach(async (layer) => {
+      fetchingRef.current.add(layer.id);
       setLoadingStatus(`Loading ${layer.name}...`);
       try {
-        const isSlowLayer = ["osm-cameras", "alpr"].includes(layer.id);
-        const controller = new AbortController();
+        const isSlowLayer = ["osm-cameras", "alpr", "deflock-alpr"].includes(layer.id);
         const timeout = setTimeout(() => controller.abort(), isSlowLayer ? 300000 : 60000);
         const res = await fetch(`/api/layers?layer=${layer.id}`, { signal: controller.signal });
         clearTimeout(timeout);
@@ -123,10 +131,15 @@ export default function Home() {
           );
         }
       } catch (err) {
-        console.error(`Failed to fetch ${layer.name}:`, err);
+        if ((err as Error).name !== "AbortError") {
+          console.error(`Failed to fetch ${layer.name}:`, err);
+        }
       }
+      fetchingRef.current.delete(layer.id);
       setLoadingStatus("");
     });
+
+    return () => controller.abort();
   }, [layers, layerData]);
 
   // Keyboard shortcuts
@@ -156,7 +169,7 @@ export default function Home() {
       {loadingStatus && (
         <div className="h-5 bg-surface-2 border-b border-border flex items-center px-3">
           <div className="w-1 h-1 bg-accent animate-pulse mr-2" />
-          <span className="text-[8px] font-mono text-text-dim tracking-wider">
+          <span className="text-[13px] font-mono text-text-dim tracking-wider">
             {loadingStatus}
           </span>
         </div>
@@ -173,13 +186,9 @@ export default function Home() {
         <main className="flex-1 flex flex-col overflow-hidden">
           {activeView === "map" && (
             <>
-              <div className="flex-1 overflow-hidden relative">
-                {selectedCamera ? (
-                  <PrimaryCameraView
-                    camera={selectedCamera}
-                    onClose={() => setSelectedCamera(null)}
-                  />
-                ) : (
+              <div className="flex-1 overflow-hidden relative flex">
+                {/* Map — always visible */}
+                <div className={`h-full transition-all duration-300 ${selectedCamera ? "w-[55%]" : "w-full"}`}>
                   <MapEngine
                     layers={layers}
                     cameras={cameras}
@@ -188,6 +197,15 @@ export default function Home() {
                     onCameraClick={handleCameraClick}
                     navRef={mapNavRef}
                   />
+                </div>
+                {/* Camera panel — slides in from right */}
+                {selectedCamera && (
+                  <div className="w-[45%] h-full border-l border-border relative">
+                    <PrimaryCameraView
+                      camera={selectedCamera}
+                      onClose={() => setSelectedCamera(null)}
+                    />
+                  </div>
                 )}
               </div>
               <ThumbnailStrip
@@ -203,10 +221,10 @@ export default function Home() {
           {activeView === "canvas" && (
             <div className="w-full h-full bg-void flex items-center justify-center">
               <div className="text-center">
-                <div className="text-text-dim text-[9px] font-heading tracking-[2px] uppercase mb-1">
+                <div className="text-text-dim text-[13px] font-heading tracking-[2px] uppercase mb-1">
                   Canvas — Visual Research Board
                 </div>
-                <div className="text-text-muted text-[8px] font-mono">
+                <div className="text-text-muted text-[13px] font-mono">
                   React Flow + Obsidian Import
                 </div>
               </div>
@@ -216,10 +234,10 @@ export default function Home() {
           {activeView === "ingest" && (
             <div className="w-full h-full bg-void flex items-center justify-center">
               <div className="text-center">
-                <div className="text-text-dim text-[9px] font-heading tracking-[2px] uppercase mb-1">
+                <div className="text-text-dim text-[13px] font-heading tracking-[2px] uppercase mb-1">
                   Ingest — Document Pipeline
                 </div>
-                <div className="text-text-muted text-[8px] font-mono">
+                <div className="text-text-muted text-[13px] font-mono">
                   Upload, chunk, embed, store
                 </div>
               </div>

@@ -1,0 +1,25 @@
+{
+  "positions": [
+    {"name": "Sana'a (Houthi capital)", "lat": 15.37, "lng": 44.19, "type": "capital", "notes": "Ansar Allah HQ — heavily fortified"},
+    {"name": "Hodeidah Port", "lat": 14.80, "lng": 42.95, "type": "port", "notes": "Houthi-controlled port — weapons import route"},
+    {"name": "Sa'dah", "lat": 16.94, "lng": 43.76, "type": "stronghold", "notes": "Houthi heartland — underground missile storage"},
+    {"name": "Marib", "lat": 15.47, "lng": 45.32, "type": "contested", "notes": "Oil-rich region — front line with government forces"},
+    {"name": "Aden", "lat": 12.78, "lng": 45.02, "type": "port", "notes": "Government-controlled — coalition naval base"}
+  ],
+  "shipping_attacks": [
+    {"date": "2026-03-01", "target": "Commercial vessel near Bab el-Mandeb", "lat": 12.8, "lng": 43.3, "type": "missile", "notes": "Anti-ship ballistic missile — near miss"},
+    {"date": "2026-03-03", "target": "Oil tanker, Red Sea", "lat": 14.5, "lng": 42.0, "type": "drone", "notes": "Suicide drone — minor damage"},
+    {"date": "2026-03-05", "target": "Container ship approaching Suez", "lat": 16.0, "lng": 41.5, "type": "missile", "notes": "Cruise missile — ship hit, still operational"}
+  ],
+  "shipping_lanes": [
+    {"name": "Red Sea Northbound Lane", "coordinates": [[12.5, 43.3], [14.0, 42.5], [16.0, 41.0], [20.0, 39.0], [27.0, 34.5]]},
+    {"name": "Gulf of Aden Route", "coordinates": [[12.5, 43.3], [12.0, 45.0], [12.5, 47.0], [13.0, 49.0]]}
+  ],
+  "chokepoint_status": {
+    "bab_el_mandeb": {
+      "status": "RESTRICTED",
+      "notes": "Houthi threat to close fully if Saudi enters war. ~30% traffic reduction. Insurance premiums 10x.",
+      "polygon": [[12.8, 43.1], [12.4, 43.5], [12.0, 43.3], [12.5, 42.9]]
+    }
+  }
+}

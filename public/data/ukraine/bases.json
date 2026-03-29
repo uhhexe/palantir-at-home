@@ -1,0 +1,130 @@
+[
+  {
+    "name": "Starokostiantyniv Air Base",
+    "lat": 49.514,
+    "lng": 27.104,
+    "side": "Ukraine",
+    "type": "Air Base",
+    "notes": "F-16 capable"
+  },
+  {
+    "name": "Mirhorod Air Base",
+    "lat": 49.966,
+    "lng": 33.617,
+    "side": "Ukraine",
+    "type": "Air Base",
+    "notes": "MiG-29 / Su-27"
+  },
+  {
+    "name": "Ozerne Air Base",
+    "lat": 49.816,
+    "lng": 28.783,
+    "side": "Ukraine",
+    "type": "Air Base",
+    "notes": "Strategic aviation"
+  },
+  {
+    "name": "Kulbakino Air Base",
+    "lat": 47.053,
+    "lng": 32.034,
+    "side": "Ukraine",
+    "type": "Air Base",
+    "notes": "Southern command"
+  },
+  {
+    "name": "Kanatove Air Base",
+    "lat": 48.713,
+    "lng": 32.279,
+    "side": "Ukraine",
+    "type": "Air Base",
+    "notes": "Training base"
+  },
+  {
+    "name": "Sevastopol Naval Base",
+    "lat": 44.617,
+    "lng": 33.525,
+    "side": "Russia",
+    "type": "Naval Base",
+    "notes": "BSF HQ \u2014 degraded"
+  },
+  {
+    "name": "Saky Air Base",
+    "lat": 45.093,
+    "lng": 33.596,
+    "side": "Russia",
+    "type": "Air Base",
+    "notes": "Crimea \u2014 hit Aug 2022"
+  },
+  {
+    "name": "Belbek Air Base",
+    "lat": 44.688,
+    "lng": 33.572,
+    "side": "Russia",
+    "type": "Air Base",
+    "notes": "Crimea fighter base"
+  },
+  {
+    "name": "Morozovsk Air Base",
+    "lat": 48.323,
+    "lng": 41.804,
+    "side": "Russia",
+    "type": "Air Base",
+    "notes": "Su-34 \u2014 hit by UA drones"
+  },
+  {
+    "name": "Engels-2 Air Base",
+    "lat": 51.483,
+    "lng": 46.2,
+    "side": "Russia",
+    "type": "Strategic Bomber Base",
+    "notes": "Tu-95/Tu-160 \u2014 drone target"
+  },
+  {
+    "name": "Zaporizhzhia NPP",
+    "lat": 47.507,
+    "lng": 34.586,
+    "side": "Russia (occupied)",
+    "type": "Nuclear Plant",
+    "notes": "Europe's largest NPP"
+  },
+  {
+    "name": "Kerch Strait Bridge",
+    "lat": 45.314,
+    "lng": 36.514,
+    "side": "Russia",
+    "type": "Infrastructure",
+    "notes": "Hit July 2023"
+  },
+  {
+    "name": "Novorossiysk Naval Base",
+    "lat": 44.716,
+    "lng": 37.783,
+    "side": "Russia",
+    "type": "Naval Base",
+    "notes": "Relocated BSF assets"
+  },
+  {
+    "name": "Kavkaz Port",
+    "lat": 45.37,
+    "lng": 36.63,
+    "side": "Russia",
+    "type": "Port",
+    "notes": "Logistics hub for Crimea"
+  },
+  {
+    "name": "Tikhoretsk Ammo Depot",
+    "lat": 45.854,
+    "lng": 40.125,
+    "side": "Russia",
+    "type": "Ammo Storage",
+    "notes": "Major depot \u2014 hit Sept 2024"
+  },
+  {
+    "name": "Afipsky Oil Refinery",
+    "lat": 44.89,
+    "lng": 38.85,
+    "side": "Russia",
+    "type": "Refinery",
+    "notes": "UA drone target"
+  }
+]

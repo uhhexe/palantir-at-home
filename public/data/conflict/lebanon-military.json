@@ -1,0 +1,7 @@
+[
+  {"name": "Hezbollah Southern Lebanon Zone", "lat": 33.30, "lng": 35.50, "side": "Hezbollah", "type": "Operations Zone", "notes": "Launch sites for anti-tank missiles, tunnels, fortified positions"},
+  {"name": "IDF Northern Command (Golan)", "lat": 33.10, "lng": 35.75, "side": "Israel", "type": "Command Post", "notes": "Coordinating Lebanon ground ops"},
+  {"name": "IDF Meron Air Ops Base", "lat": 33.00, "lng": 35.40, "side": "Israel", "type": "Air Base", "notes": "F-35/F-16 sorties into Lebanon"},
+  {"name": "Hezbollah Beirut HQ Area", "lat": 33.84, "lng": 35.48, "side": "Hezbollah", "type": "Command", "notes": "Senior leadership — multiple strikes"},
+  {"name": "UNIFIL Zone", "lat": 33.25, "lng": 35.35, "side": "UN", "type": "Peacekeeping", "notes": "UNIFIL forces sheltering — casualties reported"}
+]

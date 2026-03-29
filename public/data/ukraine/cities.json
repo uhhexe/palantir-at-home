@@ -1,0 +1,162 @@
+[
+  {
+    "name": "Kyiv",
+    "lat": 50.4501,
+    "lng": 30.5234,
+    "control": "Ukraine",
+    "status": "Capital \u2014 frequent missile target",
+    "pop": 2962000
+  },
+  {
+    "name": "Kharkiv",
+    "lat": 49.9935,
+    "lng": 36.2304,
+    "control": "Ukraine",
+    "status": "Front-adjacent \u2014 daily strikes",
+    "pop": 1419000
+  },
+  {
+    "name": "Odesa",
+    "lat": 46.4825,
+    "lng": 30.7233,
+    "control": "Ukraine",
+    "status": "Port city \u2014 missile target",
+    "pop": 1010000
+  },
+  {
+    "name": "Dnipro",
+    "lat": 48.4647,
+    "lng": 35.0462,
+    "control": "Ukraine",
+    "status": "Industrial hub \u2014 missile target",
+    "pop": 968000
+  },
+  {
+    "name": "Zaporizhzhia",
+    "lat": 47.8388,
+    "lng": 35.1396,
+    "control": "Ukraine",
+    "status": "Nuclear plant occupied",
+    "pop": 722000
+  },
+  {
+    "name": "Lviv",
+    "lat": 49.8397,
+    "lng": 24.0297,
+    "control": "Ukraine",
+    "status": "Western hub \u2014 occasional strikes",
+    "pop": 717000
+  },
+  {
+    "name": "Mykolaiv",
+    "lat": 46.975,
+    "lng": 31.995,
+    "control": "Ukraine",
+    "status": "Near front \u2014 frequent shelling",
+    "pop": 476000
+  },
+  {
+    "name": "Kherson",
+    "lat": 46.6354,
+    "lng": 32.6169,
+    "control": "Ukraine",
+    "status": "Liberated Nov 2022 \u2014 under fire",
+    "pop": 283000
+  },
+  {
+    "name": "Kramatorsk",
+    "lat": 48.7364,
+    "lng": 37.5834,
+    "control": "Ukraine",
+    "status": "UA military HQ east",
+    "pop": 150000
+  },
+  {
+    "name": "Sloviansk",
+    "lat": 48.8516,
+    "lng": 37.6003,
+    "control": "Ukraine",
+    "status": "Near front \u2014 fortified",
+    "pop": 107000
+  },
+  {
+    "name": "Sumy",
+    "lat": 50.9077,
+    "lng": 34.7981,
+    "control": "Ukraine",
+    "status": "Border region \u2014 drone/shelling",
+    "pop": 259000
+  },
+  {
+    "name": "Chernihiv",
+    "lat": 51.4982,
+    "lng": 31.2893,
+    "control": "Ukraine",
+    "status": "Survived 2022 siege",
+    "pop": 285000
+  },
+  {
+    "name": "Mariupol",
+    "lat": 47.0958,
+    "lng": 37.5417,
+    "control": "Russia",
+    "status": "Occupied since May 2022",
+    "pop": 431000
+  },
+  {
+    "name": "Donetsk",
+    "lat": 48.0159,
+    "lng": 37.8029,
+    "control": "Russia",
+    "status": "Occupied since 2014",
+    "pop": 905000
+  },
+  {
+    "name": "Luhansk",
+    "lat": 48.574,
+    "lng": 39.3078,
+    "control": "Russia",
+    "status": "Occupied since 2014",
+    "pop": 399000
+  },
+  {
+    "name": "Melitopol",
+    "lat": 46.8489,
+    "lng": 35.3675,
+    "control": "Russia",
+    "status": "Occupied \u2014 resistance active",
+    "pop": 150000
+  },
+  {
+    "name": "Bakhmut",
+    "lat": 48.5953,
+    "lng": 38.0003,
+    "control": "Russia",
+    "status": "Fell May 2023 \u2014 devastated",
+    "pop": 71000
+  },
+  {
+    "name": "Avdiivka",
+    "lat": 48.1396,
+    "lng": 37.7483,
+    "control": "Russia",
+    "status": "Fell February 2024",
+    "pop": 31000
+  },
+  {
+    "name": "Sevastopol",
+    "lat": 44.6167,
+    "lng": 33.5254,
+    "control": "Russia",
+    "status": "Crimea \u2014 BSF base degraded",
+    "pop": 449000
+  },
+  {
+    "name": "Simferopol",
+    "lat": 44.9521,
+    "lng": 34.1024,
+    "control": "Russia",
+    "status": "Crimea \u2014 occupied since 2014",
+    "pop": 332000
+  }
+]

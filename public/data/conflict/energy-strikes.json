@@ -1,0 +1,206 @@
+{
+  "asOf": "2026-03-29",
+  "source": "PBS, NPR, CNBC, Al Jazeera, The Conversation, Wikipedia, NBC News",
+
+  "oilPriceImpact": {
+    "brentCrude": {
+      "preWar": 73,
+      "current": 119,
+      "peakDate": "2026-03-19",
+      "changePercent": 63,
+      "note": "Brent briefly surged above $119/bbl — up 63% since war started"
+    },
+    "naturalGas": {
+      "change": "Roughly doubled in one month",
+      "ttfBenchmark": "+24% in single day after Ras Laffan attack"
+    },
+    "globalLngImpact": {
+      "qatarShareOfGlobal": "~20%",
+      "capacityLost": "17% of Qatar's LNG capacity",
+      "repairTimeline": "3-5 years",
+      "note": "Pearl GTL (world's largest gas-to-liquids plant, Shell-operated) damaged"
+    }
+  },
+
+  "escalationTimeline": [
+    {
+      "date": "2026-02-28",
+      "event": "War begins — initial strikes avoid energy infrastructure",
+      "type": "context"
+    },
+    {
+      "date": "2026-03-02",
+      "attacker": "Iran",
+      "target": "Ras Laffan LNG + Mesaieed Industrial City, Qatar",
+      "lat": 25.93, "lng": 51.53,
+      "type": "gas/lng",
+      "damage": "LNG production halted. Drone strikes.",
+      "country": "Qatar"
+    },
+    {
+      "date": "2026-03-02",
+      "attacker": "Iran",
+      "target": "Fujairah Oil Terminal, UAE",
+      "lat": 25.12, "lng": 56.36,
+      "type": "oil",
+      "damage": "Oil export hub struck — Hormuz bypass route damaged",
+      "country": "UAE"
+    },
+    {
+      "date": "2026-03-08",
+      "attacker": "Israel",
+      "target": "Tehran oil storage facilities",
+      "lat": 35.70, "lng": 51.42,
+      "type": "oil_storage",
+      "damage": "Large fires. Toxic 'black rain' over Tehran capital.",
+      "country": "Iran"
+    },
+    {
+      "date": "2026-03-11",
+      "attacker": "Iran",
+      "target": "Shaybah Oil Field, Saudi Arabia",
+      "lat": 22.52, "lng": 54.01,
+      "type": "oil_field",
+      "damage": "Drone swarm attack on remote oil field",
+      "country": "Saudi Arabia"
+    },
+    {
+      "date": "2026-03-11",
+      "attacker": "Iran",
+      "target": "Shah Gas Field, Abu Dhabi, UAE",
+      "lat": 23.68, "lng": 53.28,
+      "type": "gas_field",
+      "damage": "Gas field targeted by drones",
+      "country": "UAE"
+    },
+    {
+      "date": "2026-03-11",
+      "attacker": "Iran",
+      "target": "Fujairah Oil Facilities (2nd attack), UAE",
+      "lat": 25.12, "lng": 56.36,
+      "type": "oil",
+      "damage": "Repeated strikes on Hormuz bypass",
+      "country": "UAE"
+    },
+    {
+      "date": "2026-03-18",
+      "attacker": "Israel",
+      "target": "Asaluyeh Complex / South Pars Gas Field, Iran",
+      "lat": 27.48, "lng": 52.60,
+      "type": "gas_field",
+      "damage": "4 gas treatment plants damaged. 80% of Iran's power from gas. World's largest gas field.",
+      "country": "Iran",
+      "note": "MAJOR ESCALATION — triggered tit-for-tat energy war"
+    },
+    {
+      "date": "2026-03-18",
+      "attacker": "Iran",
+      "target": "Ras Laffan LNG Complex (2nd major attack), Qatar",
+      "lat": 25.93, "lng": 51.53,
+      "type": "lng",
+      "damage": "Extensive damage. Pearl GTL damaged. 17% of Qatar LNG capacity lost. 3-5 year repair.",
+      "country": "Qatar",
+      "note": "Retaliation for South Pars strike"
+    },
+    {
+      "date": "2026-03-19",
+      "attacker": "Iran",
+      "target": "Ras Laffan LNG (3rd attack — multiple facilities), Qatar",
+      "lat": 25.93, "lng": 51.53,
+      "type": "lng",
+      "damage": "Additional LNG facilities set ablaze",
+      "country": "Qatar"
+    },
+    {
+      "date": "2026-03-19",
+      "attacker": "Iran",
+      "target": "Mina Al Ahmadi Refinery, Kuwait",
+      "lat": 29.07, "lng": 48.16,
+      "type": "refinery",
+      "damage": "Drone attack on one of Middle East's largest refineries",
+      "country": "Kuwait"
+    },
+    {
+      "date": "2026-03-19",
+      "attacker": "Iran",
+      "target": "Mina Abdullah Refinery, Kuwait",
+      "lat": 29.00, "lng": 48.17,
+      "type": "refinery",
+      "damage": "Second Kuwaiti refinery hit in same attack wave",
+      "country": "Kuwait"
+    },
+    {
+      "date": "2026-03-19",
+      "attacker": "Iran",
+      "target": "SAMREF Refinery, Yanbu, Saudi Arabia",
+      "lat": 24.09, "lng": 38.06,
+      "type": "refinery",
+      "damage": "Drone hit on Red Sea refinery — Saudi Hormuz bypass route targeted",
+      "country": "Saudi Arabia",
+      "note": "Critical — Yanbu is the endpoint of the Petroline Hormuz bypass"
+    },
+    {
+      "date": "2026-03-19",
+      "attacker": "Iran",
+      "target": "Habshan Gas Facility, Abu Dhabi, UAE",
+      "lat": 23.82, "lng": 53.57,
+      "type": "gas",
+      "damage": "Operations suspended after intercepted missile debris fell nearby",
+      "country": "UAE"
+    },
+    {
+      "date": "2026-03-19",
+      "attacker": "Iran",
+      "target": "Bab Oilfield, Abu Dhabi, UAE",
+      "lat": 23.60, "lng": 53.50,
+      "type": "oil_field",
+      "damage": "Targeted — details emerging",
+      "country": "UAE"
+    },
+    {
+      "date": "2026-03-19",
+      "attacker": "Iran",
+      "target": "Al Hosn Gas Field, Abu Dhabi, UAE",
+      "lat": 23.65, "lng": 53.15,
+      "type": "gas_field",
+      "damage": "Closure of gas facilities in UAE",
+      "country": "UAE"
+    },
+    {
+      "date": "2026-03-20",
+      "attacker": "Iran",
+      "target": "Ruwais Industrial Complex / ADNOC Refinery, Abu Dhabi",
+      "lat": 24.11, "lng": 52.73,
+      "type": "refinery",
+      "damage": "Fire from Iranian drone strike. ADNOC shut down 922K bpd refinery.",
+      "country": "UAE"
+    },
+    {
+      "date": "2026-03-19",
+      "attacker": "Iran",
+      "target": "Haifa Oil Refinery, Israel",
+      "lat": 32.82, "lng": 35.00,
+      "type": "refinery",
+      "damage": "Iranian missile strike — Israel Energy Ministry said no 'significant damage'",
+      "country": "Israel"
+    }
+  ],
+
+  "iranThreat": {
+    "quote": "These strikes represented 'a fraction' of Iran's capabilities. 'Zero restraint' going forward.",
+    "source": "Iranian FM Abbas Araghchi"
+  },
+  "trumpThreat": {
+    "quote": "If Iran attacks Qatar again, the US 'will massively blow up the entirety' of South Pars.",
+    "source": "Trump Truth Social post"
+  },
+
+  "diplomaticFallout": [
+    "Qatar expelled Iranian military attaches — persona non grata within 24 hours",
+    "UAE called attacks 'terrorist attacks' — reserved right to 'all necessary measures'",
+    "Saudi FM: 'What little trust there was has been completely shattered'",
+    "6 Gulf countries (Saudi, UAE, Kuwait, Bahrain, Qatar, Jordan) issued joint condemnation",
+    "Macron called for moratorium on strikes targeting energy/water infrastructure",
+    "Pentagon requesting extra $200 billion for war funding"
+  ]
+}

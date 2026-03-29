@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inconsolata, Chakra_Petch, Rajdhani } from "next/font/google";
+import { Inconsolata, Chakra_Petch, Rajdhani, Caveat } from "next/font/google";
 import "./globals.css";
 
 const inconsolata = Inconsolata({
@@ -19,10 +19,15 @@ const rajdhani = Rajdhani({
   subsets: ["latin"],
 });
 
+const caveat = Caveat({
+  variable: "--font-handwritten",
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
-  title: "WAR ROOM — Surveillance Operations Center",
-  description:
-    "Self-hosted investigative research platform with map intelligence, RAG-powered document search, and visual research boards.",
+  title: "palantir at home",
+  description: "Personal OSINT & conflict intelligence platform",
 };
 
 export default function RootLayout({
@@ -33,7 +38,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inconsolata.variable} ${chakraPetch.variable} ${rajdhani.variable} h-full`}
+      className={`${inconsolata.variable} ${chakraPetch.variable} ${rajdhani.variable} ${caveat.variable} h-full`}
     >
       <body className="h-full">{children}</body>
     </html>
