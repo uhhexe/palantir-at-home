@@ -26,6 +26,17 @@ const ConflictMap = dynamic(() => import("./components/ConflictMap"), {
   ),
 });
 
+const ConflictGlobe = dynamic(() => import("./components/ConflictGlobe"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-void flex items-center justify-center">
+      <div className="text-text-dim text-[17px] font-heading tracking-[3px] animate-pulse uppercase">
+        Initializing 3D Globe...
+      </div>
+    </div>
+  ),
+});
+
 // Conflict start date: Feb 28, 2026
 const CONFLICT_START = new Date("2026-02-28T04:00:00Z");
 
@@ -85,7 +96,7 @@ export default function IranIsraelConflict() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [infrastructure, setInfrastructure] = useState<InfrastructureData | null>(null);
   const [time, setTime] = useState({ local: "", utc: "" });
-  const [viewMode, setViewMode] = useState<"map" | "table" | "flights" | "maritime">("map");
+  const [viewMode, setViewMode] = useState<"map" | "table" | "flights" | "maritime" | "globe">("map");
   const [dateRange, setDateRange] = useState<{ start: string; end: string } | null>(null);
   const [waves, setWaves] = useState<WaveEvent[]>([]);
   const [selectedWaveId, setSelectedWaveId] = useState<string | null>(null);
@@ -244,6 +255,21 @@ export default function IranIsraelConflict() {
     setCumulativeWaveTargets(targets);
   }, []);
 
+  // Memoize globe props so they don't change every render (clock ticks every 1s)
+  const globeBases = useMemo(() => [
+    ...(militaryBases.usa || []).map((b: any) => ({ lat: b.lat, lng: b.lng, name: b.name, country: "US" })),
+    ...(militaryBases.idf || []).map((b: any) => ({ lat: b.lat, lng: b.lng, name: b.name, country: "Israel" })),
+    ...(militaryBases.carriers || []).map((b: any) => ({ lat: b.lat, lng: b.lng, name: b.name, country: "US Navy" })),
+  ], [militaryBases]);
+
+  const globeNuclearSites = useMemo(() =>
+    (nuclearSites.iran || []).map((n: any) => ({ lat: n.lat, lng: n.lng, name: n.name, status: n.status || "" })),
+  [nuclearSites]);
+
+  const selectedWaveObj = useMemo(() =>
+    waves.find((w) => w.id === selectedWaveId) || null,
+  [waves, selectedWaveId]);
+
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-void">
       {/* Top bar */}
@@ -288,7 +314,7 @@ export default function IranIsraelConflict() {
         {/* Center: Stats + View Toggle */}
         <div className="flex items-center gap-3 text-[16px] font-mono text-text-dim">
           <div className="flex items-center border border-border">
-            {(["map", "table", "flights", "maritime"] as const).map((mode, i, arr) => (
+            {(["map", "globe", "table", "flights", "maritime"] as const).map((mode, i, arr) => (
               <button
                 key={mode}
                 onClick={() => setViewMode(mode)}
@@ -349,13 +375,21 @@ export default function IranIsraelConflict() {
                 cumulativeWaveTargets={cumulativeWaveTargets}
               />
             )}
+            {viewMode === "globe" && (
+              <ConflictGlobe
+                strikes={filteredStrikes}
+                militaryBases={globeBases}
+                nuclearSites={globeNuclearSites}
+                selectedWave={selectedWaveObj}
+              />
+            )}
             {viewMode === "table" && <StrikeTable strikes={filteredStrikes} />}
             {viewMode === "flights" && <FlightsView />}
             {viewMode === "maritime" && <MaritimeView />}
           </main>
 
-          {/* Wave player — only for map mode */}
-          {viewMode === "map" && waves.length > 0 && (
+          {/* Wave player — for map and globe modes */}
+          {(viewMode === "map" || viewMode === "globe") && waves.length > 0 && (
             <WavePlayer
               waves={waves}
               onWaveSelect={handleWaveSelect}
