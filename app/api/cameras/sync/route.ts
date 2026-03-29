@@ -3,7 +3,13 @@ import { getServiceClient } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
-export async function POST() {
+export async function POST(req: Request) {
+  // Auth: require a secret header to prevent unauthenticated writes
+  const authHeader = req.headers.get("x-sync-secret");
+  const syncSecret = process.env.SYNC_SECRET;
+  if (!syncSecret || authHeader !== syncSecret) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const supabase = getServiceClient();
 
   // Fetch cameras from the main cameras API (same server)

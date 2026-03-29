@@ -97,6 +97,7 @@ export async function GET(request: Request) {
       }
     );
   } catch (error) {
-    return NextResponse.json({ fires: [], count: 0, status: "error", error: String(error) });
+    console.error("FIRMS fetch error:", error);
+    return NextResponse.json({ fires: [], count: 0, status: "error", error: "Failed to fetch fire data" });
   }
 }

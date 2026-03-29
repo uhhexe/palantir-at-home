@@ -8,13 +8,52 @@ function loadJson(filename: string) {
   return JSON.parse(readFileSync(p, "utf-8"));
 }
 
+// Simple in-memory rate limiter
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 10; // requests per window
+const RATE_WINDOW = 60_000; // 1 minute
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_WINDOW });
+    return false;
+  }
+  entry.count++;
+  return entry.count > RATE_LIMIT;
+}
+
 export async function POST(req: Request) {
+  // Rate limiting
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  if (isRateLimited(ip)) {
+    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: "No API key configured" }, { status: 500 });
   }
 
-  const { messages } = await req.json();
+  let messages: { role: string; content: string }[];
+  try {
+    const body = await req.json();
+    messages = body.messages;
+    if (!Array.isArray(messages) || messages.length === 0 || messages.length > 50) {
+      return NextResponse.json({ error: "Invalid messages" }, { status: 400 });
+    }
+    for (const m of messages) {
+      if (!m.role || !m.content || typeof m.content !== "string" || m.content.length > 4000) {
+        return NextResponse.json({ error: "Invalid message format" }, { status: 400 });
+      }
+      if (!["user", "assistant"].includes(m.role)) {
+        return NextResponse.json({ error: "Invalid role" }, { status: 400 });
+      }
+    }
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
 
   const equipment = loadJson("equipment-losses.json");
   const cities = loadJson("cities.json");
@@ -78,8 +117,8 @@ Respond concisely in a military briefing style. Use facts from the data above. F
   });
 
   if (!response.ok) {
-    const err = await response.text();
-    return NextResponse.json({ error: err }, { status: response.status });
+    console.error("Anthropic API error:", response.status);
+    return NextResponse.json({ error: "AI service unavailable" }, { status: 502 });
   }
 
   const data = await response.json();

@@ -50,6 +50,7 @@ export async function GET() {
       status: "ok",
     });
   } catch (error) {
-    return NextResponse.json({ events: [], count: 0, status: "error", error: String(error) });
+    console.error("GCA fetch error:", error);
+    return NextResponse.json({ events: [], count: 0, status: "error", error: "Failed to fetch events" });
   }
 }

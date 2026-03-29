@@ -30,7 +30,9 @@ const NOAA_ALERTS = "https://api.weather.gov/alerts/active";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const layer = searchParams.get("layer");
-  const state = searchParams.get("state") || undefined;
+  const rawState = searchParams.get("state") || undefined;
+  // Validate state param: only allow alphanumeric, spaces, and hyphens
+  const state = rawState && /^[a-zA-Z\s-]{1,30}$/.test(rawState) ? rawState : undefined;
 
   try {
     // Submarine cables
@@ -156,13 +158,13 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json(
-      { error: `Unknown layer: ${layer}` },
+      { error: "Unknown layer" },
       { status: 400 }
     );
   } catch (error) {
     console.error("Layer fetch error:", error);
     return NextResponse.json(
-      { error: `Failed to fetch layer: ${error instanceof Error ? error.message : "unknown"}` },
+      { error: "Failed to fetch layer data" },
       { status: 500 }
     );
   }

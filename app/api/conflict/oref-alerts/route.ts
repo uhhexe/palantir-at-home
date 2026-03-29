@@ -109,7 +109,7 @@ export async function GET() {
         historyCount: alertHistory.length,
         timestamp: new Date().toISOString(),
         status: "error",
-        error: String(error),
+        error: "Failed to fetch alerts",
       },
       { status: 200 }
     );

@@ -82,6 +82,7 @@ export async function GET(request: Request) {
       }
     );
   } catch (error) {
-    return NextResponse.json({ events: [], count: 0, status: "error", error: String(error) });
+    console.error("ACLED fetch error:", error);
+    return NextResponse.json({ events: [], count: 0, status: "error", error: "Failed to fetch conflict data" });
   }
 }

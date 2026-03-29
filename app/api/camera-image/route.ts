@@ -45,6 +45,12 @@ export async function GET(request: Request) {
 
   try {
     const parsed = new URL(imageUrl);
+
+    // Only allow http/https schemes to prevent SSRF via file://, ftp://, etc.
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return NextResponse.json({ error: "Invalid URL scheme" }, { status: 400 });
+    }
+
     if (!isHostAllowed(parsed.hostname)) {
       return NextResponse.json({ error: "Host not allowed" }, { status: 403 });
     }
@@ -66,7 +72,7 @@ export async function GET(request: Request) {
       headers: {
         "Content-Type": contentType,
         "Cache-Control": "no-cache, no-store, must-revalidate",
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3001",
       },
     });
   } catch {
