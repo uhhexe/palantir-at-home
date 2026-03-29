@@ -1,0 +1,27 @@
+{
+  "usa": [
+    {"id":"udeid","name":"Al Udeid AB","country":"Qatar","lat":25.117,"lng":51.315,"type":"Air Base","assets":"CENTCOM Forward HQ, B-52H, F-15E, KC-135","status":"ACTIVE","threat":"MEDIUM"},
+    {"id":"dhafra","name":"Al Dhafra AB","country":"UAE","lat":24.248,"lng":54.548,"type":"Air Base","assets":"F-35A (388th FW), KC-135, THAAD Battery","status":"ACTIVE","threat":"HIGH"},
+    {"id":"bahrain","name":"NSA Bahrain","country":"Bahrain","lat":26.237,"lng":50.592,"type":"Naval","assets":"5th Fleet HQ, USS Bataan LHD","status":"ACTIVE","threat":"HIGH"},
+    {"id":"arifjan","name":"Camp Arifjan","country":"Kuwait","lat":28.934,"lng":48.088,"type":"Army Base","assets":"Army Forces Central Command","status":"ACTIVE","threat":"MEDIUM"},
+    {"id":"alisalem","name":"Ali Al Salem AB","country":"Kuwait","lat":29.347,"lng":47.521,"type":"Air Base","assets":"A-10, F-16","status":"ACTIVE","threat":"MEDIUM"},
+    {"id":"lemonnier","name":"Camp Lemonnier","country":"Djibouti","lat":11.547,"lng":43.153,"type":"Military","assets":"JSOC, MQ-9 Reaper, P-8 Poseidon","status":"ACTIVE","threat":"LOW"},
+    {"id":"diego","name":"Diego Garcia","country":"BIOT","lat":-7.316,"lng":72.411,"type":"Air/Naval","assets":"B-2 Spirit (509th BW), SSGN-726 Ohio, B-52H","status":"ACTIVE ROTATIONS","threat":"LOW"},
+    {"id":"incirlik","name":"Incirlik AB","country":"Turkey","lat":37.002,"lng":35.426,"type":"Air Base","assets":"F-15C/D, B61 nuclear storage (est.)","status":"ACTIVE","threat":"LOW"},
+    {"id":"altanf","name":"Al Tanf Garrison","country":"Syria","lat":33.508,"lng":38.767,"type":"SOF Garrison","assets":"US SOF, MRF-D","status":"ACTIVE","threat":"ELEVATED"},
+    {"id":"ainasad","name":"Ain al-Asad AB","country":"Iraq","lat":33.799,"lng":42.442,"type":"Air Base","assets":"US Forces Iraq, F-16","status":"ACTIVE","threat":"ELEVATED"}
+  ],
+  "idf": [
+    {"id":"nevatim","name":"Nevatim AB","country":"Israel","lat":31.208,"lng":34.882,"type":"Air Base","assets":"F-35I Adir 140 Sqn, 116 Sqn","status":"ACTIVE OPS","threat":"TARGETED"},
+    {"id":"hatzerim","name":"Hatzerim AB","country":"Israel","lat":31.233,"lng":34.662,"type":"Air Base","assets":"F-16I Sufa 101 Sqn, 105 Sqn","status":"ACTIVE OPS","threat":"TARGETED"},
+    {"id":"ramatdavid","name":"Ramat David AB","country":"Israel","lat":32.665,"lng":35.183,"type":"Air Base","assets":"F-15I Ra'am 69 Sqn, 133 Sqn","status":"ACTIVE OPS","threat":"HIGH"},
+    {"id":"telnof","name":"Tel Nof AB","country":"Israel","lat":31.839,"lng":34.818,"type":"Air Base","assets":"F-15I, Arrow-2/3 BMD","status":"ACTIVE","threat":"HIGH"},
+    {"id":"palmachim","name":"Palmachim","country":"Israel","lat":31.898,"lng":34.691,"type":"Missile/Space","assets":"Arrow-2, Arrow-3, Jericho III (classified)","status":"ACTIVE","threat":"HIGH"},
+    {"id":"haifanaval","name":"Haifa Naval Base","country":"Israel","lat":32.820,"lng":34.984,"type":"Naval","assets":"INS Dolphin subs, Sa'ar 6 corvettes","status":"ACTIVE","threat":"MEDIUM"}
+  ],
+  "carriers": [
+    {"id":"cvn69","name":"CVN-69 USS Eisenhower CSG","lat":26.5,"lng":56.2,"type":"Carrier Strike Group","assets":"F/A-18E/F, E-2D Hawkeye, EA-18G","status":"ACTIVE OPS"},
+    {"id":"cvn72","name":"CVN-72 USS Abraham Lincoln CSG","lat":19.8,"lng":63.5,"type":"Carrier Strike Group","assets":"F/A-18E/F Super Hornet","status":"ACTIVE OPS"},
+    {"id":"lhd7","name":"LHD-7 USS Iwo Jima ARG","lat":14.5,"lng":43.8,"type":"Amphibious Ready Group","assets":"AV-8B Harrier, MV-22 Osprey, USMC MEU","status":"STANDBY"}
+  ]
+}

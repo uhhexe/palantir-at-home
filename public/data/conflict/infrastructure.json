@@ -1,0 +1,66 @@
+{
+  "oilFacilities": [
+    {"name": "Ras Laffan LNG", "lat": 25.93, "lng": 51.53, "country": "Qatar", "type": "LNG", "status": "OPERATIONAL", "notes": "World's largest LNG export facility"},
+    {"name": "Mesaieed Industrial", "lat": 24.98, "lng": 51.55, "country": "Qatar", "type": "GAS", "status": "OPERATIONAL", "notes": "Major gas processing complex"},
+    {"name": "Fujairah Oil Terminal", "lat": 25.12, "lng": 56.36, "country": "UAE", "type": "OIL", "status": "OPERATIONAL", "notes": "Bypasses Strait of Hormuz — strategic backup"},
+    {"name": "Jebel Ali Refinery", "lat": 25.01, "lng": 55.06, "country": "UAE", "type": "REF", "status": "OPERATIONAL", "notes": "Major refining hub"},
+    {"name": "Ras Tanura", "lat": 26.64, "lng": 50.16, "country": "Saudi Arabia", "type": "OIL", "status": "OPERATIONAL", "notes": "World's largest offshore oil loading facility"},
+    {"name": "Abqaiq Processing", "lat": 25.94, "lng": 49.68, "country": "Saudi Arabia", "type": "OIL", "status": "OPERATIONAL", "notes": "Critical processing — previously struck by Houthis 2019"},
+    {"name": "Kharg Island", "lat": 29.23, "lng": 50.32, "country": "Iran", "type": "OIL", "status": "STRUCK", "notes": "Iran's main oil export terminal — 90% of exports"},
+    {"name": "Bandar Abbas Refinery", "lat": 27.18, "lng": 56.27, "country": "Iran", "type": "REF", "status": "DAMAGED", "notes": "Major refinery near Hormuz"},
+    {"name": "South Pars Gas Field", "lat": 26.50, "lng": 52.00, "country": "Iran/Qatar", "type": "GAS", "status": "OPERATIONAL", "notes": "World's largest gas field — shared Iran/Qatar"},
+    {"name": "Bushehr Nuclear Plant", "lat": 28.83, "lng": 50.89, "country": "Iran", "type": "NUCLEAR", "status": "SHUTDOWN", "notes": "Only operational nuclear power plant in Iran"}
+  ],
+  "pipelines": [
+    {"name": "East-West Pipeline (Petroline)", "coords": [[26.3, 50.1], [25.5, 49.5], [24.5, 45.0], [23.5, 41.0], [22.0, 39.2]], "country": "Saudi Arabia", "type": "oil", "notes": "Bypasses Hormuz — Red Sea export route"},
+    {"name": "Fujairah Bypass (ADCOP)", "coords": [[24.5, 54.5], [24.8, 55.5], [25.1, 56.3]], "country": "UAE", "type": "oil", "notes": "Abu Dhabi to Fujairah — bypasses Hormuz"},
+    {"name": "Kirkuk-Ceyhan Pipeline", "coords": [[35.5, 44.4], [36.5, 43.5], [37.0, 42.0], [37.5, 40.0], [36.9, 35.3]], "country": "Iraq-Turkey", "type": "oil", "notes": "Iraqi oil to Mediterranean"},
+    {"name": "Iran-Pakistan Pipeline (IP)", "coords": [[27.2, 56.3], [26.5, 58.0], [25.5, 60.0], [25.2, 62.0]], "country": "Iran-Pakistan", "type": "gas", "notes": "Planned pipeline — construction disputed"},
+    {"name": "IGAT Trunkline", "coords": [[26.5, 52.0], [28.5, 52.5], [30.5, 51.5], [32.5, 51.0], [35.0, 51.5]], "country": "Iran", "type": "gas", "notes": "Iran internal gas trunk — South Pars to north"},
+    {"name": "Strait of Hormuz Shipping Lane", "coords": [[26.6, 56.0], [26.3, 56.3], [26.0, 56.5], [25.5, 56.8]], "country": "International", "type": "shipping", "notes": "21% of global oil — CLOSED"}
+  ],
+  "chokepoints": [
+    {
+      "name": "Strait of Hormuz",
+      "coords": [[26.56, 56.25], [26.0, 56.6], [25.8, 56.4], [26.3, 56.0]],
+      "status": "CLOSED",
+      "notes": "Iran declared closure. Shipping insurance suspended. Tankers anchored outside."
+    },
+    {
+      "name": "Bab el-Mandeb",
+      "coords": [[12.6, 43.3], [12.4, 43.5], [12.2, 43.3], [12.5, 43.1]],
+      "status": "RESTRICTED",
+      "notes": "Houthi threat to close. -30% traffic."
+    },
+    {
+      "name": "Suez Canal",
+      "coords": [[30.0, 32.5], [30.2, 32.6], [31.2, 32.4], [31.0, 32.3]],
+      "status": "OPERATIONAL",
+      "notes": "Operational but elevated risk."
+    }
+  ],
+  "desalination": [
+    {"name": "Jebel Ali Desal", "lat": 25.0, "lng": 55.1, "country": "UAE", "capacity": "2.1M m³/day", "status": "OPERATIONAL"},
+    {"name": "Ras Al Khair", "lat": 27.5, "lng": 49.2, "country": "Saudi Arabia", "capacity": "1.0M m³/day", "status": "OPERATIONAL"},
+    {"name": "Shoaiba", "lat": 20.7, "lng": 39.5, "country": "Saudi Arabia", "capacity": "0.9M m³/day", "status": "OPERATIONAL"},
+    {"name": "Umm Al Nar", "lat": 24.4, "lng": 54.6, "country": "UAE", "capacity": "0.6M m³/day", "status": "OPERATIONAL"},
+    {"name": "Doha West", "lat": 25.3, "lng": 51.4, "country": "Qatar", "capacity": "0.3M m³/day", "status": "OPERATIONAL"}
+  ],
+  "airDefense": [
+    {"name": "THAAD Battery Site 1", "lat": 24.25, "lng": 54.65, "country": "UAE", "type": "THAAD", "status": "DESTROYED", "notes": "Hit by ballistic missile barrage"},
+    {"name": "THAAD Battery Site 2", "lat": 24.43, "lng": 54.45, "country": "UAE", "type": "THAAD", "status": "DAMAGED", "notes": "Partial damage from debris"},
+    {"name": "AN/FPS-132 Early Warning", "lat": 24.0, "lng": 54.0, "country": "UAE", "type": "EARLY_WARNING", "status": "DAMAGED", "notes": "Early warning radar — degraded capability"},
+    {"name": "Patriot Battery (Qatar)", "lat": 25.12, "lng": 51.31, "country": "Qatar", "type": "PATRIOT", "status": "OPERATIONAL", "notes": "Al Udeid defense — interceptor stocks low"},
+    {"name": "Patriot Battery (Kuwait)", "lat": 29.34, "lng": 47.97, "country": "Kuwait", "type": "PATRIOT", "status": "OPERATIONAL", "notes": "Ali Al Salem defense"},
+    {"name": "Iron Dome (Nevatim)", "lat": 31.21, "lng": 34.67, "country": "Israel", "type": "IRON_DOME", "status": "OPERATIONAL", "notes": "Short-range defense of Nevatim AFB"},
+    {"name": "David's Sling", "lat": 32.0, "lng": 34.8, "country": "Israel", "type": "DAVIDS_SLING", "status": "OPERATIONAL", "notes": "Medium-range missile defense"},
+    {"name": "Arrow-3 (Palmachim)", "lat": 31.89, "lng": 34.69, "country": "Israel", "type": "ARROW", "status": "OPERATIONAL", "notes": "Exo-atmospheric ballistic missile defense"}
+  ],
+  "airspace": [
+    {"name": "Tehran FIR (OIIX)", "status": "CLOSED", "country": "Iran"},
+    {"name": "Baghdad FIR (ORBB)", "status": "RESTRICTED", "country": "Iraq"},
+    {"name": "Beirut FIR (OLBB)", "status": "RESTRICTED", "country": "Lebanon"},
+    {"name": "Sana'a FIR (OYSC)", "status": "CLOSED", "country": "Yemen"},
+    {"name": "Israel (LLLL)", "status": "RESTRICTED", "country": "Israel"}
+  ]
+}

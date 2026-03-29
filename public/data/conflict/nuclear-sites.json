@@ -1,0 +1,13 @@
+{
+  "iran": [
+    {"id":"natanz","name":"Natanz FEP","lat":33.724,"lng":51.727,"type":"Uranium Enrichment","enrichment":"84%","status":"HEAVILY DAMAGED","detail":"B-2 GBU-57 MOP strikes. Est. 60-70% surface facilities destroyed. Underground centrifuge halls status TBD.","threat":"DEGRADED"},
+    {"id":"fordow","name":"Fordow FFEP","lat":34.880,"lng":51.580,"type":"Underground Enrichment","enrichment":"84%","status":"DAMAGED","detail":"Hardened underground facility. B-2 strikes with MOP bunker busters. Damage assessment in progress. Partial functionality possible.","threat":"DEGRADED"},
+    {"id":"isfahan","name":"Isfahan UCF","lat":32.682,"lng":51.678,"type":"Uranium Conversion","status":"STRUCK","detail":"Uranium conversion facility targeted by IDF F-35I strikes. Conversion capacity disrupted.","threat":"DEGRADED"},
+    {"id":"bushehr","name":"Bushehr NPP","lat":28.831,"lng":50.886,"type":"Nuclear Power Plant","status":"INTACT","detail":"INTENTIONALLY NOT TARGETED per US/IDF policy. Risk of radiological incident. IAEA monitoring requested.","threat":"INTACT"},
+    {"id":"arak","name":"Arak IR-40 Reactor","lat":34.381,"lng":49.243,"type":"Heavy Water Reactor","status":"STRUCK","detail":"Heavy water reactor targeted. Plutonium production pathway disrupted.","threat":"DEGRADED"},
+    {"id":"parchin","name":"Parchin Military Complex","lat":35.521,"lng":51.773,"type":"Military Research","status":"STRUCK","detail":"IRGC weapons research site. IDF F-35I precision strikes on specific buildings assessed to be weapons-relevant.","threat":"DEGRADED"}
+  ],
+  "israel": [
+    {"id":"dimona","name":"Negev Nuclear Research Center (Dimona)","lat":31.005,"lng":35.145,"type":"Classified","status":"OPERATIONAL","detail":"Israel maintains policy of nuclear ambiguity. Est. 80-90 warheads (FAS/SIPRI). Jericho III ICBM capability. Submarine-based 2nd strike (Dolphin-class, Popeye Turbo ALCM).","threat":"INTACT"}
+  ]
+}
