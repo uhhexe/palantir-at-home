@@ -144,8 +144,8 @@ export default function UkraineMap({ layers, cities, bases, frontlineGeo, droneL
       ],
     });
 
-    L.tileLayer("https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png", {
-      attribution: "&copy; OSM &amp; Stadia Maps",
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      attribution: "&copy; OSM &amp; CARTO",
       maxZoom: 18,
     }).addTo(map);
 

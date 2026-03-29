@@ -219,7 +219,7 @@ const ATTACKER_COLORS: Record<string, string> = {
 };
 
 const TILE_URLS: Record<string, string> = {
-  dark: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+  dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
   satellite: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   topo: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
 };
