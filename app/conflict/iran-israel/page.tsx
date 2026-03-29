@@ -49,6 +49,9 @@ const DEFAULT_LAYERS: ConflictLayer[] = [
   // Maritime & Airspace
   { id: "sea-lanes", name: "Sea Lanes / Ports", enabled: false, color: "#388bfd" },
   { id: "airspace", name: "Closed Airspace", enabled: false, count: 5, color: "#e8364a" },
+  // Live Tracking
+  { id: "live-flights", name: "Live Aircraft", enabled: false, color: "#00d4aa" },
+  { id: "mil-only", name: "Military Only", enabled: false, color: "#ff2a6d" },
   // Reference
   { id: "borders", name: "Country Borders", enabled: true, color: "#344050" },
 ];

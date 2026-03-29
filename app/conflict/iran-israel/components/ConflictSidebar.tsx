@@ -14,6 +14,7 @@ const LAYER_GROUPS: { label: string; ids: string[] }[] = [
   { label: "MILITARY", ids: ["us-bases", "iran-bases", "nuclear", "air-defense"] },
   { label: "INFRASTRUCTURE", ids: ["pipelines", "oil-facilities", "desalination", "chokepoints"] },
   { label: "MARITIME & AIRSPACE", ids: ["sea-lanes", "airspace"] },
+  { label: "LIVE TRACKING", ids: ["live-flights", "mil-only"] },
   { label: "REFERENCE", ids: ["borders"] },
 ];
 

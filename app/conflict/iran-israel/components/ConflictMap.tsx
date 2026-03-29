@@ -170,6 +170,23 @@ function svgIcon(svg: string, size: [number, number] = [12, 12]): L.DivIcon {
   });
 }
 
+function getFlightColor(ac: { isMilitary: boolean; country: string }): string {
+  const country = ac.country.toLowerCase();
+  if (ac.isMilitary) {
+    if (country.includes("united states") || country.includes("america")) return "#388bfd";
+    if (country.includes("israel")) return "#e6edf3";
+    if (country.includes("iran")) return "#e8364a";
+    if (country.includes("united kingdom") || country.includes("britain")) return "#6ac0ff";
+    if (country.includes("france")) return "#6ac0ff";
+    return "#ff2a6d";
+  }
+  if (country.includes("iran")) return "#e8364a50";
+  if (country.includes("israel")) return "#e6edf350";
+  if (country.includes("united states")) return "#388bfd30";
+  if (country.includes("qatar") || country.includes("emirates") || country.includes("saudi") || country.includes("kuwait")) return "#d4962a30";
+  return "#5c6c7820";
+}
+
 function getAttackerColor(attacker: string): string {
   const a = attacker.toLowerCase();
   if (a.includes("us") || a.includes("america") || a.includes("centcom") || a.includes("coalition")) return "#388bfd";
@@ -493,6 +510,119 @@ export default function ConflictMap({ layers, strikes, militaryBases, nuclearSit
       }
     }
   }, [layers, strikes, militaryBases, nuclearSites, infrastructure, countriesGeo]);
+
+  // ── Live aircraft tracking layer ──
+  const flightLayerRef = useRef<L.LayerGroup | null>(null);
+  const flightIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const flightsEnabled = layers.find((l) => l.id === "live-flights")?.enabled;
+    const milOnly = layers.find((l) => l.id === "mil-only")?.enabled;
+
+    // Clean up if disabled
+    if (!flightsEnabled) {
+      if (flightLayerRef.current) {
+        map.removeLayer(flightLayerRef.current);
+        flightLayerRef.current = null;
+      }
+      if (flightIntervalRef.current) {
+        clearInterval(flightIntervalRef.current);
+        flightIntervalRef.current = null;
+      }
+      return;
+    }
+
+    async function fetchAndRender() {
+      try {
+        const res = await fetch("/api/conflict/flights");
+        const data = await res.json();
+        if (!data.aircraft || !Array.isArray(data.aircraft)) return;
+
+        // Clear old markers
+        if (flightLayerRef.current) {
+          map!.removeLayer(flightLayerRef.current);
+        }
+
+        const group = L.layerGroup();
+        const zoomLevel = map!.getZoom();
+        let rendered = 0;
+
+        for (const ac of data.aircraft) {
+          if (!ac.lat || !ac.lng) continue;
+          if (milOnly && !ac.isMilitary) continue;
+          // At very low zoom, only show military to avoid clutter
+          if (zoomLevel < 4 && !ac.isMilitary) continue;
+
+          const color = getFlightColor(ac);
+          const size = ac.isMilitary ? 10 : 6;
+          const opacity = ac.isMilitary ? 1.0 : 0.5;
+          const heading = ac.heading || 0;
+
+          const icon = L.divIcon({
+            className: "",
+            html: `<div style="width:${size}px;height:${size * 1.5}px;transform:rotate(${heading}deg);transform-origin:center center"><svg viewBox="0 0 10 15" width="${size}" height="${size * 1.5}"><polygon points="5,0 10,15 5,11 0,15" fill="${color}" opacity="${opacity}"/></svg></div>`,
+            iconSize: [size, size * 1.5],
+            iconAnchor: [size / 2, (size * 1.5) / 2],
+          });
+
+          const marker = L.marker([ac.lat, ac.lng], { icon });
+
+          const altFt = ac.altitude ? Math.round(ac.altitude * 3.281) : "—";
+          const speedKts = ac.velocity ? Math.round(ac.velocity * 1.944) : "—";
+          const vr = ac.verticalRate ? (ac.verticalRate > 0 ? "\u2191" : ac.verticalRate < 0 ? "\u2193" : "\u2192") : "";
+          const vrFpm = ac.verticalRate ? Math.round(Math.abs(ac.verticalRate) * 196.85) : "";
+
+          marker.bindPopup(`
+            <div style="font-family:Inconsolata,monospace;font-size:10px;color:#9aa8b4;min-width:180px">
+              <div style="font-family:Rajdhani;font-size:13px;font-weight:600;color:${ac.isMilitary ? "#ff2a6d" : "#00d4aa"}">
+                ${ac.callsign || ac.icao}
+                ${ac.isMilitary ? ' <span style="color:#ff2a6d;font-size:9px">\u2605 MIL</span>' : ""}
+              </div>
+              <div style="color:#5c6c78;font-size:9px;margin-bottom:6px">${ac.country}</div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#344050">ALT</span><span>${altFt} ft</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#344050">SPD</span><span>${speedKts} kts</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#344050">HDG</span><span>${Math.round(heading)}\u00b0</span></div>
+              ${vrFpm ? `<div style="display:flex;justify-content:space-between"><span style="color:#344050">V/S</span><span>${vr} ${vrFpm} fpm</span></div>` : ""}
+              <div style="display:flex;justify-content:space-between"><span style="color:#344050">ICAO</span><span>${ac.icao}</span></div>
+              ${ac.squawk ? `<div style="display:flex;justify-content:space-between"><span style="color:#344050">SQK</span><span>${ac.squawk}</span></div>` : ""}
+            </div>
+          `, { className: "war-room-popup" });
+
+          marker.addTo(group);
+          rendered++;
+        }
+
+        group.addTo(map!);
+        flightLayerRef.current = group;
+
+        // Update layer count
+        const flightLayer = layers.find((l) => l.id === "live-flights");
+        if (flightLayer) flightLayer.count = data.count || rendered;
+        const milLayer = layers.find((l) => l.id === "mil-only");
+        if (milLayer) milLayer.count = data.milCount || 0;
+      } catch {
+        // Keep last known positions on error
+      }
+    }
+
+    fetchAndRender();
+    flightIntervalRef.current = setInterval(fetchAndRender, 30000);
+
+    // Re-render on zoom change for density filtering
+    const onZoom = () => fetchAndRender();
+    map.on("zoomend", onZoom);
+
+    return () => {
+      if (flightIntervalRef.current) {
+        clearInterval(flightIntervalRef.current);
+        flightIntervalRef.current = null;
+      }
+      map.off("zoomend", onZoom);
+    };
+  }, [layers]);
 
   // Cumulative wave markers (static dots showing war footprint buildup)
   const cumulativeLayerRef = useRef<L.LayerGroup | null>(null);
