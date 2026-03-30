@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
-import { readFile } from "fs/promises";
-import { join } from "path";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const filePath = join(process.cwd(), "public/data/conflict/strikes.json");
-    const raw = await readFile(filePath, "utf-8");
-    const strikes = JSON.parse(raw);
+    // Serve strikes from the public static JSON — no filesystem access needed
+    const origin = request.nextUrl.origin;
+    const res = await fetch(`${origin}/data/conflict/strikes.json`);
+    if (!res.ok) throw new Error(`Static file returned ${res.status}`);
+    const strikes = await res.json();
     return NextResponse.json(strikes, {
       headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=60" },
     });

@@ -195,7 +195,7 @@ export default function IranIsraelConflict() {
   // Strike fetch function (reusable for auto-refresh)
   const fetchStrikes = useCallback(async () => {
     try {
-      const r = await fetch("/api/conflict/strikes");
+      const r = await fetch("/data/conflict/strikes.json");
       const data = await r.json();
       if (Array.isArray(data)) {
         setStrikes(data);

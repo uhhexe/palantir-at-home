@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
-import { readFileSync, existsSync } from "fs";
-import { join } from "path";
 
-function loadJson(filename: string) {
-  const p = join(process.cwd(), "public", "data", "ukraine", filename);
-  if (!existsSync(p)) return null;
-  return JSON.parse(readFileSync(p, "utf-8"));
+async function loadJson(baseUrl: string, filename: string) {
+  try {
+    const res = await fetch(`${baseUrl}/data/ukraine/${filename}`);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
 }
 
 // Simple in-memory rate limiter
@@ -55,9 +57,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const equipment = loadJson("equipment-losses.json");
-  const cities = loadJson("cities.json");
-  const bases = loadJson("bases.json");
+  const baseUrl = new URL(req.url).origin;
+  const [equipment, cities, bases] = await Promise.all([
+    loadJson(baseUrl, "equipment-losses.json"),
+    loadJson(baseUrl, "cities.json"),
+    loadJson(baseUrl, "bases.json"),
+  ]);
 
   let newsContext = "";
   try {
