@@ -26,6 +26,7 @@ import WeaponsPanel from "./components/WeaponsPanel";
 import type { WeaponsData } from "./components/WeaponsPanel";
 import EconomicDashboard from "./components/EconomicDashboard";
 import type { EconomicData } from "./components/EconomicDashboard";
+import SitrepPanel from "./components/SitrepPanel";
 
 const ConflictMap = dynamic(() => import("./components/ConflictMap"), {
   ssr: false,
@@ -156,7 +157,7 @@ export default function IranIsraelConflict() {
   const [acledEvents, setAcledEvents] = useState<AcledEvent[]>([]);
   const [internetStatus, setInternetStatus] = useState<{ name: string; code: string; connectivity: number; status: string; note: string; color: string }[]>([]);
   const [time, setTime] = useState({ local: "", utc: "" });
-  const [viewMode, setViewMode] = useState<"map" | "table" | "flights" | "maritime" | "globe" | "today" | "leaders" | "casualties" | "claims" | "weapons" | "econ">("map");
+  const [viewMode, setViewMode] = useState<"map" | "table" | "flights" | "maritime" | "globe" | "today" | "leaders" | "casualties" | "claims" | "weapons" | "econ" | "sitrep">("map");
   const [dateRange, setDateRange] = useState<{ start: string; end: string } | null>(null);
   const [waves, setWaves] = useState<WaveEvent[]>([]);
   const [selectedWaveId, setSelectedWaveId] = useState<string | null>(null);
@@ -642,7 +643,7 @@ export default function IranIsraelConflict() {
         {/* Center: Stats + View Toggle */}
         <div className="flex items-center gap-3 text-[16px] font-mono text-text-dim">
           <div className="flex gap-0.5 p-1 bg-[#0d1117] rounded-[6px] border border-[rgba(0,210,170,0.08)]">
-            {(["today", "map", "globe", "leaders", "casualties", "claims", "weapons", "econ", "table", "flights", "maritime"] as const).map((mode) => (
+            {(["today", "map", "globe", "leaders", "casualties", "claims", "weapons", "econ", "sitrep", "table", "flights", "maritime"] as const).map((mode) => (
               <button
                 key={mode}
                 onClick={() => setViewMode(mode)}
@@ -797,6 +798,18 @@ export default function IranIsraelConflict() {
                   setLayers(prev => prev.map(l => l.id === "range-rings" ? { ...l, enabled: true } : l));
                   setViewMode("map");
                 }}
+              />
+            )}
+            {viewMode === "sitrep" && (
+              <SitrepPanel
+                strikes={strikes}
+                waves={waves}
+                leadership={leadershipData}
+                casualties={casualtyData}
+                claims={claimsData}
+                weapons={weaponsData}
+                economic={economicData}
+                energyStrikes={energyStrikes}
               />
             )}
             {viewMode === "table" && <StrikeTable strikes={filteredStrikes} />}
