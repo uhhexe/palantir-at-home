@@ -9,9 +9,7 @@ export async function GET(request: NextRequest) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3001";
+  const baseUrl = new URL(request.url).origin;
 
   const results: Record<string, unknown> = {};
 
