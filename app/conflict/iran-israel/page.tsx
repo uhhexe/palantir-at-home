@@ -166,6 +166,8 @@ export default function IranIsraelConflict() {
   const [lastStrikeRefresh, setLastStrikeRefresh] = useState<Date>(new Date());
   const [isRefreshingStrikes, setIsRefreshingStrikes] = useState(false);
   const [newEventsCount, setNewEventsCount] = useState(0);
+  const [dataSources, setDataSources] = useState<Record<string, { status: string; count?: number }> | null>(null);
+  const [dataLastUpdate, setDataLastUpdate] = useState<string | null>(null);
 
   // Time
   useEffect(() => {
@@ -242,6 +244,17 @@ export default function IranIsraelConflict() {
     const id = setInterval(fetchStrikes, 300000);
     return () => clearInterval(id);
   }, [fetchStrikes]);
+
+  // Check live data sources for freshness metadata
+  useEffect(() => {
+    fetch("/api/conflict/live-strikes")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.sources) setDataSources(data.sources);
+        if (data.timestamp) setDataLastUpdate(data.timestamp);
+      })
+      .catch(() => {});
+  }, []);
 
   // Fetch static data
   useEffect(() => {
@@ -707,6 +720,8 @@ export default function IranIsraelConflict() {
           onExpandEcon={() => setViewMode("econ")}
           lastStrikeRefresh={lastStrikeRefresh}
           isRefreshingStrikes={isRefreshingStrikes}
+          dataSources={dataSources}
+          dataLastUpdate={dataLastUpdate}
         />
 
         <div className="flex-1 flex flex-col overflow-hidden">

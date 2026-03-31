@@ -57,6 +57,8 @@ interface ConflictSidebarProps {
   onExpandEcon?: () => void;
   lastStrikeRefresh?: Date;
   isRefreshingStrikes?: boolean;
+  dataSources?: Record<string, { status: string; count?: number }> | null;
+  dataLastUpdate?: string | null;
 }
 
 const LAYER_GROUPS: { label: string; ids: string[] }[] = [
@@ -98,7 +100,7 @@ function SidebarCostTicker() {
   );
 }
 
-export default function ConflictSidebar({ layers, onToggleLayer, conflictDay, totalStrikes, casualtySummary, onExpandCasualties, orefAlerts, internetStatus, claimsSummary, onExpandClaims, weaponsCounts, onExpandWeapons, econSummary, onExpandEcon, lastStrikeRefresh, isRefreshingStrikes }: ConflictSidebarProps) {
+export default function ConflictSidebar({ layers, onToggleLayer, conflictDay, totalStrikes, casualtySummary, onExpandCasualties, orefAlerts, internetStatus, claimsSummary, onExpandClaims, weaponsCounts, onExpandWeapons, econSummary, onExpandEcon, lastStrikeRefresh, isRefreshingStrikes, dataSources, dataLastUpdate }: ConflictSidebarProps) {
   const getLayer = (id: string) => layers.find((l) => l.id === id);
   const [oilPrice, setOilPrice] = useState<{ brent: number | null; wti: number | null; change: number | null; changePercent: number | null } | null>(null);
 
@@ -735,6 +737,36 @@ export default function ConflictSidebar({ layers, onToggleLayer, conflictDay, to
             <div className="text-[9px] text-text-dim pl-[52px]">(922K bpd shutdown)</div>
           </div>
         </div>
+
+        {/* Data Sources / Pipeline Status */}
+        {dataSources && (
+          <div className="px-3 py-2 border-t border-border">
+            <div className="font-heading text-[9px] tracking-[1.5px] text-accent mb-1.5 uppercase">
+              Data Pipeline
+            </div>
+            <div className="space-y-0.5">
+              {Object.entries(dataSources).map(([name, info]) => (
+                <div key={name} className="flex justify-between items-center">
+                  <span className="font-mono text-[8px] text-text-muted truncate mr-2">
+                    {name.replace(/-/g, " ").toUpperCase()}
+                  </span>
+                  <span
+                    className="font-mono text-[8px] font-semibold shrink-0"
+                    style={{
+                      color: info.status === "ok" ? "#22f5b0" : info.status === "timeout" ? "#e8364a" : "#ffb020",
+                    }}
+                  >
+                    {info.status === "ok" ? `✓ ${info.count ?? ""}` : `✗ ${info.status}`}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="font-mono text-[7px] text-text-muted mt-1.5 pt-1 border-t border-border/50">
+              LAST UPDATE: {dataLastUpdate ? new Date(dataLastUpdate).toLocaleTimeString() : "—"}
+              {" · "}AUTO: DAILY 05:00 UTC
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

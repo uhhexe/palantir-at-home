@@ -18,7 +18,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://server.arcgisonline.com https://tiles.stadiamaps.com https://*.tile.opentopomap.org https://tiles.openseamap.org https://unpkg.com",
-      "connect-src 'self' https://api.anthropic.com https://*.supabase.co https://*.openstreetmap.org https://earthquake.usgs.gov https://api.weather.gov https://firms.modaps.eosdis.nasa.gov https://api.acleddata.com https://tiles.stadiamaps.com https://*.tile.opentopomap.org https://tiles.openseamap.org https://www.oref.org.il https://globalconflictawareness.com https://www.submarinecablemap.com https://services3.arcgis.com https://unpkg.com",
+      "connect-src 'self' https://api.anthropic.com https://*.supabase.co https://*.openstreetmap.org https://earthquake.usgs.gov https://api.weather.gov https://firms.modaps.eosdis.nasa.gov https://api.acleddata.com https://tiles.stadiamaps.com https://*.tile.opentopomap.org https://tiles.openseamap.org https://www.oref.org.il https://globalconflictawareness.com https://www.submarinecablemap.com https://services3.arcgis.com https://unpkg.com https://raw.githubusercontent.com https://iranwarlive.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
