@@ -27,6 +27,8 @@ import type { WeaponsData } from "./components/WeaponsPanel";
 import EconomicDashboard from "./components/EconomicDashboard";
 import type { EconomicData } from "./components/EconomicDashboard";
 import SitrepPanel from "./components/SitrepPanel";
+import ScreenshotButton from "./components/ScreenshotButton";
+import MapScreenshotButton from "./components/MapScreenshot";
 
 const ConflictMap = dynamic(() => import("./components/ConflictMap"), {
   ssr: false,
@@ -682,6 +684,7 @@ export default function IranIsraelConflict() {
             {isRefreshingStrikes ? "UPDATING" : "REFRESH"}
             <span className="text-text-muted text-[9px] ml-1">{formatTimeAgo(lastStrikeRefresh)}</span>
           </button>
+          <ScreenshotButton targetSelector=".conflict-main" filename="palantir-at-home-overview" variant="icon" />
           <span className="text-text-muted">|</span>
           <div className="flex items-center gap-1.5">
             <div className="w-1 h-1 bg-danger animate-pulse" />
@@ -725,31 +728,34 @@ export default function IranIsraelConflict() {
           dataLastUpdate={dataLastUpdate}
         />
 
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-hidden conflict-main">
           <main className="flex-1 overflow-hidden">
             {viewMode === "map" && (
-              <ConflictMap
-                layers={layers}
-                strikes={filteredStrikes}
-                militaryBases={militaryBases}
-                nuclearSites={nuclearSites}
-                countriesGeo={countriesGeo}
-                infrastructure={infrastructure}
-                waveTargets={selectedWaveTargets}
-                cumulativeWaveTargets={cumulativeWaveTargets}
-                lebanonTargets={lebanonTargets}
-                lebanonMilitary={lebanonMilitary}
-                hezbollahStrikes={hezbollahStrikes}
-                houthiData={houthiData}
-                iraqData={iraqData}
-                leadershipLeaders={leadershipData?.leaders}
-                energyStrikes={energyStrikes}
-                notableIncidents={notableIncidents}
-                orefAlerts={orefAlerts}
-                firmsPoints={firmsPoints}
-                acledEvents={acledEvents}
-                weaponsRangeRings={weaponsRangeRings}
-              />
+              <div className="relative w-full h-full">
+                <ConflictMap
+                  layers={layers}
+                  strikes={filteredStrikes}
+                  militaryBases={militaryBases}
+                  nuclearSites={nuclearSites}
+                  countriesGeo={countriesGeo}
+                  infrastructure={infrastructure}
+                  waveTargets={selectedWaveTargets}
+                  cumulativeWaveTargets={cumulativeWaveTargets}
+                  lebanonTargets={lebanonTargets}
+                  lebanonMilitary={lebanonMilitary}
+                  hezbollahStrikes={hezbollahStrikes}
+                  houthiData={houthiData}
+                  iraqData={iraqData}
+                  leadershipLeaders={leadershipData?.leaders}
+                  energyStrikes={energyStrikes}
+                  notableIncidents={notableIncidents}
+                  orefAlerts={orefAlerts}
+                  firmsPoints={firmsPoints}
+                  acledEvents={acledEvents}
+                  weaponsRangeRings={weaponsRangeRings}
+                />
+                <MapScreenshotButton />
+              </div>
             )}
             {viewMode === "globe" && (
               <ConflictGlobe

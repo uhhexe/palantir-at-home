@@ -12,6 +12,7 @@ import ChatPanel from "@/components/chat/ChatPanel";
 import PrimaryCameraView from "@/components/camera/PrimaryCameraView";
 import ThumbnailStrip from "@/components/camera/ThumbnailStrip";
 import type { CameraData, CableData } from "@/components/map/MapEngine";
+import MapScreenshotButton from "@/components/map/MapScreenshot";
 
 const MapEngine = dynamic(() => import("@/components/map/MapEngine"), {
   ssr: false,
@@ -188,7 +189,7 @@ export default function Home() {
             <>
               <div className="flex-1 overflow-hidden relative flex">
                 {/* Map — always visible */}
-                <div className={`h-full transition-all duration-300 ${selectedCamera ? "w-[55%]" : "w-full"}`}>
+                <div className={`h-full transition-all duration-300 relative ${selectedCamera ? "w-[55%]" : "w-full"}`}>
                   <MapEngine
                     layers={layers}
                     cameras={cameras}
@@ -197,6 +198,7 @@ export default function Home() {
                     onCameraClick={handleCameraClick}
                     navRef={mapNavRef}
                   />
+                  <MapScreenshotButton />
                 </div>
                 {/* Camera panel — slides in from right */}
                 {selectedCamera && (

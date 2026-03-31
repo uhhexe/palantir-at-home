@@ -14,6 +14,8 @@ import TodayView from "./components/TodayView";
 import DronePanel from "./components/DronePanel";
 import type { DroneWarfareData } from "./components/DronePanel";
 import type { UkraineLayer, CityMarker, BaseMarker, FirmsPoint, AcledEvent } from "./components/UkraineMap";
+import MapScreenshotButton from "./components/MapScreenshot";
+import ScreenshotButton from "./components/ScreenshotButton";
 
 const UkraineMap = dynamic(() => import("./components/UkraineMap"), {
   ssr: false,
@@ -329,6 +331,7 @@ export default function UkraineConflict() {
 
         {/* Right: Time */}
         <div className="flex items-center gap-3 text-[16px] font-mono">
+          <ScreenshotButton targetSelector="main" filename="palantir-at-home-ukraine" variant="icon" />
           <div className="flex items-center gap-1.5">
             <div className="w-1 h-1 bg-danger animate-pulse" />
             <span className="text-text-dim">LIVE</span>
@@ -362,19 +365,22 @@ export default function UkraineConflict() {
               />
             )}
             {viewMode === "map" && (
-              <UkraineMap
-                layers={layers}
-                cities={cities}
-                bases={bases}
-                frontlineGeo={frontlineGeo}
-                droneLaunchSites={droneData?.russianDronesOnUkraine?.launchSites}
-                droneTargetsRU={droneData?.ukrainianDronesOnRussia?.majorTargets}
-                droneRoutes={droneData?.droneRoutes}
-                energyTargetsUA={energyData?.russiaOnUkraineEnergy?.majorTargets}
-                energyTargetsRU={energyData?.ukraineOnRussiaEnergy?.majorTargets}
-                firmsPoints={firmsPoints}
-                acledEvents={acledEvents}
-              />
+              <div className="relative w-full h-full">
+                <UkraineMap
+                  layers={layers}
+                  cities={cities}
+                  bases={bases}
+                  frontlineGeo={frontlineGeo}
+                  droneLaunchSites={droneData?.russianDronesOnUkraine?.launchSites}
+                  droneTargetsRU={droneData?.ukrainianDronesOnRussia?.majorTargets}
+                  droneRoutes={droneData?.droneRoutes}
+                  energyTargetsUA={energyData?.russiaOnUkraineEnergy?.majorTargets}
+                  energyTargetsRU={energyData?.ukraineOnRussiaEnergy?.majorTargets}
+                  firmsPoints={firmsPoints}
+                  acledEvents={acledEvents}
+                />
+                <MapScreenshotButton />
+              </div>
             )}
             {viewMode === "drones" && droneData && (
               <DronePanel data={droneData} />

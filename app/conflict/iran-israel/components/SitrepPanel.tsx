@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, ReactNode } from "react";
+import ScreenshotButton from "./ScreenshotButton";
 
 interface SitrepPanelProps {
   strikes: { attacker?: string; side?: string }[];
@@ -192,23 +193,28 @@ export default function SitrepPanel({ strikes, waves, leadership, casualties, cl
             DAILY SITREP
           </span>
         </div>
-        <button
-          onClick={generateSitrep}
-          disabled={isGenerating}
-          className="px-4 py-1.5 border rounded-[3px] font-mono text-[10px] font-bold tracking-[1px] transition-all"
-          style={{
-            background: isGenerating ? "rgba(255,184,48,0.12)" : "rgba(34,245,176,0.12)",
-            borderColor: isGenerating ? "rgba(255,184,48,0.25)" : "rgba(34,245,176,0.25)",
-            color: isGenerating ? "#ffb830" : "#22f5b0",
-            cursor: isGenerating ? "wait" : "pointer",
-          }}
-        >
-          {isGenerating ? "\u25CC GENERATING..." : "\u25B6 GENERATE SITREP"}
-        </button>
+        <div className="flex items-center gap-2">
+          {sitrep && (
+            <ScreenshotButton targetSelector=".sitrep-content" filename="palantir-at-home-sitrep" variant="full" />
+          )}
+          <button
+            onClick={generateSitrep}
+            disabled={isGenerating}
+            className="px-4 py-1.5 border rounded-[3px] font-mono text-[10px] font-bold tracking-[1px] transition-all"
+            style={{
+              background: isGenerating ? "rgba(255,184,48,0.12)" : "rgba(34,245,176,0.12)",
+              borderColor: isGenerating ? "rgba(255,184,48,0.25)" : "rgba(34,245,176,0.25)",
+              color: isGenerating ? "#ffb830" : "#22f5b0",
+              cursor: isGenerating ? "wait" : "pointer",
+            }}
+          >
+            {isGenerating ? "\u25CC GENERATING..." : "\u25B6 GENERATE SITREP"}
+          </button>
+        </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-4 sitrep-content">
         {error && (
           <div className="p-3 bg-danger/6 border border-danger/15 rounded-[3px] font-mono text-[10px] text-danger mb-3">
             {error}
